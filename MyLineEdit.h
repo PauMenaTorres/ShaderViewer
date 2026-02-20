@@ -1,7 +1,6 @@
 #ifndef MYLINEEDIT_H
 #define MYLINEEDIT_H
 
-#include <QLineEdit>
 #include <QObject>
 #include <QLineEdit>
 
