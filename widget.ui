@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1016</width>
+    <width>914</width>
     <height>562</height>
    </rect>
   </property>
@@ -73,7 +73,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>12</x>
@@ -111,6 +111,29 @@
     </item>
    </layout>
   </widget>
+  <widget class="MyLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>270</y>
+     <width>113</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="MyLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>350</y>
+     <width>161</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Text: </string>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
@@ -119,6 +142,24 @@
    <header>MyGLWidget.h</header>
    <slots>
     <slot>changeToRed(int)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>MyLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">MyLabel.h</header>
+   <slots>
+    <slot>toUpperCase(QString)</slot>
+    <slot>enviaText()</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>MyLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">MyLineEdit.h</header>
+   <slots>
+    <signal>enviaText(QString)</signal>
+    <slot>tractaReturn()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -153,6 +194,38 @@
     <hint type="destinationlabel">
      <x>465</x>
      <y>191</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>lineEdit</receiver>
+   <slot>tractaReturn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>654</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>662</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>enviaText(QString)</signal>
+   <receiver>label</receiver>
+   <slot>toUpperCase(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>684</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>686</x>
+     <y>416</y>
     </hint>
    </hints>
   </connection>

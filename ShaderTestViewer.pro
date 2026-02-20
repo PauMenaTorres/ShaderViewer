@@ -12,11 +12,15 @@ INCLUDEPATH+=C:/Qt/Qt5.12.12/Tools/glm-master
 
 SOURCES += \
     MyGLWidget.cpp \
+    MyLabel.cpp \
+    MyLineEdit.cpp \
     main.cpp \
     widget.cpp
 
 HEADERS += \
     MyGLWidget.h \
+    MyLabel.h \
+    MyLineEdit.h \
     widget.h
 
 FORMS += \

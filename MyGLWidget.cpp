@@ -1,4 +1,4 @@
-#include "myglwidget.h"
+#include "MyGLWidget.h"
 
 MyGLWidget::MyGLWidget(QWidget* parent):QOpenGLWidget(parent)
 {
