@@ -4,6 +4,9 @@
 
 #include <QOpenGLFunctions_4_3_Core>
 #include <QOpenGLWidget>
+#include <QOpenGLShaderProgram>
+#include <QFile>
+#include <glm/glm.hpp>
 
 class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
 
@@ -24,7 +27,9 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
     private:
 
         void createBuffers();
+        void loadShaders();
         GLuint vertexLoc, VAO1;
+        QOpenGLShaderProgram* program;
 
     public slots:
 

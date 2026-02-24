@@ -13,127 +13,60 @@
   <property name="windowTitle">
    <string>Widget</string>
   </property>
-  <widget class="MyGLWidget" name="openGLWidget">
-   <property name="geometry">
-    <rect>
-     <x>14</x>
-     <y>14</y>
-     <width>500</width>
-     <height>500</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>500</width>
-     <height>500</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>800</width>
-     <height>800</height>
-    </size>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_2">
-   <property name="geometry">
-    <rect>
-     <x>580</x>
-     <y>40</y>
-     <width>111</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Red</string>
-   </property>
-  </widget>
-  <widget class="QSlider" name="horizontalSlider">
-   <property name="geometry">
-    <rect>
-     <x>550</x>
-     <y>120</y>
-     <width>160</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="maximum">
-    <number>100</number>
-   </property>
-   <property name="singleStep">
-    <number>1</number>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>12</x>
-     <y>523</y>
-     <width>216</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Exit</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="MyLineEdit" name="lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>590</x>
-     <y>270</y>
-     <width>113</width>
-     <height>24</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="MyLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>350</y>
-     <width>161</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Text: </string>
-   </property>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="MyGLWidget" name="openGLWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>500</width>
+       <height>500</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>800</width>
+       <height>800</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Exit</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>
@@ -142,24 +75,6 @@
    <header>MyGLWidget.h</header>
    <slots>
     <slot>changeToRed(int)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>MyLabel</class>
-   <extends>QLabel</extends>
-   <header location="global">MyLabel.h</header>
-   <slots>
-    <slot>toUpperCase(QString)</slot>
-    <slot>enviaText()</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>MyLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">MyLineEdit.h</header>
-   <slots>
-    <signal>enviaText(QString)</signal>
-    <slot>tractaReturn()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -178,54 +93,6 @@
     <hint type="destinationlabel">
      <x>527</x>
      <y>447</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>horizontalSlider</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>changeToRed(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>628</x>
-     <y>134</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>465</x>
-     <y>191</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit</sender>
-   <signal>returnPressed()</signal>
-   <receiver>lineEdit</receiver>
-   <slot>tractaReturn()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>654</x>
-     <y>288</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>662</x>
-     <y>285</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit</sender>
-   <signal>enviaText(QString)</signal>
-   <receiver>label</receiver>
-   <slot>toUpperCase(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>684</x>
-     <y>280</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>686</x>
-     <y>416</y>
     </hint>
    </hints>
   </connection>
