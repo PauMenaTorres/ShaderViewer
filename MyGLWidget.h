@@ -28,7 +28,7 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
 
         void createBuffers();
         void loadShaders();
-        GLuint vertexLoc, VAO1;
+        GLuint vertexLoc, colorLoc, VAO1;
         QOpenGLShaderProgram* program;
 
     public slots:

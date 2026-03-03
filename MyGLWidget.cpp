@@ -31,6 +31,21 @@ void MyGLWidget::createBuffers ()
    glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);   //6. Activate attribute    3=number of components of the vertices
    glEnableVertexAttribArray(vertexLoc);
 
+
+   glm::vec4 Colors[3]; // Defines the colors for the vertexs
+   Colors[0] = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+   Colors[1] = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+   Colors[2] = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+   GLuint VBO2;
+   glGenBuffers(1, &VBO2);             //3. Generate VBO
+   glBindBuffer(GL_ARRAY_BUFFER, VBO2);   //4. Activate the VBO
+   glBufferData(GL_ARRAY_BUFFER, sizeof(Colors), Colors, GL_STATIC_DRAW); //5.Fill the VBO
+
+   // Activation of the attribute
+   glVertexAttribPointer(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, 0);   //6. Activate attribute    3=number of components of the vertices
+   glEnableVertexAttribArray(colorLoc);
+
    // Disable the VAO
    glBindVertexArray(0);
 }
@@ -71,6 +86,7 @@ void MyGLWidget::loadShaders()
         program->bind();
 
         vertexLoc=glGetAttribLocation(program->programId(), "vertex");
+        colorLoc=glGetAttribLocation(program->programId(), "color");
 }
 
 void MyGLWidget::initializeGL()
