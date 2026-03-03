@@ -17,7 +17,7 @@
    <item>
     <widget class="MyGLWidget" name="openGLWidget">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -26,12 +26,6 @@
       <size>
        <width>500</width>
        <height>500</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>800</width>
-       <height>800</height>
       </size>
      </property>
     </widget>
@@ -50,6 +44,34 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_4">
+       <property name="text">
+        <string>2 Colors</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_3">
+       <property name="text">
+        <string>4 Colors</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_2">
+       <property name="text">
+        <string>Circle</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton">
+       <property name="text">
+        <string>4 Color Lines</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
@@ -75,6 +97,10 @@
    <header>MyGLWidget.h</header>
    <slots>
     <slot>changeToRed(int)</slot>
+    <slot>changeToButton1()</slot>
+    <slot>changeToButton2()</slot>
+    <slot>changeToButton3()</slot>
+    <slot>changeToButton4()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -87,12 +113,76 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>223</x>
-     <y>541</y>
+     <x>901</x>
+     <y>549</y>
     </hint>
     <hint type="destinationlabel">
      <x>527</x>
      <y>447</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>changeToButton1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>517</x>
+     <y>533</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>404</x>
+     <y>467</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>changeToButton3()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>682</x>
+     <y>535</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>681</x>
+     <y>480</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>changeToButton2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>608</x>
+     <y>530</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>625</x>
+     <y>482</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>changeToButton4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>742</x>
+     <y>535</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>780</x>
+     <y>476</y>
     </hint>
    </hints>
   </connection>

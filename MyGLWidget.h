@@ -28,13 +28,16 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
 
         void createBuffers();
         void loadShaders();
-        GLuint vertexLoc, colorLoc, VAO1;
+        GLuint vertexLoc, colorLoc, scaleLoc, idShaderLoc, VAO1;
         QOpenGLShaderProgram* program;
 
     public slots:
 
         void changeToRed(int value);
-
+        void changeToButton1();
+        void changeToButton2();
+        void changeToButton3();
+        void changeToButton4();
 
 
 };
