@@ -22,9 +22,9 @@ void MyGLWidget::createBuffers ()
    glBindVertexArray(VAO1);           //2. Bind VAO
 
    // Creation of the VBO with vertices data
-   GLuint VBO1;
-   glGenBuffers(1, &VBO1);             //3. Generate VBO
-   glBindBuffer(GL_ARRAY_BUFFER, VBO1);   //4. Activate the VBO
+   GLuint VBO[2];
+   glGenBuffers(2, VBO);             //3. Generate VBO
+   glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);   //4. Activate the VBO
    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW); //5.Fill the VBO
 
    // Activation of the attribute
@@ -33,13 +33,11 @@ void MyGLWidget::createBuffers ()
 
 
    glm::vec4 Colors[3]; // Defines the colors for the vertexs
-   Colors[0] = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-   Colors[1] = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-   Colors[2] = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+   Colors[0] = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+   Colors[1] = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f);
+   Colors[2] = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
-   GLuint VBO2;
-   glGenBuffers(1, &VBO2);             //3. Generate VBO
-   glBindBuffer(GL_ARRAY_BUFFER, VBO2);   //4. Activate the VBO
+   glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
    glBufferData(GL_ARRAY_BUFFER, sizeof(Colors), Colors, GL_STATIC_DRAW); //5.Fill the VBO
 
    // Activation of the attribute
