@@ -6,6 +6,9 @@
 #include <QOpenGLWidget>
 #include <QOpenGLShaderProgram>
 #include <QFile>
+#include <QKeyEvent>
+#include <QMouseEvent>
+
 #include <glm/glm.hpp>
 
 class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
@@ -24,16 +27,31 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         void paintGL();
         void resizeGL(int width, int height);
 
+        virtual void mousePressEvent ( QMouseEvent *e);
+        //virtual void mouseReleaseEvent ( QMouseEvent *e);
+        //virtual void mouseMoveEvent ( QMouseEvent *e);
+        virtual void keyPressEvent ( QKeyEvent *e);
+
     private:
 
         void createBuffers();
         void loadShaders();
-        GLuint vertexLoc, colorLoc, scaleLoc, idShaderLoc, VAO1;
+
+        float halfVP;
+        glm::vec2 mousePos;
+        glm::vec2 resolution;
+
+        glm::vec3 r0 = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 rd;
+        glm::vec2 uv;
+
+        GLuint vertexLoc, colorLoc, scaleLoc, idShaderLoc, halfLoc, resolutionLoc, mousePosLoc, VAO1;
         QOpenGLShaderProgram* program;
 
     public slots:
 
         void changeToRed(int value);
+        void showState(int s);
         void changeToButton1();
         void changeToButton2();
         void changeToButton3();

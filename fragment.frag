@@ -3,11 +3,13 @@ out vec4 FragColor; // el primer out siempre especifica el color del fragment
 in vec3 fcolor;
 uniform vec2 screenSize;
 uniform int idShader;
+uniform float halfScreen;
+uniform vec2 mousePosition;
 
 
 void Paint2Colors(void)
 {
-    if(gl_FragCoord.x < screenSize[0] / 2)
+    if(gl_FragCoord.x < halfScreen)
     {
         FragColor = vec4(1.0, 0.0, 0.0, 1.0);
     }
@@ -39,7 +41,7 @@ void Paint4Colors(void)
 
 void PaintCircle(void)
 {
-    vec2 center = (screenSize /2);
+    vec2 center = mousePosition;
 
     if(distance(center, gl_FragCoord.xy) < 75)
     {

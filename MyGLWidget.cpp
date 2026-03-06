@@ -1,4 +1,5 @@
 #include "MyGLWidget.h"
+#include <iostream>
 
 MyGLWidget::MyGLWidget(QWidget* parent):QOpenGLWidget(parent)
 {
@@ -97,6 +98,8 @@ void MyGLWidget::loadShaders()
     colorLoc=glGetAttribLocation(program->programId(), "color");
     scaleLoc=glGetUniformLocation(program->programId(), "screenSize");
     idShaderLoc=glGetUniformLocation(program->programId(), "idShader");
+    halfLoc=glGetUniformLocation(program->programId(), "halfScreen");
+    mousePosLoc=glGetUniformLocation(program->programId(), "mousePosition");
 }
 
 void MyGLWidget::initializeGL()
@@ -106,6 +109,11 @@ void MyGLWidget::initializeGL()
     loadShaders();
     createBuffers();
     glUniform1i(idShaderLoc, 1);
+
+//    GLint vp[4];
+//    glGetIntegerv(GL_VIEWPORT, vp);
+//    halfVP = vp[2];
+//    glUniform1f(halfLoc, halfVP);
 }
 
 void MyGLWidget::paintGL()
@@ -120,6 +128,37 @@ void MyGLWidget::resizeGL(int width, int height)
 {
     glm::vec2 screenSize(width, height);
     glUniform2fv(scaleLoc, 1, &screenSize[0]);
+
+    resolution = glm::vec2(width, height);
+    glUniform2fv(resolutionLoc, 1, &resolution[0]);
+    halfVP = width / 2;
+    glUniform1f(halfLoc, halfVP);
+}
+
+void MyGLWidget::keyPressEvent(QKeyEvent *e)
+{
+    makeCurrent ();   //Activate the OpenGL context
+    switch ( e->key() )
+    {
+        case  Qt::Key_A :
+            halfVP--;
+            glUniform1f(halfLoc, halfVP);
+            break;
+        case  Qt::Key_D :
+            halfVP++;
+            glUniform1f(halfLoc, halfVP);
+            break;
+        default: e->ignore (); // propagate to parent
+     }
+     update ();  //Refresh window
+}
+
+void MyGLWidget::mousePressEvent(QMouseEvent *e)
+{
+    makeCurrent();
+    mousePos = glm::vec2(e->x(), resolution.y - e->y());
+    glUniform2fv(mousePosLoc, 1, &mousePos[0]);
+    update();
 }
 
 void MyGLWidget::changeToRed(int value)
@@ -158,4 +197,9 @@ void MyGLWidget::changeToButton4()
     makeCurrent();
     glUniform1i(idShaderLoc, 4);
     update();
+}
+
+void MyGLWidget::showState(int s)
+{
+    std::cout << "Current State: " << s << std::endl;
 }

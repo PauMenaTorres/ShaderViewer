@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Widget</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="MyGLWidget" name="openGLWidget">
      <property name="sizePolicy">
@@ -28,50 +28,67 @@
        <height>500</height>
       </size>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_4">
-       <property name="text">
-        <string>2 Colors</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_3">
-       <property name="text">
-        <string>4 Colors</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton_2">
-       <property name="text">
-        <string>Circle</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButton">
-       <property name="text">
-        <string>4 Color Lines</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>CheckBox</string>
+         </property>
+         <property name="tristate">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_4">
+         <property name="text">
+          <string>2 Colors</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_3">
+         <property name="text">
+          <string>4 Colors</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_2">
+         <property name="text">
+          <string>Circle</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>4 Color Lines</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
@@ -101,6 +118,7 @@
     <slot>changeToButton2()</slot>
     <slot>changeToButton3()</slot>
     <slot>changeToButton4()</slot>
+    <slot>showState(int)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -113,7 +131,7 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>901</x>
+     <x>876</x>
      <y>549</y>
     </hint>
     <hint type="destinationlabel">
@@ -129,8 +147,8 @@
    <slot>changeToButton1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>517</x>
-     <y>533</y>
+     <x>837</x>
+     <y>415</y>
     </hint>
     <hint type="destinationlabel">
      <x>404</x>
@@ -145,8 +163,8 @@
    <slot>changeToButton3()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>682</x>
-     <y>535</y>
+     <x>836</x>
+     <y>475</y>
     </hint>
     <hint type="destinationlabel">
      <x>681</x>
@@ -161,8 +179,8 @@
    <slot>changeToButton2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>608</x>
-     <y>530</y>
+     <x>845</x>
+     <y>441</y>
     </hint>
     <hint type="destinationlabel">
      <x>625</x>
@@ -177,8 +195,8 @@
    <slot>changeToButton4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>742</x>
-     <y>535</y>
+     <x>828</x>
+     <y>504</y>
     </hint>
     <hint type="destinationlabel">
      <x>780</x>
@@ -186,5 +204,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>showState(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>876</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>727</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>showState(int)</slot>
+ </slots>
 </ui>
