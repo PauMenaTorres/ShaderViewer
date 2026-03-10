@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>fragment.frag</file>
         <file>vertex.vert</file>
+        <file>fragmentSphere.frag</file>
     </qresource>
 </RCC>

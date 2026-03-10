@@ -35,6 +35,7 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
     private:
 
         void createBuffers();
+        void createBuffers2();
         void loadShaders();
 
         float halfVP;

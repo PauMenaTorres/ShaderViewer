@@ -59,10 +59,53 @@ void MyGLWidget::createBuffers ()
    glBindVertexArray(0);
 }
 
+void MyGLWidget::createBuffers2()
+{
+    /*glm::vec3 Vertices[3];  // Defines a triangle with default camera
+    Vertices[0] = glm::vec3(-1.0, -1.0, 0.0);
+    Vertices[1] = glm::vec3(1.0, -1.0, 0.0);
+    Vertices[2] = glm::vec3(0.0, 1.0, 0.0);*/
+
+    glm::vec3 VertCol[4];
+    VertCol[0] = glm::vec3(-1.0, 1.0, -1.0);
+    VertCol[1] = glm::vec3(-1.0, -1.0, -1.0);
+    VertCol[2] = glm::vec3(1.0, 1.0, -1.0);
+    VertCol[3] = glm::vec3(1.0, -1.0, -1.0);
+
+   // Creation of the Vertex Array Object (VAO)
+   glGenVertexArrays(1, &VAO1);   //1. Generate VAO
+   glBindVertexArray(VAO1);           //2. Bind VAO
+
+   GLsizei stride = 2 * sizeof(glm::vec3);
+
+   // Creation of the VBO with vertices data
+   GLuint VBO;
+   glGenBuffers(1, &VBO);             //3. Generate VBO
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);   //4. Activate the VBO
+   glBufferData(GL_ARRAY_BUFFER, sizeof(VertCol), VertCol, GL_STATIC_DRAW); //5.Fill the VBO
+
+   // Activation of the attribute
+   glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);   //6. Activate attribute    3=number of components of the vertices
+   glEnableVertexAttribArray(vertexLoc);
+
+
+   /*glm::vec4 Colors[3]; // Defines the colors for the vertexs
+   Colors[0] = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+   Colors[1] = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f);
+   Colors[2] = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);*/
+
+   /*/glBindBuffer(GL_ARRAY_BUFFER, VBO);
+   glBufferData(GL_ARRAY_BUFFER, sizeof(Colors), Colors, GL_STATIC_DRAW); //5.Fill the VBO */
+
+
+   // Disable the VAO
+   glBindVertexArray(0);
+}
+
 void MyGLWidget::loadShaders()
 {
     program=new QOpenGLShaderProgram(this);
-    if (!QFile::exists(":/fragment.frag")) {
+    if (!QFile::exists(":/fragmentSphere.frag")) {
 
         qCritical() << "ERROR: El fitxer :/fragment.frag no existeix als recursos!";
         return;
@@ -80,7 +123,7 @@ void MyGLWidget::loadShaders()
 
     }
 
-    if (!program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fragment.frag")) {
+    if (!program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fragmentSphere.frag")) {
 
         qCritical() << "Error en Fragment Shader:" << program->log();
 
@@ -107,7 +150,7 @@ void MyGLWidget::initializeGL()
     initializeOpenGLFunctions();
     glClearColor(0.5 , 0.7, 1.0, 1.0);
     loadShaders();
-    createBuffers();
+    createBuffers2();
     glUniform1i(idShaderLoc, 1);
 
 //    GLint vp[4];
@@ -120,7 +163,7 @@ void MyGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glBindVertexArray(VAO1);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 }
 

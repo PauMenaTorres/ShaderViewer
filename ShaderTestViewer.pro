@@ -41,4 +41,5 @@ RESOURCES += \
 
 DISTFILES += \
     fragment.frag \
+    fragmentSphere.frag \
     vertex.vert
