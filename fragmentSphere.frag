@@ -77,11 +77,11 @@ void main(void)
     spheres[3].position.xyz = centerPink;
     spheres[4].position.xyz = centerYellow;
 
-    spheres[0].color = FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    spheres[1].color = FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-    spheres[2].color = FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-    spheres[3].color = FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-    spheres[4].color = FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+    spheres[0].color = vec4(1.0, 0.0, 0.0, 1.0);
+    spheres[1].color = vec4(0.0, 1.0, 0.0, 1.0);
+    spheres[2].color = vec4(0.0, 0.0, 1.0, 1.0);
+    spheres[3].color = vec4(1.0, 0.0, 1.0, 1.0);
+    spheres[4].color = vec4(1.0, 1.0, 0.0, 1.0);
 
     spheres[0].radius = radiusRed;
     spheres[1].radius = radiusGreen;
