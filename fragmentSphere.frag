@@ -3,7 +3,14 @@ out vec4 FragColor; // el primer out siempre especifica el color del fragment
 
 uniform vec2 screenSize;
 
-bool CalculateIntersection(vec3 r0, vec3 rd, vec3 C, float r)
+struct Sphere
+{
+    vec4 position;
+    vec4 color;
+    float radius;
+};
+
+float CalculateIntersection(vec3 r0, vec3 rd, vec3 C, float r)
 {
     vec3 oc = r0 - C;
 
@@ -15,7 +22,7 @@ bool CalculateIntersection(vec3 r0, vec3 rd, vec3 C, float r)
 
     if(disc < 0.0)
     {
-        return false;
+        return -1;
     }
     else
     {
@@ -26,44 +33,112 @@ bool CalculateIntersection(vec3 r0, vec3 rd, vec3 C, float r)
 
         if(t <= 0.0)
         {
-            return false;
+            return -1;
         }
         else
         {
-            return true;
+            return t;
         }
     }
 }
 
+
+
 void main(void)
 {
+    float tMin = 1e30;
+    int iMin = 5;
+
     vec2 uv = (gl_FragCoord.xy / screenSize) * 2.0 - 1.0;
     uv.x *= screenSize.x / screenSize.y;
 
-    vec3 r0 = vec3(0.0, 0.0, 2.0);
+    vec3 r0 = vec3(0.0, 0.0, 1.0);
     vec3 rd = normalize(vec3(uv, -1.0));
 
     vec3 centerRed = vec3(0.0, 0.0, 0.0);
     float radiusRed = 0.5;
 
-    vec3 centerGreen = vec3(-0.2, 0.0, 0.0);
-    float radiusGreen = 0.3;
+    vec3 centerGreen = vec3(0.0, -0.7, 0.0);
+    float radiusGreen = 0.2;
 
-    bool hitGreen = CalculateIntersection(r0, rd, centerGreen, radiusGreen);
-    bool hitRed = CalculateIntersection(r0, rd, centerRed, radiusRed);
+    vec3 centerBlue = vec3(0.0, 0.7, 0.0);
+    float radiusBlue = 0.2;
 
-    if(hitGreen)
+    vec3 centerPink = vec3(0.7, 0.0, 0.0);
+    float radiusPink = 0.3;
+
+    vec3 centerYellow = vec3(-0.7, 0.0, 0.0);
+    float radiusYellow = 0.3;
+
+    Sphere[5] spheres;
+    spheres[0].position.xyz = centerRed;
+    spheres[1].position.xyz = centerGreen;
+    spheres[2].position.xyz = centerBlue;
+    spheres[3].position.xyz = centerPink;
+    spheres[4].position.xyz = centerYellow;
+
+    spheres[0].color = FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    spheres[1].color = FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+    spheres[2].color = FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+    spheres[3].color = FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+    spheres[4].color = FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+
+    spheres[0].radius = radiusRed;
+    spheres[1].radius = radiusGreen;
+    spheres[2].radius = radiusBlue;
+    spheres[3].radius = radiusPink;
+    spheres[4].radius = radiusYellow;
+
+    for(int i = 0; i < 5; i++)
     {
-        FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+        float t = CalculateIntersection(r0, rd, spheres[i].position.xyz, spheres[i].radius);
+
+        if (t >= 0)
+        {
+            if (t < tMin)
+            {
+                tMin = t;
+                iMin = i;
+            }
+        }
     }
-    else if(hitRed)
+
+    if (tMin != 1e30)
     {
-        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        FragColor = spheres[iMin].color;
     }
     else
     {
-        FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+        discard;
     }
+
+    /*
+    float tGreen = CalculateIntersection(r0, rd, centerGreen, radiusGreen);
+    float tRed = CalculateIntersection(r0, rd, centerRed, radiusRed);
+
+    if (tRed >= 0 && tGreen >= 0)
+    {
+        if(tRed < tGreen)
+        {
+            FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }
+        else
+        {
+            FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+        }
+    }
+    else if (tRed >= 0)
+    {
+        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    }
+    else if (tGreen >= 0)
+    {
+        FragColor = vec4(0.0, 1.0, 0.0, 1.0);
+    }
+    else
+    {
+        discard;
+    }*/
 
 
 }
