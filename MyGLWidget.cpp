@@ -76,8 +76,6 @@ void MyGLWidget::createBuffers2()
    glGenVertexArrays(1, &VAO1);   //1. Generate VAO
    glBindVertexArray(VAO1);           //2. Bind VAO
 
-   GLsizei stride = 2 * sizeof(glm::vec3);
-
    // Creation of the VBO with vertices data
    GLuint VBO;
    glGenBuffers(1, &VBO);             //3. Generate VBO
