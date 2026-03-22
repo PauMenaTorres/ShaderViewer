@@ -55,10 +55,13 @@ vec3 Diffuse(vec3 point, vec3 normal, vec3 difuse, vec3 lightPos, vec3 lightColo
 
 vec3 Specular(vec3 point, vec3 normal, vec3 specular, float shininess, vec3 obs, vec3 lightPos, vec3 lightColor)
 {
-    vec3 R = reflect(normalize(lightPos - point), normalize(normal));
+    vec3 I = normalize(point - lightPos);
+    vec3 R = reflect(I, normalize(normal));
     vec3 V = normalize(obs - point);
 
-    return specular * normalize(lightColor) * pow(dot(R, V), shininess);
+    float specAngle = max(0.0, dot(R, V));
+
+    return specular * lightColor * pow(specAngle, shininess);
 }
 
 
@@ -90,23 +93,25 @@ void main(void)
 
     Sphere[5] spheres;
     spheres[0].position.xyz = centerRed;
-    /*spheres[1].position.xyz = centerGreen;
-    spheres[2].position.xyz = centerBlue;
-    spheres[3].position.xyz = centerPink;
-    spheres[4].position.xyz = centerYellow;
-    */
     spheres[0].color = vec4(1.0, 0.0, 0.0, 1.0);
-    /*spheres[1].color = vec4(0.0, 1.0, 0.0, 1.0);
-    spheres[2].color = vec4(0.0, 0.0, 1.0, 1.0);
-    spheres[3].color = vec4(1.0, 0.0, 1.0, 1.0);
-    spheres[4].color = vec4(1.0, 1.0, 0.0, 1.0);
-    */
     spheres[0].radius = radiusRed;
-    /*spheres[1].radius = radiusGreen;
+
+/*    spheres[1].position.xyz = centerGreen;
+    spheres[1].color = vec4(0.0, 1.0, 0.0, 1.0);
+    spheres[1].radius = radiusGreen;
+
+    spheres[2].position.xyz = centerBlue;
+    spheres[2].color = vec4(0.0, 0.0, 1.0, 1.0);
     spheres[2].radius = radiusBlue;
+
+    spheres[3].position.xyz = centerPink;
+    spheres[3].color = vec4(1.0, 0.0, 1.0, 1.0);
     spheres[3].radius = radiusPink;
+
+    spheres[4].position.xyz = centerYellow;
+    spheres[4].color = vec4(1.0, 1.0, 0.0, 1.0);
     spheres[4].radius = radiusYellow;
-    */
+*/
 
     for(int i = 0; i < 1; i++)
     {
@@ -125,8 +130,8 @@ void main(void)
     if (tMin != 1e30)
     {
         //Ambient
-        vec3 ambient = vec3(0.1f, 0.1f, 0.1f);
-        vec3 globalAmbient = vec3(0.1f, 0.1f, 0.1f);
+        vec3 ambient = vec3(0.5f, 0.5f, 0.5f);
+        vec3 globalAmbient = vec3(0.5f, 0.5f, 0.5f);
         vec3 ambientCalc =  spheres[iMin].color.xyz * Ambient(ambient, globalAmbient);
 
         //Diffuse
@@ -136,12 +141,12 @@ void main(void)
         vec3 lightPos = vec3(1.0, 1.0, 1.0);
         vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
-        vec3 diffuseCalc = spheres[iMin].color.xyz * Diffuse(point, normal, diffuse, lightPos, lightColor);
+        vec3 diffuseCalc = Diffuse(point, normal, diffuse, lightPos, lightColor);
         //Specular
-        vec3 specular = vec3(1.0, 1.0, 1.0);
-        float shininess = 0.1f;
+        vec3 specular = vec3(0.6f, 0.6f, 0.6f);
+        float shininess = 128.0f;
 
-        vec3 specularCalc = spheres[iMin].color.xyz * Specular(point, normal, specular, shininess, r0, lightPos, lightColor);
+        vec3 specularCalc = Specular(point, normal, specular, shininess, r0, lightPos, lightColor);
 
         FragColor = vec4(ambientCalc + diffuseCalc + specularCalc, 1.0f);
         //FragColor = spheres[iMin].color;
