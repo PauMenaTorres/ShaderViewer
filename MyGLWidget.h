@@ -11,6 +11,14 @@
 
 #include <glm/glm.hpp>
 
+using namespace glm;
+
+struct SphereData {
+    vec3 center;
+    float radius;
+    vec4 color;
+};
+
 class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
 
 {
@@ -39,15 +47,13 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         void loadShaders();
 
         float halfVP;
-        glm::vec2 mousePos;
-        glm::vec2 resolution;
-
-        glm::vec3 r0 = glm::vec3(0.0, 0.0, 0.0);
-        glm::vec3 rd;
-        glm::vec2 uv;
+        vec2 mousePos;
+        vec2 resolution;
 
         GLuint vertexLoc, colorLoc, scaleLoc, idShaderLoc, halfLoc, resolutionLoc, mousePosLoc, VAO1;
         QOpenGLShaderProgram* program;
+
+        std::vector<SphereData> mySpheres;
 
     public slots:
 
@@ -57,6 +63,9 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         void changeToButton2();
         void changeToButton3();
         void changeToButton4();
+
+        void addSphere(vec3 C, float r, vec4 color);
+        void sendSpheresToShader();
 
 
 };

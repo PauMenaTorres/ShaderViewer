@@ -2,6 +2,7 @@
 out vec4 FragColor; // el primer out siempre especifica el color del fragment
 
 uniform vec2 screenSize;
+uniform int numSpheres;
 
 struct Sphere
 {
@@ -9,6 +10,9 @@ struct Sphere
     vec4 color;
     float radius;
 };
+
+uniform Sphere spheres[50];
+
 
 float CalculateIntersection(vec3 r0, vec3 rd, vec3 C, float r)
 {
@@ -90,13 +94,12 @@ void main(void)
 
     vec3 centerYellow = vec3(-0.7, 0.0, 0.0);
     float radiusYellow = 0.3;
-
-    Sphere[5] spheres;
+    /*
     spheres[0].position.xyz = centerRed;
     spheres[0].color = vec4(1.0, 0.0, 0.0, 1.0);
     spheres[0].radius = radiusRed;
 
-/*    spheres[1].position.xyz = centerGreen;
+    spheres[1].position.xyz = centerGreen;
     spheres[1].color = vec4(0.0, 1.0, 0.0, 1.0);
     spheres[1].radius = radiusGreen;
 
@@ -113,7 +116,7 @@ void main(void)
     spheres[4].radius = radiusYellow;
 */
 
-    for(int i = 0; i < 1; i++)
+    for(int i = 0; i < numSpheres; i++)
     {
         float t = CalculateIntersection(r0, rd, spheres[i].position.xyz, spheres[i].radius);
 

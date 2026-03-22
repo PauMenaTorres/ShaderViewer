@@ -149,6 +149,7 @@ void MyGLWidget::initializeGL()
     glClearColor(0.5 , 0.7, 1.0, 1.0);
     loadShaders();
     createBuffers2();
+
     glUniform1i(idShaderLoc, 1);
 
 //    GLint vp[4];
@@ -160,6 +161,9 @@ void MyGLWidget::initializeGL()
 void MyGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT);
+
+    sendSpheresToShader();
+
     glBindVertexArray(VAO1);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
@@ -243,4 +247,33 @@ void MyGLWidget::changeToButton4()
 void MyGLWidget::showState(int s)
 {
     std::cout << "Current State: " << s << std::endl;
+}
+
+void MyGLWidget::addSphere(glm::vec3 C, float r, glm::vec4 color)
+{
+    SphereData newSphere;
+    newSphere.center = C;
+    newSphere.radius = r;
+    newSphere.color = color;
+
+    mySpheres.push_back(newSphere);
+    update();
+}
+
+void MyGLWidget::sendSpheresToShader()
+{
+    program->bind();
+
+    program->setUniformValue("numSpheres", (int)mySpheres.size());
+
+    for(size_t i = 0; i < mySpheres.size(); i++)
+    {
+        QString posName = QString("spheres[%1].position").arg(i);
+        QString colName = QString("spheres[%1].color").arg(i);
+        QString radName = QString("spheres[%1].radius").arg(i);
+
+        program->setUniformValue(posName.toStdString().c_str(), QVector4D(mySpheres[i].center.x, mySpheres[i].center.y, mySpheres[i].center.z, 1.0f));
+        program->setUniformValue(colName.toStdString().c_str(), QVector4D(mySpheres[i].color.r, mySpheres[i].color.g, mySpheres[i].color.b, mySpheres[i].color.a));
+        program->setUniformValue(radName.toStdString().c_str(), mySpheres[i].radius);
+    }
 }
