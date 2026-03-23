@@ -14,7 +14,7 @@ Widget::~Widget()
 }
 
 
-void Widget::on_pushButton_2_clicked()
+void Widget::on_addSphere_clicked()
 {
     float px = ui->spinX->value();
     float py = ui->spinY->value();
