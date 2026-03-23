@@ -150,8 +150,9 @@ void MyGLWidget::initializeGL()
     loadShaders();
     createBuffers2();
 
-    glUniform1i(idShaderLoc, 1);
+    addSphere(vec3(0.0, 0.0, 0.0), 0.3, vec4(0.6, 0.0, 0.9, 1.0));
 
+    glUniform1i(idShaderLoc, 1);
 //    GLint vp[4];
 //    glGetIntegerv(GL_VIEWPORT, vp);
 //    halfVP = vp[2];
