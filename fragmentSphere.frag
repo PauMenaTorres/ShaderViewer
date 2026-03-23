@@ -137,6 +137,7 @@ void main(void)
             normal = normalize(point - spheres[iMin].position.xyz);
             objectColor = spheres[iMin].color.xyz;
         }
+
         //Ambient
         vec3 ambient = vec3(0.5f, 0.5f, 0.5f);
         vec3 globalAmbient = vec3(0.5f, 0.5f, 0.5f);
