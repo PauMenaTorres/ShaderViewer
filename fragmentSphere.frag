@@ -4,11 +4,18 @@ out vec4 FragColor; // el primer out siempre especifica el color del fragment
 uniform vec2 screenSize;
 uniform int numSpheres;
 
+uniform vec3 lightPosition;
+uniform vec3 lightColor;
+uniform vec3 globalAmbient;
+
 struct Sphere
 {
     vec4 position;
     vec4 color;
     float radius;
+    vec3 ka; // Constante ambiental
+    vec3 kd; // Constante difusa
+    vec3 ks; // Constante especular
 };
 
 uniform Sphere spheres[50];
@@ -127,42 +134,61 @@ void main(void)
         vec3 normal;
         vec3 objectColor;
 
+        vec3 kaObj;
+        vec3 kdObj;
+        vec3 ksObj;
+
         if (iMin == -1)
         {
             normal = planeNormal;
-            objectColor = vec3(0.4, 0.4, 0.4); // Color plano
+            float size = 1.0;
+            float checker = mod(floor(point.x / size) + floor(point.z / size), 2.0);
+
+            if (checker < 1.0)
+            {
+                objectColor = vec3(0.2, 0.2, 0.2); // Gris oscuro
+            }
+            else
+            {
+                objectColor = vec3(0.4, 0.4, 0.4); // Gris claro
+            }
+
+            kaObj = vec3(1.0, 1.0, 1.0);
+            kdObj = vec3(1.0, 1.0, 1.0);
+            ksObj = vec3(1.0, 1.0, 1.0);
         }
         else
         {
             normal = normalize(point - spheres[iMin].position.xyz);
             objectColor = spheres[iMin].color.xyz;
+            kaObj = vec3(spheres[iMin].ka);
+            kdObj = vec3(spheres[iMin].kd);
+            ksObj = vec3(spheres[iMin].ks);
         }
 
         //Ambient
         vec3 ambient = vec3(0.5f, 0.5f, 0.5f);
         vec3 globalAmbient = vec3(0.5f, 0.5f, 0.5f);
 
-        vec3 ambientCalc =  objectColor * Ambient(ambient, globalAmbient);
+        vec3 ambientCalc = objectColor * Ambient(kaObj, globalAmbient);
 
         //Diffuse
         vec3 diffuse = objectColor;
-        vec3 lightPos = vec3(1.0, 1.0, 1.0);
-        vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
-        vec3 diffuseCalc = Diffuse(point, normal, diffuse, lightPos, lightColor);
+        vec3 diffuseCalc = Diffuse(point, normal, diffuse * kdObj, lightPosition, lightColor);
 
         //Specular
         vec3 specular = vec3(0.6f, 0.6f, 0.6f);
         float shininess = 128.0f;
 
-        vec3 specularCalc = Specular(point, normal, specular, shininess, r0, lightPos, lightColor);
+        vec3 specularCalc = Specular(point, normal, ksObj, shininess, r0, lightPosition, lightColor);
 
         FragColor = vec4(ambientCalc + diffuseCalc + specularCalc, 1.0f);
         //FragColor = spheres[iMin].color;
     }
     else
     {
-        discard;
+        FragColor = vec4(0.76, 0.69, 0.52, 1.0);
     }
 
 }

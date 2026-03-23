@@ -16,8 +16,6 @@ public:
     ~Widget();
 
 private slots:
-    void on_addSphere_clicked();
-
 private:
     Ui::Widget *ui;
 };
