@@ -46,6 +46,22 @@ float CalculateIntersection(vec3 r0, vec3 rd, vec3 C, float r)
     }
 }
 
+float CalculatePlaneIntersection(vec3 ro, vec3 rd, vec3 p0, vec3 n)
+{
+    float denom = dot(rd, n);
+
+    if (abs(denom) < 1e-6)
+    {
+        return -1;
+    }
+    else
+    {
+        float t = dot(p0 - ro, n) / denom;
+        if (t >= 0.0)
+            return t;
+    }
+    return -1;
+}
 
 vec3 Ambient(vec3 ambient, vec3 globalAmbient)
 {
@@ -72,7 +88,7 @@ vec3 Specular(vec3 point, vec3 normal, vec3 specular, float shininess, vec3 obs,
 void main(void)
 {
     float tMin = 1e30;
-    int iMin = 5;
+    int iMin = -1;
 
     vec2 uv = (gl_FragCoord.xy / screenSize) * 2.0 - 1.0;
     uv.x *= screenSize.x / screenSize.y;
@@ -80,51 +96,26 @@ void main(void)
     vec3 r0 = vec3(0.0, 0.0, 1.0);
     vec3 rd = normalize(vec3(uv, -1.0));
 
-    vec3 centerRed = vec3(0.0, 0.0, 0.0);
-    float radiusRed = 0.5;
+    vec3 planePos = vec3(0.0, -1.0, 0.0);
+    vec3 planeNormal = vec3(0.0, 1.0, 0.0);
 
-    vec3 centerGreen = vec3(0.0, -0.7, 0.0);
-    float radiusGreen = 0.2;
+    float tPlane = CalculatePlaneIntersection(r0, rd, planePos, planeNormal);
 
-    vec3 centerBlue = vec3(0.0, 0.7, 0.0);
-    float radiusBlue = 0.2;
-
-    vec3 centerPink = vec3(0.7, 0.0, 0.0);
-    float radiusPink = 0.3;
-
-    vec3 centerYellow = vec3(-0.7, 0.0, 0.0);
-    float radiusYellow = 0.3;
-    /*
-    spheres[0].position.xyz = centerRed;
-    spheres[0].color = vec4(1.0, 0.0, 0.0, 1.0);
-    spheres[0].radius = radiusRed;
-
-    spheres[1].position.xyz = centerGreen;
-    spheres[1].color = vec4(0.0, 1.0, 0.0, 1.0);
-    spheres[1].radius = radiusGreen;
-
-    spheres[2].position.xyz = centerBlue;
-    spheres[2].color = vec4(0.0, 0.0, 1.0, 1.0);
-    spheres[2].radius = radiusBlue;
-
-    spheres[3].position.xyz = centerPink;
-    spheres[3].color = vec4(1.0, 0.0, 1.0, 1.0);
-    spheres[3].radius = radiusPink;
-
-    spheres[4].position.xyz = centerYellow;
-    spheres[4].color = vec4(1.0, 1.0, 0.0, 1.0);
-    spheres[4].radius = radiusYellow;
-*/
+    if (tPlane > 0.0)
+    {
+        tMin = tPlane;
+        iMin = -1;
+    }
 
     for(int i = 0; i < numSpheres; i++)
     {
-        float t = CalculateIntersection(r0, rd, spheres[i].position.xyz, spheres[i].radius);
+        float tSpheres = CalculateIntersection(r0, rd, spheres[i].position.xyz, spheres[i].radius);
 
-        if (t >= 0)
+        if (tSpheres >= 0)
         {
-            if (t < tMin)
+            if (tSpheres < tMin)
             {
-                tMin = t;
+                tMin = tSpheres;
                 iMin = i;
             }
         }
@@ -132,19 +123,33 @@ void main(void)
 
     if (tMin != 1e30)
     {
+        vec3 point = r0 + tMin*rd;
+        vec3 normal;
+        vec3 objectColor;
+
+        if (iMin == -1)
+        {
+            normal = planeNormal;
+            objectColor = vec3(0.4, 0.4, 0.4); // Color plano
+        }
+        else
+        {
+            normal = normalize(point - spheres[iMin].position.xyz);
+            objectColor = spheres[iMin].color.xyz;
+        }
         //Ambient
         vec3 ambient = vec3(0.5f, 0.5f, 0.5f);
         vec3 globalAmbient = vec3(0.5f, 0.5f, 0.5f);
-        vec3 ambientCalc =  spheres[iMin].color.xyz * Ambient(ambient, globalAmbient);
+
+        vec3 ambientCalc =  objectColor * Ambient(ambient, globalAmbient);
 
         //Diffuse
-        vec3 point = r0 + tMin*rd;
-        vec3 normal = normalize(point - spheres[iMin].position.xyz);
-        vec3 diffuse = spheres[iMin].color.xyz;
+        vec3 diffuse = objectColor;
         vec3 lightPos = vec3(1.0, 1.0, 1.0);
         vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
         vec3 diffuseCalc = Diffuse(point, normal, diffuse, lightPos, lightColor);
+
         //Specular
         vec3 specular = vec3(0.6f, 0.6f, 0.6f);
         float shininess = 128.0f;
@@ -158,34 +163,5 @@ void main(void)
     {
         discard;
     }
-
-    /*
-    float tGreen = CalculateIntersection(r0, rd, centerGreen, radiusGreen);
-    float tRed = CalculateIntersection(r0, rd, centerRed, radiusRed);
-
-    if (tRed >= 0 && tGreen >= 0)
-    {
-        if(tRed < tGreen)
-        {
-            FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-        }
-        else
-        {
-            FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-        }
-    }
-    else if (tRed >= 0)
-    {
-        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    }
-    else if (tGreen >= 0)
-    {
-        FragColor = vec4(0.0, 1.0, 0.0, 1.0);
-    }
-    else
-    {
-        discard;
-    }*/
-
 
 }
