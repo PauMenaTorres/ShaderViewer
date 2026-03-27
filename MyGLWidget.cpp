@@ -87,28 +87,53 @@ void MyGLWidget::createBuffers2()
    glBindVertexArray(0);
 }
 
+void MyGLWidget::createBuffersModel()
+{
+   glGenVertexArrays(1, &VAO1);   //1. Generate VAO
+   glBindVertexArray(VAO1);           //2. Bind VAO
+
+   GLuint VBO[2];
+   glGenBuffers(2, VBO);             //3. Generate VBO
+   glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);   //4. Activate the VBO
+   glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_vertices(), GL_STATIC_DRAW); //5.Fill the VBO
+
+   // Activation of the attribute
+   glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);   //6. Activate attribute    3=number of components of the vertices
+   glEnableVertexAttribArray(vertexLoc);
+
+
+   glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);   //4. Activate the VBO
+   glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_matdiff(), GL_STATIC_DRAW); //5.Fill the VBO
+
+   // Activation of the attribute
+   glVertexAttribPointer(colorLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);   //6. Activate attribute    3=number of components of the vertices
+   glEnableVertexAttribArray(colorLoc);
+
+   glBindVertexArray(0);
+}
+
 void MyGLWidget::loadShaders()
 {
     program=new QOpenGLShaderProgram(this);
-    if (!QFile::exists(":/fragmentSphere.frag")) {
+    if (!QFile::exists(":/fragmentModel.frag")) {
 
-        qCritical() << "ERROR: El fitxer :/fragment.frag no existeix als recursos!";
+        qCritical() << "ERROR: El fitxer :/fragmentModel.frag no existeix als recursos!";
         return;
     }
 
-    if (!QFile::exists(":/vertex.vert")) {
+    if (!QFile::exists(":/vertexModel.vert")) {
 
-        qCritical() << "ERROR: El fitxer :/vertex.vert no existeix als recursos!";
+        qCritical() << "ERROR: El fitxer :/vertexModel.vert no existeix als recursos!";
         return;
     }
 
-    if (!program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertex.vert")) {
+    if (!program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/vertexModel.vert")) {
 
         qCritical() << "Error en Vertex Shader:" << program->log();
 
     }
 
-    if (!program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fragmentSphere.frag")) {
+    if (!program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/fragmentModel.frag")) {
 
         qCritical() << "Error en Fragment Shader:" << program->log();
 
@@ -138,14 +163,19 @@ void MyGLWidget::getShaderLocations()
     lightPositionLoc = glGetUniformLocation(program->programId(), "lightPosition");
     lightColorLoc = glGetUniformLocation(program->programId(), "lightColor");
     globalAmbientLoc = glGetUniformLocation(program->programId(), "globalAmbient");
+
+    TGLoc = glGetUniformLocation(program->programId(), "TG");
 }
 
 void MyGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
-    glClearColor(0.5 , 0.7, 1.0, 1.0);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.76, 0.69, 0.52, 1.0);
     loadShaders();
-    createBuffers2();
+    m.load("Models3D/f-16.obj");
+    computeAABB(m);
+    createBuffersModel();
 
     SphereData defaultSphere;
     defaultSphere.center = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -155,7 +185,7 @@ void MyGLWidget::initializeGL()
     defaultSphere.kd = glm::vec3(0.8f, 0.8f, 0.8f);
     defaultSphere.ks = glm::vec3(1.0f, 1.0f, 1.0f);
 
-    mySpheres.push_back(defaultSphere);
+    //mySpheres.push_back(defaultSphere);
 
     glUniform1i(idShaderLoc, 1);
 
@@ -169,19 +199,21 @@ void MyGLWidget::initializeGL()
     myLightPos = vec3(1.0f);
     myLightColor = vec3(1.0f);
     myGlobalAmbient = vec3(0.5f);
+
 }
 
 void MyGLWidget::paintGL()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindVertexArray(VAO1);
 
     program->bind();
 
     sendLightToShader();
     sendSpheresToShader();
 
-    glBindVertexArray(VAO1);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    modelTransform();
+    glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);
     glBindVertexArray(0);
 }
 
@@ -194,6 +226,44 @@ void MyGLWidget::resizeGL(int width, int height)
     glUniform2fv(resolutionLoc, 1, &resolution[0]);
     halfVP = width / 2;
     glUniform1f(halfLoc, halfVP);
+}
+
+void MyGLWidget::modelTransform()
+{
+    glm::mat4 TG(1.0);
+    TG = glm::scale(TG, glm::vec3(0.5));
+    TG = glm::rotate(TG, (float)M_PI, glm::vec3(0.0, 1.0, 0.0));
+    glUniformMatrix4fv(TGLoc, 1, GL_FALSE, &TG[0][0]);
+}
+
+void MyGLWidget::computeAABB(Model &m)
+{
+    float xmin, xmax, ymin, ymax, zmin, zmax;
+    xmin = m.vertices()[0];
+    xmax = m.vertices()[0];
+    ymin = m.vertices()[1];
+    ymax = m.vertices()[1];
+    zmin = m.vertices()[2];
+    zmax = m.vertices()[2];
+
+    for(int i = 0; i < m.vertices(), i = i+3)
+    {
+        if(m.vertices()[i] < xmin) xmin = m.vertices()[i];
+        if(m.vertices()[i] > xmax) xmax = m.vertices()[i];
+
+        if(m.vertices()[i] < ymin) ymin = m.vertices()[i + 1];
+        if(m.vertices()[i] > ymax) ymax = m.vertices()[i + 1];
+
+        if(m.vertices()[i] < zmin) zmin = m.vertices()[i + 2];
+        if(m.vertices()[i] > zmax) zmax = m.vertices()[i + 2];
+    }
+
+    aabb[0] = xmin;
+    aabb[1] = xmax;
+    aabb[2] = ymin;
+    aabb[3] = ymax;
+    aabb[4] = zmin;
+    aabb[5] = zmax;
 }
 
 void MyGLWidget::keyPressEvent(QKeyEvent *e)

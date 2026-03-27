@@ -3,5 +3,7 @@
         <file>fragment.frag</file>
         <file>vertex.vert</file>
         <file>fragmentSphere.frag</file>
+        <file>fragmentModel.frag</file>
+        <file>vertexModel.vert</file>
     </qresource>
 </RCC>

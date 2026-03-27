@@ -15,12 +15,14 @@ SOURCES += \
     MyLabel.cpp \
     MyLineEdit.cpp \
     main.cpp \
+    model.cpp \
     widget.cpp
 
 HEADERS += \
     MyGLWidget.h \
     MyLabel.h \
     MyLineEdit.h \
+    model.h \
     widget.h
 
 FORMS += \
@@ -41,5 +43,7 @@ RESOURCES += \
 
 DISTFILES += \
     fragment.frag \
+    fragmentModel.frag \
     fragmentSphere.frag \
-    vertex.vert
+    vertex.vert \
+    vertexModel.vert

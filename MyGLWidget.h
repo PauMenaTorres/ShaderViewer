@@ -12,6 +12,9 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <model.h>
 
 using namespace glm;
 
@@ -42,11 +45,19 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         //virtual void mouseMoveEvent ( QMouseEvent *e);
         virtual void keyPressEvent ( QKeyEvent *e);
 
+        void modelTransform();
+
     private:
+
+        Model m;
+        float aabb[6];
 
         void createBuffers();
         void createBuffers2();
+        void createBuffersModel();
         void loadShaders();
+        void computeAABB(Model &m);
+
         void getShaderLocations();
         void sendSpheresToShader();
         void sendLightToShader();
@@ -56,7 +67,7 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         vec2 resolution;
 
         GLuint VAO1;
-        GLuint vertexLoc, colorLoc, scaleLoc, idShaderLoc, halfLoc, resolutionLoc, mousePosLoc;
+        GLuint vertexLoc, colorLoc, scaleLoc, idShaderLoc, halfLoc, resolutionLoc, mousePosLoc, TGLoc;
 
         GLuint numSpheresLoc;
         GLuint lightPositionLoc, lightColorLoc, globalAmbientLoc;
