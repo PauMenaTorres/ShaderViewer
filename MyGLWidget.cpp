@@ -246,7 +246,7 @@ void MyGLWidget::computeAABB(Model &m)
     zmin = m.vertices()[2];
     zmax = m.vertices()[2];
 
-    for(int i = 0; i < m.vertices(), i = i+3)
+    for(int i = 0; i < m.vertices(); i = i+3)
     {
         if(m.vertices()[i] < xmin) xmin = m.vertices()[i];
         if(m.vertices()[i] > xmax) xmax = m.vertices()[i];
