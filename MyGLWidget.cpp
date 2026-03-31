@@ -60,11 +60,6 @@ void MyGLWidget::createBuffers ()
 
 void MyGLWidget::createBuffers2()
 {
-    /*glm::vec3 Vertices[3];  // Defines a triangle with default camera
-    Vertices[0] = glm::vec3(-1.0, -1.0, 0.0);
-    Vertices[1] = glm::vec3(1.0, -1.0, 0.0);
-    Vertices[2] = glm::vec3(0.0, 1.0, 0.0);*/
-
     glm::vec3 VertCol[4];
     VertCol[0] = glm::vec3(-1.0, 1.0, -1.0);
     VertCol[1] = glm::vec3(-1.0, -1.0, -1.0);
@@ -87,30 +82,6 @@ void MyGLWidget::createBuffers2()
    glBindVertexArray(0);
 }
 
-void MyGLWidget::createBuffersModel()
-{
-   glGenVertexArrays(1, &VAO1);   //1. Generate VAO
-   glBindVertexArray(VAO1);           //2. Bind VAO
-
-   GLuint VBO[2];
-   glGenBuffers(2, VBO);             //3. Generate VBO
-   glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);   //4. Activate the VBO
-   glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_vertices(), GL_STATIC_DRAW); //5.Fill the VBO
-
-   // Activation of the attribute
-   glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);   //6. Activate attribute    3=number of components of the vertices
-   glEnableVertexAttribArray(vertexLoc);
-
-
-   glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);   //4. Activate the VBO
-   glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_matdiff(), GL_STATIC_DRAW); //5.Fill the VBO
-
-   // Activation of the attribute
-   glVertexAttribPointer(colorLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);   //6. Activate attribute    3=number of components of the vertices
-   glEnableVertexAttribArray(colorLoc);
-
-   glBindVertexArray(0);
-}
 
 void MyGLWidget::loadShaders()
 {
@@ -164,7 +135,6 @@ void MyGLWidget::getShaderLocations()
     lightColorLoc = glGetUniformLocation(program->programId(), "lightColor");
     globalAmbientLoc = glGetUniformLocation(program->programId(), "globalAmbient");
 
-    TGLoc = glGetUniformLocation(program->programId(), "TG");
 }
 
 void MyGLWidget::initializeGL()
@@ -173,9 +143,19 @@ void MyGLWidget::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.76, 0.69, 0.52, 1.0);
     loadShaders();
-    m.load("Models3D/f-16.obj");
-    computeAABB(m);
-    createBuffersModel();
+
+    homer.init("Models3D/HomerProves.obj", ":/vertexModel.vert", ":/fragmentRed.frag");
+    glm::mat4 tgHomer(1.0f);
+    tgHomer = glm::translate(tgHomer, glm::vec3(0.3f, 0.0f, 0.0f));
+    tgHomer = glm::scale(tgHomer, glm::vec3(0.5f, 0.5f, 0.5f));
+    homer.modelTransform(tgHomer);
+
+    tree.init("Models3D/cow.obj", ":/vertexModel.vert", ":/fragmentGreen.frag");
+    glm::mat4 tgTree(1.0f);
+    tgTree = glm::rotate(tgTree, -(float)M_PI/2, glm::vec3(1.0, 0.0, 0.0));
+    tgTree = glm::translate(tgTree, glm::vec3(-0.4f, 0.0f, 0.0f));
+    tgTree = glm::scale(tgTree, glm::vec3(0.5f, 0.5f, 0.5f));
+    tree.modelTransform(tgTree);
 
     SphereData defaultSphere;
     defaultSphere.center = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -205,16 +185,21 @@ void MyGLWidget::initializeGL()
 void MyGLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindVertexArray(VAO1);
 
     program->bind();
 
     sendLightToShader();
     sendSpheresToShader();
 
-    modelTransform();
-    glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);
+    glBindVertexArray(VAO1);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
+
+    program->release();
+
+    homer.render();
+    tree.render();
+
 }
 
 void MyGLWidget::resizeGL(int width, int height)
@@ -226,44 +211,6 @@ void MyGLWidget::resizeGL(int width, int height)
     glUniform2fv(resolutionLoc, 1, &resolution[0]);
     halfVP = width / 2;
     glUniform1f(halfLoc, halfVP);
-}
-
-void MyGLWidget::modelTransform()
-{
-    glm::mat4 TG(1.0);
-    TG = glm::scale(TG, glm::vec3(0.5));
-    TG = glm::rotate(TG, (float)M_PI, glm::vec3(0.0, 1.0, 0.0));
-    glUniformMatrix4fv(TGLoc, 1, GL_FALSE, &TG[0][0]);
-}
-
-void MyGLWidget::computeAABB(Model &m)
-{
-    float xmin, xmax, ymin, ymax, zmin, zmax;
-    xmin = m.vertices()[0];
-    xmax = m.vertices()[0];
-    ymin = m.vertices()[1];
-    ymax = m.vertices()[1];
-    zmin = m.vertices()[2];
-    zmax = m.vertices()[2];
-
-    for(int i = 0; i < m.vertices(); i = i+3)
-    {
-        if(m.vertices()[i] < xmin) xmin = m.vertices()[i];
-        if(m.vertices()[i] > xmax) xmax = m.vertices()[i];
-
-        if(m.vertices()[i] < ymin) ymin = m.vertices()[i + 1];
-        if(m.vertices()[i] > ymax) ymax = m.vertices()[i + 1];
-
-        if(m.vertices()[i] < zmin) zmin = m.vertices()[i + 2];
-        if(m.vertices()[i] > zmax) zmax = m.vertices()[i + 2];
-    }
-
-    aabb[0] = xmin;
-    aabb[1] = xmax;
-    aabb[2] = ymin;
-    aabb[3] = ymax;
-    aabb[4] = zmin;
-    aabb[5] = zmax;
 }
 
 void MyGLWidget::keyPressEvent(QKeyEvent *e)

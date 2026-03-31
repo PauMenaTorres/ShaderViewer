@@ -11,6 +11,7 @@ INCLUDEPATH+=C:/Qt/Qt5.12.12/Tools/glm-master
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ModelOBJ.cpp \
     MyGLWidget.cpp \
     MyLabel.cpp \
     MyLineEdit.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
+    ModelOBJ.h \
     MyGLWidget.h \
     MyLabel.h \
     MyLineEdit.h \
@@ -43,7 +45,9 @@ RESOURCES += \
 
 DISTFILES += \
     fragment.frag \
+    fragmentGreen.frag \
     fragmentModel.frag \
+    fragmentRed.frag \
     fragmentSphere.frag \
     vertex.vert \
     vertexModel.vert

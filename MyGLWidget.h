@@ -15,6 +15,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <model.h>
+#include <ModelOBJ.h>
 
 using namespace glm;
 
@@ -49,14 +50,12 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
 
     private:
 
-        Model m;
-        float aabb[6];
+        ModelOBJ homer;
+        ModelOBJ tree;
 
         void createBuffers();
         void createBuffers2();
-        void createBuffersModel();
         void loadShaders();
-        void computeAABB(Model &m);
 
         void getShaderLocations();
         void sendSpheresToShader();
@@ -67,7 +66,7 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         vec2 resolution;
 
         GLuint VAO1;
-        GLuint vertexLoc, colorLoc, scaleLoc, idShaderLoc, halfLoc, resolutionLoc, mousePosLoc, TGLoc;
+        GLuint vertexLoc, colorLoc, scaleLoc, idShaderLoc, halfLoc, resolutionLoc, mousePosLoc  ;
 
         GLuint numSpheresLoc;
         GLuint lightPositionLoc, lightColorLoc, globalAmbientLoc;

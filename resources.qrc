@@ -5,5 +5,7 @@
         <file>fragmentSphere.frag</file>
         <file>fragmentModel.frag</file>
         <file>vertexModel.vert</file>
+        <file>fragmentGreen.frag</file>
+        <file>fragmentRed.frag</file>
     </qresource>
 </RCC>
