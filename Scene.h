@@ -21,7 +21,6 @@ private:
     std::vector<ModelOBJ*> models;
     Camera camera;
 
-    ModelOBJ* homer, tree;
 
 };
 
