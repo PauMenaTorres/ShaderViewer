@@ -21,12 +21,12 @@ public:
 private:
 
     Model m;
-    glm::mat4 TG;
+    glm::mat4 TG = glm::mat4(1.0f);
     QOpenGLShaderProgram* program;
 
     GLuint VAO;
     GLuint VBO_vert, VBO_mat;
-    GLint vertexLoc, colorLoc, TGLoc;
+    GLint vertexLoc, colorLoc, TGLoc, viewLoc, projLoc;
 
     float aabb[6];
 

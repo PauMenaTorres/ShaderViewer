@@ -11,19 +11,23 @@ INCLUDEPATH+=C:/Qt/Qt5.12.12/Tools/glm-master
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Camera.cpp \
     ModelOBJ.cpp \
     MyGLWidget.cpp \
     MyLabel.cpp \
     MyLineEdit.cpp \
+    Scene.cpp \
     main.cpp \
     model.cpp \
     widget.cpp
 
 HEADERS += \
+    Camera.h \
     ModelOBJ.h \
     MyGLWidget.h \
     MyLabel.h \
     MyLineEdit.h \
+    Scene.h \
     model.h \
     widget.h
 
