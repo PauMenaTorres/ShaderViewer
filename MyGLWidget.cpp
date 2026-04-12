@@ -179,6 +179,9 @@ void MyGLWidget::resizeGL(int width, int height)
     glUniform2fv(resolutionLoc, 1, &resolution[0]);
     halfVP = width / 2;
     glUniform1f(halfLoc, halfVP);
+
+    float ratio = (float)width / (float)height;
+    scene.getCamera().setAspectRatio(ratio);
 }
 
 void MyGLWidget::keyPressEvent(QKeyEvent *e)
@@ -200,6 +203,9 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e)
             break;
         case Qt::Key_D:
             scene.getCamera().rotate(-angle);
+            break;
+        case Qt::Key_R:
+            scene.getCamera().init();
             break;
         default:
             e->ignore();

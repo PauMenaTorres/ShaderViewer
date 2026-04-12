@@ -74,3 +74,9 @@ void Camera::setType(CameraType type)
     cameraType = type;
 }
 
+void Camera::setAspectRatio(float ratio)
+{
+    ra = ratio;
+    updatePerspective();
+}
+

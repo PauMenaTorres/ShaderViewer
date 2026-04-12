@@ -27,6 +27,8 @@ public:
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectMatrix();
 
+    void setAspectRatio(float ratio);
+
 private:
 
     float FOV, zfar, znear, ra;
