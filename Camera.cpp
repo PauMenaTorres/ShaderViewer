@@ -4,19 +4,44 @@ Camera::Camera()
 {
 
 }
-
 void Camera::init()
 {
     setType(CameraType::PERSPECTIVE);
-    OBS = glm::vec3(0.0f);
-    VRP = glm::vec3(0.0f, 0.0f, -1.0f);
 
+    OBS = glm::vec3(0.0f, 0.0f, 2.0f);
+    VRP = glm::vec3(0.0f, 0.0f, 0.0f);
+
+    up_vector = glm::vec3(0.0f, 1.0f, 0.0f);
+
+    FOV = glm::radians(60.0f);
+    znear = 0.1f;
+    zfar = 100.0f;
+    ra = 1.0f;
+
+    updateLookAt();
+    updatePerspective();
 }
 
 void Camera::moveForward(float distance)
 {
     OBS = OBS + distance * glm::normalize(VRP - OBS);
     VRP = VRP + distance * glm::normalize(VRP - OBS);
+
+    updateLookAt();
+}
+
+void Camera::rotate(float angle)
+{
+    glm::mat4 TG(1.0f);
+
+    TG = glm::translate(TG, OBS);
+    TG = glm::rotate(TG, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+    TG = glm::translate(TG, -OBS);
+
+    glm::vec4 newVRP = TG * glm::vec4(VRP, 1.0f);
+    VRP = glm::vec3(newVRP);
+
+    updateLookAt();
 }
 
 void Camera::updatePerspective()
@@ -48,3 +73,4 @@ void Camera::setType(CameraType type)
 {
     cameraType = type;
 }
+

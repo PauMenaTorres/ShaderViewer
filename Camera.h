@@ -22,7 +22,7 @@ public:
     void setType(CameraType type);
 
     void moveForward(float distance);
-    void rotate();
+    void rotate(float angle);
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectMatrix();

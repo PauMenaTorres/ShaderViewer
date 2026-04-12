@@ -144,29 +144,7 @@ void MyGLWidget::initializeGL()
     glClearColor(0.76, 0.69, 0.52, 1.0);
     loadShaders();
 
-    SphereData defaultSphere;
-    defaultSphere.center = glm::vec3(0.0f, 0.0f, 0.0f);
-    defaultSphere.radius = 0.3f;
-    defaultSphere.color = glm::vec4(0.6f, 0.0f, 0.8f, 1.0f);
-    defaultSphere.ka = glm::vec3(0.2f, 0.2f, 0.2f);
-    defaultSphere.kd = glm::vec3(0.8f, 0.8f, 0.8f);
-    defaultSphere.ks = glm::vec3(1.0f, 1.0f, 1.0f);
-
-    //mySpheres.push_back(defaultSphere);
-
-    glUniform1i(idShaderLoc, 1);
-
-    currentCenterTemp = glm::vec3(0.0f);
-    currentRadiusTemp = 0.5f;
-    currentColorTemp = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    currentKaTemp = glm::vec3(0.2f);
-    currentKdTemp = glm::vec3(0.8f);
-    currentKsTemp = glm::vec3(1.0f);
-
-    myLightPos = vec3(1.0f);
-    myLightColor = vec3(1.0f);
-    myGlobalAmbient = vec3(0.5f);
-
+    scene.init();
 }
 
 void MyGLWidget::paintGL()
@@ -178,15 +156,18 @@ void MyGLWidget::paintGL()
     sendLightToShader();
     sendSpheresToShader();
 
-    glBindVertexArray(VAO1);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glBindVertexArray(0);
+    glm::mat4 viewMat = scene.getCamera().getViewMatrix();
+    glm::mat4 projMat = scene.getCamera().getProjectMatrix();
+
+    GLuint viewLoc = glGetUniformLocation(program->programId(), "view");
+    GLuint projLoc = glGetUniformLocation(program->programId(), "proj");
+
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &viewMat[0][0]);
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, &projMat[0][0]);
+
+    scene.render();
 
     program->release();
-
-    homer.render();
-    tree.render();
-
 }
 
 void MyGLWidget::resizeGL(int width, int height)
@@ -203,18 +184,28 @@ void MyGLWidget::resizeGL(int width, int height)
 void MyGLWidget::keyPressEvent(QKeyEvent *e)
 {
     makeCurrent();
+    float speed = 0.5f;
+    float angle = glm::radians(5.0f); // 5 grados de giro
+
     switch ( e->key() )
     {
-        case  Qt::Key_A :
-            halfVP--;
-            glUniform1f(halfLoc, halfVP);
+        case Qt::Key_W:
+            scene.getCamera().moveForward(speed);
             break;
-        case  Qt::Key_D :
-            halfVP++;
-            glUniform1f(halfLoc, halfVP);
+        case Qt::Key_S:
+            scene.getCamera().moveForward(-speed);
             break;
-        default: e->ignore();
-     }
+        case Qt::Key_A:
+            scene.getCamera().rotate(angle);
+            break;
+        case Qt::Key_D:
+            scene.getCamera().rotate(-angle);
+            break;
+        default:
+            e->ignore();
+            return;
+         }
+
      update();
 }
 

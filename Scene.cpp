@@ -30,10 +30,17 @@ void Scene::init()
 
 void Scene::render()
 {
+    glm::mat4 viewMat = camera.getViewMatrix();
+    glm::mat4 projMat = camera.getProjectMatrix();
+
+    for(ModelOBJ* model : models)
+    {
+        model->render(viewMat, projMat);
+    }
 
 }
 
-void Scene::moveForward(float distance)
+Camera& Scene::getCamera()
 {
-    camera.moveForward(distance);
+    return camera;
 }

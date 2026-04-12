@@ -16,6 +16,8 @@
 
 #include <model.h>
 #include <ModelOBJ.h>
+#include <Scene.h>
+
 
 using namespace glm;
 
@@ -49,9 +51,7 @@ class MyGLWidget : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         void modelTransform();
 
     private:
-
-        ModelOBJ homer;
-        ModelOBJ tree;
+        Scene scene;
 
         void createBuffers();
         void createBuffers2();

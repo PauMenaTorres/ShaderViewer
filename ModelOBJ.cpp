@@ -69,11 +69,17 @@ void ModelOBJ::modelTransform(const glm::mat4& transform)
     TG = transform;
 }
 
-void ModelOBJ::render()
+void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
 {
     program->bind();
 
     glUniformMatrix4fv(TGLoc, 1, GL_FALSE, &TG[0][0]);
+
+    GLuint viewLoc = program->uniformLocation("view");
+    GLuint projLoc = program->uniformLocation("proj");
+
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &viewMat[0][0]);
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, &projMat[0][0]);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);

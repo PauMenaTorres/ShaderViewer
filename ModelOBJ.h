@@ -16,7 +16,7 @@ public:
 
     void init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader);
     void modelTransform(const glm::mat4& transform);
-    void render();
+    void render(const glm::mat4& viewMat, const glm::mat4& projMat);
 
 private:
 
