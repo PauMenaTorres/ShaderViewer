@@ -22,6 +22,7 @@ public:
     void setType(CameraType type);
 
     void moveForward(float distance);
+    void moveUp(float distance);
     void rotate(float angle);
 
     glm::mat4 getViewMatrix();

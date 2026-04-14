@@ -187,8 +187,8 @@ void MyGLWidget::resizeGL(int width, int height)
 void MyGLWidget::keyPressEvent(QKeyEvent *e)
 {
     makeCurrent();
-    float speed = 0.5f;
-    float angle = glm::radians(5.0f); // 5 grados de giro
+    float speed = 0.1f;
+    float angle = glm::radians(1.0f);
 
     switch ( e->key() )
     {
@@ -203,6 +203,12 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e)
             break;
         case Qt::Key_D:
             scene.getCamera().rotate(-angle);
+            break;
+        case Qt::Key_Q:
+            scene.getCamera().moveUp(-speed);
+            break;
+        case Qt::Key_E:
+            scene.getCamera().moveUp(speed);
             break;
         case Qt::Key_R:
             scene.getCamera().init();

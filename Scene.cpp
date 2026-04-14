@@ -7,20 +7,28 @@ Scene::Scene()
 
 void Scene::init()
 {
-    ModelOBJ* homer = new ModelOBJ;
-    homer->init("Models3D/HomerProves.obj", ":/vertexModel.vert", ":/fragmentRed.frag");
-    glm::mat4 tgHomer(1.0f);
-    tgHomer = glm::translate(tgHomer, glm::vec3(0.3f, 0.0f, 0.0f));
-    tgHomer = glm::scale(tgHomer, glm::vec3(0.5f));
-    homer->modelTransform(tgHomer);
+    ModelOBJ* patricio = new ModelOBJ;
+    patricio->init("Models3D/Patricio.obj", ":/vertexModel.vert", ":/fragmentModel.frag");
+    glm::mat4 tgPatricio(1.0f);
 
-    models.push_back(homer);
+    glm::vec3 center = patricio->getCenter();
 
+    tgPatricio = glm::translate(tgPatricio, glm::vec3(0.3f, 0.0f, 0.0f));
+    tgPatricio = glm::scale(tgPatricio, glm::vec3(0.2f));
+    tgPatricio = glm::translate(tgPatricio, -center);
+
+    patricio->modelTransform(tgPatricio);
+
+    models.push_back(patricio);
+
+    tgPatricio = glm::translate(tgPatricio, -center);
     ModelOBJ* tree = new ModelOBJ;
-    tree->init("Models3D/tree.obj", ":/vertexModel.vert", ":/fragmentGreen.frag");
+    tree->init("Models3D/tree.obj", ":/vertexModel.vert", ":/fragmentModel.frag");
     glm::mat4 tgTree(1.0f);
-    tgTree = glm::translate(tgTree, glm::vec3(-0.4f, 0.0f, 0.0f));
+    tgTree = glm::translate(tgTree, glm::vec3(-0.8f, 0.0f, 0.0f));
     tgTree = glm::scale(tgTree, glm::vec3(0.05f));
+    tgTree = glm::translate(tgTree, -center);
+
     tree->modelTransform(tgTree);
 
     models.push_back(tree);

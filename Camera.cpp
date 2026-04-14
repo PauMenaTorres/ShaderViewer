@@ -30,6 +30,16 @@ void Camera::moveForward(float distance)
     updateLookAt();
 }
 
+void Camera::moveUp(float distance)
+{
+    glm::vec3 up = glm::normalize(up_vector);
+
+    OBS += distance * up;
+    VRP += distance * up;
+
+    updateLookAt();
+}
+
 void Camera::rotate(float angle)
 {
     glm::mat4 TG(1.0f);

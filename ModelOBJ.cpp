@@ -35,9 +35,14 @@ void ModelOBJ::loadShaders(const QString& vShader, const QString& fShader)
     program->link();
 
     program->bind();
-    vertexLoc = program->attributeLocation("vertex");
-    colorLoc = program->attributeLocation("color");
-    TGLoc = program->uniformLocation("TG");
+    vertexLoc = glGetAttribLocation(program->programId(), "vertex");
+    normalLoc = glGetAttribLocation(program->programId(), "normal");
+    matambLoc = glGetAttribLocation(program->programId(), "matamb");
+    matdiffLoc = glGetAttribLocation(program->programId(), "matdif");
+    matspecLoc = glGetAttribLocation(program->programId(), "matspec");
+    matshinLoc = glGetAttribLocation(program->programId(), "matshin");
+
+    TGLoc = glGetUniformLocation(program->programId(), "TG");
     program->release();
 }
 
@@ -46,20 +51,50 @@ void ModelOBJ::createBuffers()
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    GLuint VBO[2];
-    glGenBuffers(2, VBO);
+    GLuint VBO[6];
+    glGenBuffers(6, VBO);
     VBO_vert = VBO[0];
-    VBO_mat = VBO[1];
+    VBO_normals = VBO[1];
+    VBO_matamb = VBO[2];
+    VBO_matdiff = VBO[3];
+    VBO_matspec = VBO[4];
+    VBO_matshin = VBO[5];
 
+    // Vertexs
     glBindBuffer(GL_ARRAY_BUFFER, VBO_vert);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_vertices(), GL_STATIC_DRAW);
     glVertexAttribPointer(vertexLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(vertexLoc);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO_mat);
+    // Normals
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_normals);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_normals(), GL_STATIC_DRAW);
+    glVertexAttribPointer(normalLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(normalLoc);
+
+    //Ambient
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_matamb);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_matamb(), GL_STATIC_DRAW);
+    glVertexAttribPointer(matambLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(matambLoc);
+
+    //Diffuse
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_matdiff);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_matdiff(), GL_STATIC_DRAW);
-    glVertexAttribPointer(colorLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(colorLoc);
+    glVertexAttribPointer(matdiffLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(matdiffLoc);
+
+    //Specular
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_matspec);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3 * 3, m.VBO_matspec(), GL_STATIC_DRAW);
+    glVertexAttribPointer(matspecLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(matspecLoc);
+
+    //Shininess
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_matshin);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*m.faces().size() * 3, m.VBO_matshin(), GL_STATIC_DRAW);
+    glVertexAttribPointer(matshinLoc, 1, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(matshinLoc);
 
     glBindVertexArray(0);
 }
@@ -84,6 +119,10 @@ void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);
     glBindVertexArray(0);
+
+    GLuint lightPosLoc = program->uniformLocation("lightPos");
+    glm::vec3 lightPos(2.0f);
+    glUniform3fv(lightPosLoc, 1, &lightPos[0]);
 
     program->release();
 }
@@ -114,4 +153,13 @@ void ModelOBJ::computeAABB()
     aabb[4] = zmin;
     aabb[5] = zmax;
 
+}
+
+glm::vec3 ModelOBJ::getCenter() const
+{
+    return glm::vec3(
+        (aabb[0] + aabb[1]) * 0.5f,
+        (aabb[2] + aabb[3]) * 0.5f,
+        (aabb[4] + aabb[5]) * 0.5f
+    );
 }

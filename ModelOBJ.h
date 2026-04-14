@@ -17,6 +17,7 @@ public:
     void init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader);
     void modelTransform(const glm::mat4& transform);
     void render(const glm::mat4& viewMat, const glm::mat4& projMat);
+    glm::vec3 getCenter() const;
 
 private:
 
@@ -25,8 +26,8 @@ private:
     QOpenGLShaderProgram* program;
 
     GLuint VAO;
-    GLuint VBO_vert, VBO_mat;
-    GLint vertexLoc, colorLoc, TGLoc, viewLoc, projLoc;
+    GLuint VBO_vert, VBO_normals, VBO_matamb, VBO_matdiff, VBO_matspec, VBO_matshin;
+    GLint vertexLoc, normalLoc, matambLoc, matdiffLoc, matspecLoc, matshinLoc, TGLoc, viewLoc, projLoc;
 
     float aabb[6];
 
