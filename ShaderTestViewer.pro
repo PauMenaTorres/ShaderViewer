@@ -19,7 +19,9 @@ SOURCES += \
     Scene.cpp \
     main.cpp \
     model.cpp \
-    widget.cpp
+    widgetMain.cpp \
+    widgetModels.cpp \
+    widgetSpheres.cpp
 
 HEADERS += \
     Camera.h \
@@ -29,10 +31,14 @@ HEADERS += \
     MyLineEdit.h \
     Scene.h \
     model.h \
-    widget.h
+    widgetMain.h \
+    widgetModels.h \
+    widgetSpheres.h
 
 FORMS += \
-    widget.ui
+    widgetMain.ui \
+    widgetModels.ui \
+    widgetSpheres.ui
 
 TRANSLATIONS += \
     ShaderTestViewer_en_GB.ts

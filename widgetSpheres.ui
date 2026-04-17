@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Widget</class>
- <widget class="QWidget" name="Widget">
+ <class>WidgetSpheres</class>
+ <widget class="QWidget" name="WidgetSpheres">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -911,7 +911,7 @@
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>Widget</receiver>
+   <receiver>WidgetSpheres</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">

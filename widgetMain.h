@@ -1,13 +1,14 @@
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef WIDGETMAIN_H
+#define WIDGETMAIN_H
 
 #include <QWidget>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
 
-class Widget : public QWidget
+class Widget: public QWidget
 {
     Q_OBJECT
 
@@ -19,4 +20,4 @@ private slots:
 private:
     Ui::Widget *ui;
 };
-#endif // WIDGET_H
+#endif // WIDGETMAIN_H

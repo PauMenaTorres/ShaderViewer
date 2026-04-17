@@ -1,5 +1,7 @@
 #include <QApplication>
-#include "widget.h"
+#include "widgetMain.h"
+#include "widgetSpheres.h"
+#include "widgetModels.h"
 #include <QSurfaceFormat>
 
 int main(int argc, char *argv[])
