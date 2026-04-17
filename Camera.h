@@ -17,7 +17,7 @@ public:
 
     Camera();
 
-    void init();
+    void init(glm::vec3 min, glm::vec3 max);
 
     void setType(CameraType type);
 
@@ -28,10 +28,14 @@ public:
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectMatrix();
 
+    float getFOV();
+    float setFOV(float newFov);
+
     void setAspectRatio(float ratio);
 
 private:
 
+    float d, R;
     float FOV, zfar, znear, ra;
     float left, right, bottom, top;
 

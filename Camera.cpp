@@ -4,23 +4,28 @@ Camera::Camera()
 {
 
 }
-void Camera::init()
+void Camera::init(glm::vec3 min, glm::vec3 max)
 {
     setType(CameraType::PERSPECTIVE);
 
-    OBS = glm::vec3(0.0f, 0.0f, 2.0f);
+    R = glm::distance(max, min) / 2;
+    d = R + 2.0f;
+
+    OBS = glm::vec3(0.0f, 0.0f, d);
     VRP = glm::vec3(0.0f, 0.0f, 0.0f);
+
+    FOV = 2 * glm::asin(R / d);
 
     up_vector = glm::vec3(0.0f, 1.0f, 0.0f);
 
-    FOV = glm::radians(60.0f);
-    znear = 0.1f;
-    zfar = 100.0f;
+    znear = d - R;
+    zfar = d + R;
     ra = 1.0f;
 
     updateLookAt();
     updatePerspective();
 }
+
 
 void Camera::moveForward(float distance)
 {
@@ -77,6 +82,17 @@ glm::mat4 Camera::getViewMatrix()
 glm::mat4 Camera::getProjectMatrix()
 {
     return projectMatrix;
+}
+
+float Camera::getFOV()
+{
+    return FOV;
+}
+
+float Camera::setFOV(float newFov)
+{
+    FOV = newFov;
+    return FOV;
 }
 
 void Camera::setType(CameraType type)

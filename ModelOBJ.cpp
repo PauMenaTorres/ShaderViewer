@@ -127,9 +127,18 @@ void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
     program->release();
 }
 
+glm::vec3 ModelOBJ::getMin()
+{
+    return glm::vec3(xmin, ymin, zmin);
+}
+
+glm::vec3 ModelOBJ::getMax()
+{
+    return glm::vec3(xmax, ymax, zmax);
+}
+
 void ModelOBJ::computeAABB()
 {
-    float xmin, xmax, ymin, ymax, zmin, zmax;
     xmin = xmax = m.vertices()[0];
     ymin = ymax = m.vertices()[1];
     zmin = zmax = m.vertices()[2];

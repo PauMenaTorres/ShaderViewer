@@ -211,7 +211,7 @@ void MyGLWidget::keyPressEvent(QKeyEvent *e)
             scene.getCamera().moveUp(speed);
             break;
         case Qt::Key_R:
-            scene.getCamera().init();
+            //scene.getCamera().init();
             break;
         default:
             e->ignore();

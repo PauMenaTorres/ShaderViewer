@@ -19,6 +19,9 @@ public:
     void render(const glm::mat4& viewMat, const glm::mat4& projMat);
     glm::vec3 getCenter() const;
 
+    glm::vec3 getMin();
+    glm::vec3 getMax();
+
 private:
 
     Model m;
@@ -29,9 +32,12 @@ private:
     GLuint VBO_vert, VBO_normals, VBO_matamb, VBO_matdiff, VBO_matspec, VBO_matshin;
     GLint vertexLoc, normalLoc, matambLoc, matdiffLoc, matspecLoc, matshinLoc, TGLoc, viewLoc, projLoc;
 
+
+    float xmin, xmax, ymin, ymax, zmin, zmax;
     float aabb[6];
 
     void loadShaders(const QString& vShader, const QString& fShader);
+
     void createBuffers();
     void computeAABB();
 };

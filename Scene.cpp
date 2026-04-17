@@ -13,14 +13,13 @@ void Scene::init()
 
     glm::vec3 centerPatricio = patricio->getCenter();
 
-    tgPatricio = glm::translate(tgPatricio, glm::vec3(0.3f, 0.0f, 0.0f));
-    tgPatricio = glm::scale(tgPatricio, glm::vec3(0.2f));
     tgPatricio = glm::translate(tgPatricio, -centerPatricio);
 
     patricio->modelTransform(tgPatricio);
 
     models.push_back(patricio);
 
+    /*
     ModelOBJ* tree = new ModelOBJ;
     tree->init("Models3D/tree.obj", ":/vertexModel.vert", ":/fragmentModel.frag");
     glm::mat4 tgTree(1.0f);
@@ -34,8 +33,9 @@ void Scene::init()
     tree->modelTransform(tgTree);
 
     models.push_back(tree);
+    */
 
-    camera.init();
+    camera.init(patricio->getMin(), patricio->getMax());
 }
 
 void Scene::render()
