@@ -24,6 +24,7 @@ public:
     void moveForward(float distance);
     void moveUp(float distance);
     void rotate(float angle);
+    void restart();
 
     glm::mat4 getViewMatrix();
     glm::mat4 getProjectMatrix();
@@ -42,6 +43,7 @@ private:
     CameraType cameraType;
 
     glm::vec3 OBS, VRP, up_vector;
+    glm::vec3 min_orig, max_orig;
 
     glm::mat4 viewMatrix, projectMatrix;
 

@@ -3,1345 +3,278 @@
  <class>WidgetSpheres</class>
  <widget class="QWidget" name="WidgetSpheres">
   <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1086</width>
-    <height>740</height>
-   </rect>
+   <rect><x>0</x><y>0</y><width>1200</width><height>740</height></rect>
   </property>
   <property name="windowTitle">
-   <string>Widget</string>
+   <string>Spheres</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_11">
+  <layout class="QHBoxLayout" name="mainLayout">
    <item>
-    <widget class="MyGLWidget" name="openGLWidget">
+    <widget class="MyGLWidgetSpheres" name="openGLWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
+       <horstretch>2</horstretch><verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>500</width>
-       <height>500</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::StrongFocus</enum>
-     </property>
+     <property name="minimumSize"><size><width>500</width><height>500</height></size></property>
+     <property name="focusPolicy"><enum>Qt::StrongFocus</enum></property>
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_5">
+    <layout class="QVBoxLayout" name="rightPanelLayout">
      <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Center</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QDoubleSpinBox" name="spinX">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>-1.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinY">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>-1.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinZ">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>-1.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Color</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="minimumSize"><size><width>400</width><height>0</height></size></property>
+       <!-- ===================== SPHERE PROPS TAB ===================== -->
+       <widget class="QWidget" name="tab_spheres">
+        <attribute name="title"><string>Sphere Props</string></attribute>
+        <layout class="QVBoxLayout">
+         <item><widget class="QLabel"><property name="text"><string>Center (-1 to 1)</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
          <item>
-          <widget class="QSlider" name="sliderR">
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout">
+           <item>
+            <layout class="QVBoxLayout">
+             <item><widget class="QSlider" name="sliderCenterX"><property name="minimumSize"><size><height>100</height></size></property><property name="minimum"><number>-10</number></property><property name="maximum"><number>10</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item>
+             <item><widget class="QLabel"><property name="text"><string>X</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+             <item><widget class="QDoubleSpinBox" name="spinCenterX"><property name="minimum"><double>-1.0</double></property><property name="maximum"><double>1.0</double></property><property name="singleStep"><double>0.1</double></property></widget></item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout">
+             <item><widget class="QSlider" name="sliderCenterY"><property name="minimumSize"><size><height>100</height></size></property><property name="minimum"><number>-10</number></property><property name="maximum"><number>10</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item>
+             <item><widget class="QLabel"><property name="text"><string>Y</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+             <item><widget class="QDoubleSpinBox" name="spinCenterY"><property name="minimum"><double>-1.0</double></property><property name="maximum"><double>1.0</double></property><property name="singleStep"><double>0.1</double></property></widget></item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout">
+             <item><widget class="QSlider" name="sliderCenterZ"><property name="minimumSize"><size><height>100</height></size></property><property name="minimum"><number>-10</number></property><property name="maximum"><number>10</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item>
+             <item><widget class="QLabel"><property name="text"><string>Z</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+             <item><widget class="QDoubleSpinBox" name="spinCenterZ"><property name="minimum"><double>-1.0</double></property><property name="maximum"><double>1.0</double></property><property name="singleStep"><double>0.1</double></property></widget></item>
+            </layout>
+           </item>
+          </layout>
          </item>
+         <item><widget class="QLabel"><property name="text"><string>Color</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
          <item>
-          <widget class="QLabel" name="label_4">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>R</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout">
+           <item>
+            <layout class="QVBoxLayout">
+             <item><widget class="QSlider" name="sliderR"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item>
+             <item><widget class="QLabel"><property name="text"><string>R</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+             <item><widget class="QSpinBox" name="spinR"><property name="maximum"><number>255</number></property></widget></item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout">
+             <item><widget class="QSlider" name="sliderG"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item>
+             <item><widget class="QLabel"><property name="text"><string>G</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+             <item><widget class="QSpinBox" name="spinG"><property name="maximum"><number>255</number></property></widget></item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout">
+             <item><widget class="QSlider" name="sliderB"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item>
+             <item><widget class="QLabel"><property name="text"><string>B</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+             <item><widget class="QSpinBox" name="spinB"><property name="maximum"><number>255</number></property></widget></item>
+            </layout>
+           </item>
+          </layout>
          </item>
+         <item><widget class="QLabel"><property name="text"><string>Radius</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
+         <item>
+          <layout class="QHBoxLayout">
+           <item><widget class="QSlider" name="sliderRadius"><property name="maximum"><number>100</number></property><property name="value"><number>30</number></property><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item>
+           <item><widget class="QSpinBox" name="spinRadius"><property name="maximum"><number>100</number></property><property name="value"><number>30</number></property></widget></item>
+          </layout>
+         </item>
+         <item><spacer><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+         <item><widget class="QPushButton" name="addSphere"><property name="text"><string>Add Sphere</string></property></widget></item>
         </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+       </widget>
+
+       <widget class="QWidget" name="tab_material">
+        <attribute name="title"><string>Material Props</string></attribute>
+        <layout class="QVBoxLayout">
+         <item><widget class="QLabel"><property name="text"><string>Ambient (Ka)</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
          <item>
-          <widget class="QSlider" name="sliderG">
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout">
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKaR"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>20</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKaR"><property name="maximum"><number>100</number></property><property name="value"><number>20</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKaG"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>20</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKaG"><property name="maximum"><number>100</number></property><property name="value"><number>20</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKaB"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>20</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKaB"><property name="maximum"><number>100</number></property><property name="value"><number>20</number></property></widget></item></layout></item>
+          </layout>
          </item>
+         <item><widget class="QLabel"><property name="text"><string>Diffuse (Kd)</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
          <item>
-          <widget class="QLabel" name="label_6">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>G</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout">
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKdR"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>80</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKdR"><property name="maximum"><number>100</number></property><property name="value"><number>80</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKdG"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>80</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKdG"><property name="maximum"><number>100</number></property><property name="value"><number>80</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKdB"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>80</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKdB"><property name="maximum"><number>100</number></property><property name="value"><number>80</number></property></widget></item></layout></item>
+          </layout>
          </item>
+         <item><widget class="QLabel"><property name="text"><string>Specular (Ks)</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
+         <item>
+          <layout class="QHBoxLayout">
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKsR"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>100</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKsR"><property name="maximum"><number>100</number></property><property name="value"><number>100</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKsG"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>100</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKsG"><property name="maximum"><number>100</number></property><property name="value"><number>100</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderKsB"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>100</number></property><property name="value"><number>100</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinKsB"><property name="maximum"><number>100</number></property><property name="value"><number>100</number></property></widget></item></layout></item>
+          </layout>
+         </item>
+         <item><widget class="QLabel"><property name="text"><string>Shininess</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
+         <item><layout class="QHBoxLayout"><item><widget class="QSlider" name="sliderShininess"><property name="minimum"><number>1</number></property><property name="maximum"><number>256</number></property><property name="value"><number>128</number></property><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item><item><widget class="QSpinBox" name="spinShininess"><property name="minimum"><number>1</number></property><property name="maximum"><number>256</number></property><property name="value"><number>128</number></property></widget></item></layout></item>
+         <item><spacer><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
         </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+       </widget>
+
+       <widget class="QWidget" name="tab_lights">
+        <attribute name="title"><string>Lighting Props</string></attribute>
+        <layout class="QVBoxLayout">
+         <item><widget class="QLabel"><property name="text"><string>Light Position</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
          <item>
-          <widget class="QSlider" name="sliderB">
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout">
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderLightX"><property name="minimumSize"><size><height>100</height></size></property><property name="minimum"><number>-5</number></property><property name="maximum"><number>5</number></property><property name="value"><number>1</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QLabel"><property name="text"><string>X</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item><item><widget class="QSpinBox" name="spinLightX"><property name="minimum"><number>-5</number></property><property name="maximum"><number>5</number></property><property name="value"><number>1</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderLightY"><property name="minimumSize"><size><height>100</height></size></property><property name="minimum"><number>-5</number></property><property name="maximum"><number>5</number></property><property name="value"><number>1</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QLabel"><property name="text"><string>Y</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item><item><widget class="QSpinBox" name="spinLightY"><property name="minimum"><number>-5</number></property><property name="maximum"><number>5</number></property><property name="value"><number>1</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderLightZ"><property name="minimumSize"><size><height>100</height></size></property><property name="minimum"><number>-5</number></property><property name="maximum"><number>5</number></property><property name="value"><number>1</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QLabel"><property name="text"><string>Z</string></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item><item><widget class="QSpinBox" name="spinLightZ"><property name="minimum"><number>-5</number></property><property name="maximum"><number>5</number></property><property name="value"><number>1</number></property></widget></item></layout></item>
+          </layout>
          </item>
+         <item><widget class="QLabel"><property name="text"><string>Light Color</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
          <item>
-          <widget class="QLabel" name="label_5">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>B</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout">
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderLightR"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="value"><number>255</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinLightR"><property name="maximum"><number>255</number></property><property name="value"><number>255</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderLightG"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="value"><number>255</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinLightG"><property name="maximum"><number>255</number></property><property name="value"><number>255</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderLightB"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="value"><number>255</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinLightB"><property name="maximum"><number>255</number></property><property name="value"><number>255</number></property></widget></item></layout></item>
+          </layout>
          </item>
+         <item><widget class="QLabel"><property name="text"><string>Ambient Color</string></property><property name="font"><font><bold>true</bold></font></property></widget></item>
+         <item>
+          <layout class="QHBoxLayout">
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderAmbR"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="value"><number>127</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinAmbR"><property name="maximum"><number>255</number></property><property name="value"><number>127</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderAmbG"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="value"><number>127</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinAmbG"><property name="maximum"><number>255</number></property><property name="value"><number>127</number></property></widget></item></layout></item>
+           <item><layout class="QVBoxLayout"><item><widget class="QSlider" name="sliderAmbB"><property name="minimumSize"><size><height>100</height></size></property><property name="maximum"><number>255</number></property><property name="value"><number>127</number></property><property name="orientation"><enum>Qt::Vertical</enum></property></widget></item><item><widget class="QSpinBox" name="spinAmbB"><property name="maximum"><number>255</number></property><property name="value"><number>127</number></property></widget></item></layout></item>
+          </layout>
+         </item>
+         <item><spacer><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
         </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Radius</string>
-       </property>
+       </widget>
       </widget>
      </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="spinRadius">
-       <property name="minimum">
-        <double>0.000000000000000</double>
-       </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.050000000000000</double>
-       </property>
-       <property name="value">
-        <double>0.300000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Ambient Constant</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKaR">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.200000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKaG">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.200000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKaB">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.200000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Diffuse Constant</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKdR">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.800000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKdG">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.800000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKdB">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.800000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>Specular Constant</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKsR">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKsG">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinKsB">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_10">
-       <property name="text">
-        <string>Light Position</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_8">
-       <item>
-        <widget class="QDoubleSpinBox" name="spinLightX">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>-5.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>5.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.250000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinLightY">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>-5.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>5.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.250000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinLightZ">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>-5.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>5.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.250000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_11">
-       <property name="text">
-        <string>Light Color</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_9">
-       <item>
-        <widget class="QDoubleSpinBox" name="spinLightR">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinLightG">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinLightB">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_12">
-       <property name="text">
-        <string>Ambient Color</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_10">
-       <item>
-        <widget class="QDoubleSpinBox" name="spinAmbR">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinAmbG">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QDoubleSpinBox" name="spinAmbB">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <double>0.000000000000000</double>
-         </property>
-         <property name="maximum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-         <property name="value">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QPushButton" name="addSphere">
-       <property name="text">
-        <string>Add Sphere</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>17</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checkBox">
-       <property name="text">
-        <string>CheckBox</string>
-       </property>
-       <property name="tristate">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QRadioButton" name="radioButton_4">
-           <property name="text">
-            <string>2 Colors</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButton_3">
-           <property name="text">
-            <string>4 Colors</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QRadioButton" name="radioButton_2">
-           <property name="text">
-            <string>Circle</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButton">
-           <property name="text">
-            <string>4 Color Lines</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Exit</string>
-       </property>
-      </widget>
-     </item>
+     <item><widget class="QPushButton" name="pushButton"><property name="text"><string>Exit</string></property></widget></item>
     </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MyGLWidget</class>
+   <class>MyGLWidgetSpheres</class>
    <extends>QOpenGLWidget</extends>
-   <header>MyGLWidget.h</header>
+   <header>MyGLWidgetSpheres.h</header>
    <slots>
-    <slot>changeToRed(int)</slot>
-    <slot>changeToButton1()</slot>
-    <slot>changeToButton2()</slot>
-    <slot>changeToButton3()</slot>
-    <slot>changeToButton4()</slot>
-    <slot>showState(int)</slot>
     <slot>setCurrentCenterX(double)</slot>
     <slot>setCurrentCenterY(double)</slot>
     <slot>setCurrentCenterZ(double)</slot>
     <slot>setCurrentColorR(int)</slot>
     <slot>setCurrentColorG(int)</slot>
     <slot>setCurrentColorB(int)</slot>
-    <slot>setCurrentRadius(double)</slot>
-    <slot>setCurrentKaR(double)</slot>
-    <slot>setCurrentKaG(double)</slot>
-    <slot>setCurrentKaB(double)</slot>
-    <slot>setCurrentKdR(double)</slot>
-    <slot>setCurrentKdG(double)</slot>
-    <slot>setCurrentKdB(double)</slot>
-    <slot>setCurrentKsB(double)</slot>
-    <slot>setCurrentKsR(double)</slot>
-    <slot>setCurrentKsG(double)</slot>
-    <slot>setLightPosX(double)</slot>
-    <slot>setLightPosY(double)</slot>
-    <slot>setLightPosZ(double)</slot>
-    <slot>setLightColorR(double)</slot>
-    <slot>setLightColorG(double)</slot>
-    <slot>setLightColorB(double)</slot>
-    <slot>setGlobalAmbientR(double)</slot>
-    <slot>setGlobalAmbientG(double)</slot>
-    <slot>setGlobalAmbientB(double)</slot>
+    <slot>setCurrentRadius(int)</slot>
+    <slot>setCurrentKaR(int)</slot>
+    <slot>setCurrentKaG(int)</slot>
+    <slot>setCurrentKaB(int)</slot>
+    <slot>setCurrentKdR(int)</slot>
+    <slot>setCurrentKdG(int)</slot>
+    <slot>setCurrentKdB(int)</slot>
+    <slot>setCurrentKsR(int)</slot>
+    <slot>setCurrentKsG(int)</slot>
+    <slot>setCurrentKsB(int)</slot>
+    <slot>setCurrentShininess(int)</slot>
+    <slot>setLightPosX(int)</slot>
+    <slot>setLightPosY(int)</slot>
+    <slot>setLightPosZ(int)</slot>
+    <slot>setLightColorR(int)</slot>
+    <slot>setLightColorG(int)</slot>
+    <slot>setLightColorB(int)</slot>
+    <slot>setGlobalAmbientR(int)</slot>
+    <slot>setGlobalAmbientG(int)</slot>
+    <slot>setGlobalAmbientB(int)</slot>
     <slot>addSphere()</slot>
    </slots>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections>
-  <connection>
-   <sender>radioButton_4</sender>
-   <signal>clicked()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>changeToButton1()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>969</x>
-     <y>645</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>860</x>
-     <y>645</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>changeToButton3()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>961</x>
-     <y>681</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>859</x>
-     <y>681</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton_3</sender>
-   <signal>clicked()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>changeToButton2()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1071</x>
-     <y>662</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>852</x>
-     <y>663</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton</sender>
-   <signal>clicked()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>changeToButton4()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1071</x>
-     <y>693</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>863</x>
-     <y>699</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox</sender>
-   <signal>stateChanged(int)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>showState(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1073</x>
-     <y>624</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>790</x>
-     <y>624</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>WidgetSpheres</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>951</x>
-     <y>727</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>711</x>
-     <y>702</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinX</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentCenterX(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>920</x>
-     <y>36</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>800</x>
-     <y>14</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinY</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentCenterY(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>962</x>
-     <y>36</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>863</x>
-     <y>34</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinZ</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentCenterZ(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1026</x>
-     <y>52</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>845</x>
-     <y>52</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sliderR</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentColorR(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>888</x>
-     <y>101</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>666</x>
-     <y>101</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sliderG</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentColorG(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>137</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>853</x>
-     <y>137</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>sliderB</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentColorB(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1017</x>
-     <y>119</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>854</x>
-     <y>119</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinRadius</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentRadius(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>961</x>
-     <y>198</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>839</x>
-     <y>182</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKaR</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKaR(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>893</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>854</x>
-     <y>232</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKaG</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKaG(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>960</x>
-     <y>253</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>863</x>
-     <y>250</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKaB</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKaB(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1044</x>
-     <y>270</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>821</x>
-     <y>270</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKdR</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKdR(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>909</x>
-     <y>310</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>797</x>
-     <y>295</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKdG</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKdG(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>312</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>845</x>
-     <y>312</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKdB</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKdB(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1025</x>
-     <y>330</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>804</x>
-     <y>330</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKsR</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKsR(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>900</x>
-     <y>367</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>863</x>
-     <y>360</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKsG</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKsG(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>971</x>
-     <y>379</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>862</x>
-     <y>379</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinKsB</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setCurrentKsB(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1022</x>
-     <y>383</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>810</x>
-     <y>398</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinLightX</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setLightPosX(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>895</x>
-     <y>424</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>830</x>
-     <y>419</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinLightY</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setLightPosY(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>963</x>
-     <y>426</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>815</x>
-     <y>438</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinLightZ</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setLightPosZ(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1055</x>
-     <y>441</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>737</x>
-     <y>456</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinLightR</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setLightColorR(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>899</x>
-     <y>481</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>824</x>
-     <y>479</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinLightG</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setLightColorG(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>956</x>
-     <y>496</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>861</x>
-     <y>496</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinLightB</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setLightColorB(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1037</x>
-     <y>489</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>820</x>
-     <y>513</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinAmbR</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setGlobalAmbientR(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>880</x>
-     <y>538</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>854</x>
-     <y>538</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinAmbG</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setGlobalAmbientG(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>979</x>
-     <y>554</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>766</x>
-     <y>554</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinAmbB</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>setGlobalAmbientB(double)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1039</x>
-     <y>562</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>756</x>
-     <y>570</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>addSphere</sender>
-   <signal>clicked()</signal>
-   <receiver>openGLWidget</receiver>
-   <slot>addSphere()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>995</x>
-     <y>589</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>816</x>
-     <y>589</y>
-    </hint>
-   </hints>
-  </connection>
+  <connection><sender>pushButton</sender><signal>clicked()</signal><receiver>WidgetSpheres</receiver><slot>close()</slot></connection>
+  <connection><sender>addSphere</sender><signal>clicked()</signal><receiver>openGLWidget</receiver><slot>addSphere()</slot></connection>
+  <!-- X Sync via C++ or manual Mapping is needed for Slider -> DoubleSpinBox -->
+  <connection><sender>spinCenterX</sender><signal>valueChanged(double)</signal><receiver>openGLWidget</receiver><slot>setCurrentCenterX(double)</slot></connection>
+  <connection><sender>spinCenterY</sender><signal>valueChanged(double)</signal><receiver>openGLWidget</receiver><slot>setCurrentCenterY(double)</slot></connection>
+  <connection><sender>spinCenterZ</sender><signal>valueChanged(double)</signal><receiver>openGLWidget</receiver><slot>setCurrentCenterZ(double)</slot></connection>
+  
+  <connection><sender>sliderR</sender><signal>valueChanged(int)</signal><receiver>spinR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinR</sender><signal>valueChanged(int)</signal><receiver>sliderR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderR</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentColorR(int)</slot></connection>
+  <connection><sender>sliderG</sender><signal>valueChanged(int)</signal><receiver>spinG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinG</sender><signal>valueChanged(int)</signal><receiver>sliderG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderG</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentColorG(int)</slot></connection>
+  <connection><sender>sliderB</sender><signal>valueChanged(int)</signal><receiver>spinB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinB</sender><signal>valueChanged(int)</signal><receiver>sliderB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderB</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentColorB(int)</slot></connection>
+  <connection><sender>sliderRadius</sender><signal>valueChanged(int)</signal><receiver>spinRadius</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinRadius</sender><signal>valueChanged(int)</signal><receiver>sliderRadius</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderRadius</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentRadius(int)</slot></connection>
+  <connection><sender>sliderShininess</sender><signal>valueChanged(int)</signal><receiver>spinShininess</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinShininess</sender><signal>valueChanged(int)</signal><receiver>sliderShininess</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderShininess</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentShininess(int)</slot></connection>
+  <connection><sender>sliderKaR</sender><signal>valueChanged(int)</signal><receiver>spinKaR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKaR</sender><signal>valueChanged(int)</signal><receiver>sliderKaR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKaR</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKaR(int)</slot></connection>
+  <connection><sender>sliderKaG</sender><signal>valueChanged(int)</signal><receiver>spinKaG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKaG</sender><signal>valueChanged(int)</signal><receiver>sliderKaG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKaG</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKaG(int)</slot></connection>
+  <connection><sender>sliderKaB</sender><signal>valueChanged(int)</signal><receiver>spinKaB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKaB</sender><signal>valueChanged(int)</signal><receiver>sliderKaB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKaB</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKaB(int)</slot></connection>
+  <connection><sender>sliderKdR</sender><signal>valueChanged(int)</signal><receiver>spinKdR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKdR</sender><signal>valueChanged(int)</signal><receiver>sliderKdR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKdR</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKdR(int)</slot></connection>
+  <connection><sender>sliderKdG</sender><signal>valueChanged(int)</signal><receiver>spinKdG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKdG</sender><signal>valueChanged(int)</signal><receiver>sliderKdG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKdG</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKdG(int)</slot></connection>
+  <connection><sender>sliderKdB</sender><signal>valueChanged(int)</signal><receiver>spinKdB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKdB</sender><signal>valueChanged(int)</signal><receiver>sliderKdB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKdB</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKdB(int)</slot></connection>
+  <connection><sender>sliderKsR</sender><signal>valueChanged(int)</signal><receiver>spinKsR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKsR</sender><signal>valueChanged(int)</signal><receiver>sliderKsR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKsR</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKsR(int)</slot></connection>
+  <connection><sender>sliderKsG</sender><signal>valueChanged(int)</signal><receiver>spinKsG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKsG</sender><signal>valueChanged(int)</signal><receiver>sliderKsG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKsG</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKsG(int)</slot></connection>
+  <connection><sender>sliderKsB</sender><signal>valueChanged(int)</signal><receiver>spinKsB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinKsB</sender><signal>valueChanged(int)</signal><receiver>sliderKsB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderKsB</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setCurrentKsB(int)</slot></connection>
+  <connection><sender>sliderLightX</sender><signal>valueChanged(int)</signal><receiver>spinLightX</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinLightX</sender><signal>valueChanged(int)</signal><receiver>sliderLightX</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderLightX</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setLightPosX(int)</slot></connection>
+  <connection><sender>sliderLightY</sender><signal>valueChanged(int)</signal><receiver>spinLightY</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinLightY</sender><signal>valueChanged(int)</signal><receiver>sliderLightY</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderLightY</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setLightPosY(int)</slot></connection>
+  <connection><sender>sliderLightZ</sender><signal>valueChanged(int)</signal><receiver>spinLightZ</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinLightZ</sender><signal>valueChanged(int)</signal><receiver>sliderLightZ</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderLightZ</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setLightPosZ(int)</slot></connection>
+  <connection><sender>sliderLightR</sender><signal>valueChanged(int)</signal><receiver>spinLightR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinLightR</sender><signal>valueChanged(int)</signal><receiver>sliderLightR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderLightR</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setLightColorR(int)</slot></connection>
+  <connection><sender>sliderLightG</sender><signal>valueChanged(int)</signal><receiver>spinLightG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinLightG</sender><signal>valueChanged(int)</signal><receiver>sliderLightG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderLightG</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setLightColorG(int)</slot></connection>
+  <connection><sender>sliderLightB</sender><signal>valueChanged(int)</signal><receiver>spinLightB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinLightB</sender><signal>valueChanged(int)</signal><receiver>sliderLightB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderLightB</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setLightColorB(int)</slot></connection>
+  <connection><sender>sliderAmbR</sender><signal>valueChanged(int)</signal><receiver>spinAmbR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinAmbR</sender><signal>valueChanged(int)</signal><receiver>sliderAmbR</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderAmbR</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setGlobalAmbientR(int)</slot></connection>
+  <connection><sender>sliderAmbG</sender><signal>valueChanged(int)</signal><receiver>spinAmbG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinAmbG</sender><signal>valueChanged(int)</signal><receiver>sliderAmbG</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderAmbG</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setGlobalAmbientG(int)</slot></connection>
+  <connection><sender>sliderAmbB</sender><signal>valueChanged(int)</signal><receiver>spinAmbB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>spinAmbB</sender><signal>valueChanged(int)</signal><receiver>sliderAmbB</receiver><slot>setValue(int)</slot></connection>
+  <connection><sender>sliderAmbB</sender><signal>valueChanged(int)</signal><receiver>openGLWidget</receiver><slot>setGlobalAmbientB(int)</slot></connection>
  </connections>
- <slots>
-  <slot>showState(int)</slot>
- </slots>
 </ui>

@@ -16,10 +16,16 @@ struct Sphere
     vec3 ka; // Constante ambiental
     vec3 kd; // Constante difusa
     vec3 ks; // Constante especular
+    float shininess;
 };
 
 uniform Sphere spheres[50];
 
+uniform vec3 cameraPos;
+uniform vec3 camForward;
+uniform vec3 camRight;
+uniform vec3 camUp;
+uniform float globalShininess;
 
 float CalculateIntersection(vec3 r0, vec3 rd, vec3 C, float r)
 {
@@ -100,8 +106,8 @@ void main(void)
     vec2 uv = (gl_FragCoord.xy / screenSize) * 2.0 - 1.0;
     uv.x *= screenSize.x / screenSize.y;
 
-    vec3 r0 = vec3(0.0, 0.0, 1.0);
-    vec3 rd = normalize(vec3(uv, -1.0));
+    vec3 r0 = cameraPos;
+    vec3 rd = normalize(uv.x * camRight + uv.y * camUp + camForward);
 
     vec3 planePos = vec3(0.0, -1.0, 0.0);
     vec3 planeNormal = vec3(0.0, 1.0, 0.0);
@@ -167,9 +173,6 @@ void main(void)
         }
 
         //Ambient
-        vec3 ambient = vec3(0.5f, 0.5f, 0.5f);
-        vec3 globalAmbient = vec3(0.5f, 0.5f, 0.5f);
-
         vec3 ambientCalc = objectColor * Ambient(kaObj, globalAmbient);
 
         //Diffuse
@@ -179,7 +182,7 @@ void main(void)
 
         //Specular
         vec3 specular = vec3(0.6f, 0.6f, 0.6f);
-        float shininess = 128.0f;
+        float shininess = (iMin == -1) ? 128.0f : globalShininess;
 
         vec3 specularCalc = Specular(point, normal, ksObj, shininess, r0, lightPosition, lightColor);
 

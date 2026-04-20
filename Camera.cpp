@@ -6,6 +6,8 @@ Camera::Camera()
 }
 void Camera::init(glm::vec3 min, glm::vec3 max)
 {
+    min_orig = min;
+    max_orig = max;
     setType(CameraType::PERSPECTIVE);
 
     R = glm::distance(max, min) / 2;
@@ -57,6 +59,11 @@ void Camera::rotate(float angle)
     VRP = glm::vec3(newVRP);
 
     updateLookAt();
+}
+
+void Camera::restart()
+{
+    init(min_orig, max_orig);
 }
 
 void Camera::updatePerspective()

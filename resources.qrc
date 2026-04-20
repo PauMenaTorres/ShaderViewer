@@ -7,5 +7,6 @@
         <file>vertexModel.vert</file>
         <file>fragmentGreen.frag</file>
         <file>fragmentRed.frag</file>
+        <file>Logo.png</file>
     </qresource>
 </RCC>

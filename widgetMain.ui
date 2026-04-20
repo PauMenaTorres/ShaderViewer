@@ -11,50 +11,106 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Widget</string>
+   <string>Shader Viewer</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_11">
+  <property name="styleSheet">
+   <string>.Widget { border-image: url(:/Logo.png) 0 0 0 0 stretch stretch; }
+QPushButton {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 180);
+    border-radius: 10px;
+    border: 2px solid #555;
+}
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 220);
+    border-color: #000;
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="mainHorizontalLayout">
+   <!-- Spacer to push buttons to the right -->
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_5">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <!-- Right column for buttons -->
+   <item>
+    <layout class="QVBoxLayout" name="buttonColumnLayout">
      <item>
-      <spacer name="verticalSpacer">
+      <spacer name="verticalSpacerTop">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSpheres">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Ray Tracer Spheres</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnModels">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>3D Models Viewer</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacerMid">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>17</height>
+         <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="btnExit">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>60</height>
+        </size>
+       </property>
        <property name="text">
-        <string>Models</string>
+        <string>Exit Application</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>Spheres</string>
+      <spacer name="verticalSpacerBottom">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Exit</string>
-       </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>
@@ -63,23 +119,10 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>btnExit</sender>
    <signal>clicked()</signal>
    <receiver>Widget</receiver>
    <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>91</x>
-     <y>727</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>711</x>
-     <y>702</y>
-    </hint>
-   </hints>
   </connection>
  </connections>
- <slots>
-  <slot>showState(int)</slot>
- </slots>
 </ui>

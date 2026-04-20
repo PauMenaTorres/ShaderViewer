@@ -13,7 +13,8 @@ INCLUDEPATH+=C:/Qt/Qt5.12.12/Tools/glm-master
 SOURCES += \
     Camera.cpp \
     ModelOBJ.cpp \
-    MyGLWidget.cpp \
+    MyGLWidgetSpheres.cpp \
+    MyGLWidgetModels.cpp \
     MyLabel.cpp \
     MyLineEdit.cpp \
     Scene.cpp \
@@ -26,7 +27,8 @@ SOURCES += \
 HEADERS += \
     Camera.h \
     ModelOBJ.h \
-    MyGLWidget.h \
+    MyGLWidgetSpheres.h \
+    MyGLWidgetModels.h \
     MyLabel.h \
     MyLineEdit.h \
     Scene.h \

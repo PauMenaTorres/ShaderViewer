@@ -16,7 +16,13 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private slots:
+    void on_btnSpheres_clicked();
+    void on_btnModels_clicked();
+
 private:
     Ui::Widget *ui;
 };
