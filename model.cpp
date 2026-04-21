@@ -13,18 +13,20 @@
 #include <iostream>
 #include <cmath>
 #include <cassert>
+
 using namespace std;
 // === Local stuff:
 static int material = 1;
 static void loadMTL(std::string filename);
 static int findMat(string material);
-static void omplenormals(vector<Face> &_faces, 
-			 vector<Vertex> const &_vertices);
-static void ompleVBOs(vector<Face> &_faces, 
-	              vector<Vertex> const &_vertices,
-	              vector<Normal> const &_normals,
-		      float *&_VBO_vert, float *&_VBO_norm,
-		      float *&_VBO_mata, float *&_VBO_matd, float *&_VBO_matsp, float *&_VBO_matsh);
+static void omplenormals(vector<Face> &_faces,
+             vector<Vertex> const &_vertices);
+static void ompleVBOs(vector<Face> &_faces,
+                  vector<Vertex> const &_vertices,
+                  vector<Normal> const &_normals,
+                  vector<TexCoord> const &_texCoords,
+              float *&_VBO_vert, float *&_VBO_norm,
+              float *&_VBO_mata, float *&_VBO_matd, float *&_VBO_matsp, float *&_VBO_matsh, float *&_VBO_tex);
 
 static bool fvtn = false;
 static bool fvt = false;
@@ -33,16 +35,18 @@ static string modelPath("");
 
 // ======== Constructors and Destructors =======
 Model::Model() : _vertices(0), _normals(0), _faces(0) {
-  _VBO_vertices = _VBO_normals = _VBO_matamb = _VBO_matdiff = _VBO_matspec = _VBO_matshin = NULL;
+  _VBO_vertices = _VBO_normals = _VBO_matamb = _VBO_matdiff = _VBO_matspec = _VBO_matshin = _VBO_texCoords = NULL;
 }
 
 Model::~Model() {
   if (_VBO_vertices != NULL) delete _VBO_vertices;
   if (_VBO_normals != NULL) delete _VBO_normals;
+  if (_VBO_texCoords != NULL) delete _VBO_texCoords;
   if (_VBO_matamb != NULL) delete _VBO_matamb;
   if (_VBO_matdiff != NULL) delete _VBO_matdiff;
   if (_VBO_matspec != NULL) delete _VBO_matspec;
   if (_VBO_matshin != NULL) delete _VBO_matshin;
+
 }
 
 Material::Material() : name("__load_object_default_material__") {
@@ -51,6 +55,11 @@ Material::Material() : name("__load_object_default_material__") {
   specular[0] = specular[1] = specular[2] = 1.0; specular[3] = 1.0;
   shininess = 64;
 }
+
+
+
+
+
 
 // ========= Public methods ==========
 void Model::load(std::string filename) {
@@ -94,20 +103,17 @@ void Model::load(std::string filename) {
       ss >> noskipws >> c >> skipws;
       switch (c) {
       case ' ':  // coordinates
-	for (int i = 0; i < 3; ++i) { ss >> coord; _vertices.push_back(coord);}
-	break;
+    for (int i = 0; i < 3; ++i) { ss >> coord; _vertices.push_back(coord);}
+    break;
       case 'n':  // normal components
-	for (int i = 0; i < 3; ++i) { ss >> coord; _normals.push_back(coord);}
-	break;
+    for (int i = 0; i < 3; ++i) { ss >> coord; _normals.push_back(coord);}
+    break;
       case 't':  // texture coords.
-	if (not  texcoord) {
-	  cerr << "Found texture coordinates, which are not yet supported. Ignoring..." << endl;
-	  texcoord = true;
-	}
-	break;
+        for (int i=0;i<2;++i) {ss >> coord; _texCoords.push_back(coord);}
+        break;
       default:
-	cerr << "Seen unknown vertex info of type '" << c << "', ignoring it..." << endl;
-	break;  
+    cerr << "Seen unknown vertex info of type '" << c << "', ignoring it..." << endl;
+    break;
       }
       break;
       //-------------
@@ -116,28 +122,32 @@ void Model::load(std::string filename) {
       first = tail.find("/");
       if (first == string::npos) parseVOnly(ss, tail);
       else {
-	second = tail.find("/", first + 1);
-	if (second == first + 1)  parseVN(ss, tail);
-	else if (second == string::npos) parseVT(ss, tail);
-	else parseVTN(ss, tail);
+    second = tail.find("/", first + 1);
+    if (second == first + 1)  parseVN(ss, tail);
+    else if (second == string::npos) parseVT(ss, tail);
+    else parseVTN(ss, tail);
       }
       break;
       //-------------
     case 'm':  // material library
       ss >> tail;
       if (tail != "tllib") {
-	cerr << "unknown line of type 'm" << tail << "'. Ignoring..." << endl;
-	break;
+    cerr << "unknown line of type 'm" << tail << "'. Ignoring..." << endl;
+    break;
       }
       ss >> tail;
       loadMTL(modelPath+tail);
+      if (Materials[Materials.size()-1].map_kd!="")
+        this->textureName=modelPath+Materials[Materials.size()-1].map_kd;
+      if (Materials[Materials.size()-1].map_bump!="")
+        this->bumpName=modelPath+Materials[Materials.size()-1].map_bump;
       break;
       //-------------
     case 'u':  // material info
       ss >> tail;
       if (tail != "semtl") {
-	cerr << "unknown line of type 'u" << tail << "'. Ignoring..." << endl;
-	break;
+    cerr << "unknown line of type 'u" << tail << "'. Ignoring..." << endl;
+    break;
       }
       ss >> tail;
       material = findMat(tail);
@@ -169,8 +179,8 @@ void Model::load(std::string filename) {
   omplenormals(_faces, _vertices);  // afegim normals per cara...
 
   // Omplim els vectors per als VBO
-  ompleVBOs(_faces, _vertices, _normals, _VBO_vertices, _VBO_normals, 
-            _VBO_matamb, _VBO_matdiff, _VBO_matspec, _VBO_matshin);
+  ompleVBOs(_faces, _vertices, _normals, _texCoords, _VBO_vertices, _VBO_normals,
+            _VBO_matamb, _VBO_matdiff, _VBO_matspec, _VBO_matshin, _VBO_texCoords);
 }
 
 // ======= helper methods for checking and debugging ==========
@@ -200,12 +210,12 @@ void Model::dumpModel() const {
     cout << "f";
     if (_faces[i].n.empty()){
       for (int j = 0; j < 3; ++j)
-	cout << " " << _faces[i].v[j]/3 + 1;
+    cout << " " << _faces[i].v[j]/3 + 1;
       cout << endl;
     } else {
       for (int j = 0; j < 3; ++j)
-	cout << " " << _faces[i].v[j]/3 + 1 << "//" << _faces[i].n[j]/3 + 1;
-      cout << endl;      
+    cout << " " << _faces[i].v[j]/3 + 1 << "//" << _faces[i].n[j]/3 + 1;
+      cout << endl;
     }
   }
 }
@@ -224,7 +234,7 @@ void Model::parseVOnly(stringstream & ss, string & block) {
 
   ss >> index;
   f.v.push_back(3*index-3);
-  
+
   ss >> index;
   f.v.push_back(3*index-3);
   f.mat = material;
@@ -253,12 +263,12 @@ void Model::parseVN(stringstream & ss, string & block) {
   ssb >> n;
   f.v.push_back(3*index-3); f.n.push_back(3*n-3);
 
-  ss >> block; 
+  ss >> block;
   ssb.clear(); ssb.str(block);
   ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> sep; assert(sep == '/');
   ssb >> n;
-  f.v.push_back(3*index-3); f.n.push_back(3*n-3); 
-  
+  f.v.push_back(3*index-3); f.n.push_back(3*n-3);
+
   ss >> block;
   ssb.clear(); ssb.str(block);
   ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> sep; assert(sep == '/');
@@ -299,7 +309,7 @@ void Model::parseVT(stringstream & ss, string & block) {
   ssb.clear(); ssb.str(block);
   ssb >> index;
   f.v.push_back(3*index-3);
-  
+
   ss >> block;
   ssb.clear(); ssb.str(block);
   ssb >> index;
@@ -323,41 +333,51 @@ void Model::parseVTN(stringstream & ss, string & block) {
 #if DEBUGPARSER
   cout << "Entering parseVTN(..., \""<< block << "\")" << endl;
 #endif
-  if (not fvtn) {
+ /* if (not fvtn) {
     cerr << "vtn node found: Texture coords not supported yet. Ignoring texture part..." << endl;
     fvtn = true;
-  }
+  }*/
   Face f;
   stringstream ssb;
   ssb.str(block);
   int index, n, t;
   char sep;
-  ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> t >> sep; assert(sep == '/');
-  ssb >> n;
-  f.v.push_back(3*index-3); f.n.push_back(3*n-3);
+  ssb >> index >> sep >> t >> sep >> n;
+  f.v.push_back(3*index-3);
+  f.t.push_back(2*t-2);
+  f.n.push_back(3*n-3);
 
   ss >> block;
   ssb.clear(); ssb.str(block);
-  ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> t >> sep; assert(sep == '/');
-  ssb >> n;
-  f.v.push_back(3*index-3); f.n.push_back(3*n-3);
-  
+  ssb >> index >> sep >> t >> sep >> n;
+  f.v.push_back(3*index-3);
+  f.t.push_back(2*t-2);
+  f.n.push_back(3*n-3);
+
   ss >> block;
   ssb.clear(); ssb.str(block);
-  ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> t >> sep; assert(sep == '/');
-  ssb >> n;
-  f.v.push_back(3*index-3); f.n.push_back(3*n-3);
+  ssb >> index >> sep >> t >> sep >> n;
+  f.v.push_back(3*index-3);
+  f.t.push_back(2*t-2);
+  f.n.push_back(3*n-3);
   f.mat = material;
   _faces.push_back(f);
   Face fAnt(f);
   while(ss >> block) {
-    f.v.clear(); f.n.clear();
+    f.v.clear(); f.n.clear(); f.t.clear();
     ssb.clear(); ssb.str(block);
-    ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> t >>sep; assert(sep == '/');
-    ssb >> n;
-    f.v.push_back(fAnt.v[0]); f.n.push_back(fAnt.n[0]);
-    f.v.push_back(fAnt.v[2]); f.n.push_back(fAnt.n[2]);
-    f.v.push_back(3*index-3); f.n.push_back(3*n-3);
+    ssb >> index >> sep >> t >> sep >> n;
+    f.v.push_back(fAnt.v[0]);
+    f.t.push_back(fAnt.t[0]);
+    f.n.push_back(fAnt.n[0]);
+
+    f.v.push_back(fAnt.v[2]);
+    f.t.push_back(fAnt.t[2]);
+    f.n.push_back(fAnt.n[2]);
+
+    f.v.push_back(3*index-3);
+    f.t.push_back(2*t-2);
+    f.n.push_back(3*n-3);
     _faces.push_back(f);
     fAnt = f;
   }
@@ -401,22 +421,32 @@ static void loadMTL(std::string filename) {
 #if DEBUGPARSER
     cerr << "Processing '" << wrd << "'" << endl;
 #endif
-      for (int i = 0; i < 3; ++i) 
-	ss >> Materials.back().ambient[i];
+      for (int i = 0; i < 3; ++i)
+    ss >> Materials.back().ambient[i];
     }
     else if (wrd == "Kd") {
 #if DEBUGPARSER
     cerr << "Processing '" << wrd << "'" << endl;
 #endif
-      for (int i = 0; i < 3; ++i) 
-	ss >> Materials.back().diffuse[i];
+      for (int i = 0; i < 3; ++i)
+    ss >> Materials.back().diffuse[i];
     }
     else if (wrd == "Ks") {
 #if DEBUGPARSER
     cerr << "Processing '" << wrd << "'" << endl;
 #endif
-      for (int i = 0; i < 3; ++i) 
-	ss >> Materials.back().specular[i];
+      for (int i = 0; i < 3; ++i)
+    ss >> Materials.back().specular[i];
+    } else if (wrd == "map_Kd") {
+#if DEBUGPARSER
+    cerr << "Processing '" << wrd << "'" << endl;
+#endif
+    ss >> Materials.back().map_kd;
+    } else if (wrd == "map_bump") {
+#if DEBUGPARSER
+    cerr << "Processing '" << wrd << "'" << endl;
+#endif
+    ss >> Materials.back().map_bump;
     } else {
 #if DEBUGPARSER
     cerr << "MTL parser: read line of type " << wrd << " which is not supported. Skipped..." << endl;
@@ -426,14 +456,14 @@ static void loadMTL(std::string filename) {
 }
 
 static int findMat(string material) {
-  for (unsigned int i = 0; i < Materials.size(); ++i) 
+  for (unsigned int i = 0; i < Materials.size(); ++i)
     if (Materials[i].name == material) return i;
   return 0;
 }
 
 
-static void omplenormals(vector<Face> &_faces, 
-			 const vector<Vertex>  &_vertices) {
+static void omplenormals(vector<Face> &_faces,
+             const vector<Vertex>  &_vertices) {
   for (unsigned int i = 0; i < _faces.size(); ++i) {
     double v0[3], v1[3];
     int P0 =_faces[i].v[0];
@@ -445,43 +475,55 @@ static void omplenormals(vector<Face> &_faces,
     }
     double norm = 0;
     double *normalcara = _faces[i].normalC;
-    normalcara[0] = v0[1]*v1[2] - v0[2]*v1[1]; 
+    normalcara[0] = v0[1]*v1[2] - v0[2]*v1[1];
     norm += normalcara[0]*normalcara[0];
-    normalcara[1] = v0[2]*v1[0] - v0[0]*v1[2]; 
+    normalcara[1] = v0[2]*v1[0] - v0[0]*v1[2];
     norm += normalcara[1]*normalcara[1];
-    normalcara[2] = v0[0]*v1[1] - v0[1]*v1[0]; 
+    normalcara[2] = v0[0]*v1[1] - v0[1]*v1[0];
     norm += normalcara[2]*normalcara[2];
     for (int j = 0; j < 3; ++j) normalcara[j] /= sqrt(norm);
   }
 }
 
-static void ompleVBOs(vector<Face> &_faces, 
-		      const vector<Vertex> &_vertices,
+static void ompleVBOs(vector<Face> &_faces,
+              const vector<Vertex> &_vertices,
                       const vector<Normal> &_normals,
-		      float *&_VBO_vert, float *&_VBO_norm, 
-                      float *&_VBO_mata, float *&_VBO_matd, float *&_VBO_matsp, float *&_VBO_matsh) 
+                          const vector<TexCoord> &_texCoords,
+              float *&_VBO_vert, float *&_VBO_norm,
+                      float *&_VBO_mata, float *&_VBO_matd, float *&_VBO_matsp, float *&_VBO_matsh, float *&_VBO_tex)
 {
   // Creem els VBOs amb 3*3*faces.size() doubles cadascun
-  _VBO_vert = new float[3*3*_faces.size()];  
+  _VBO_vert = new float[3*3*_faces.size()];
   _VBO_norm = new float[3*3*_faces.size()];
   _VBO_mata = new float[3*3*_faces.size()];
   _VBO_matd = new float[3*3*_faces.size()];
   _VBO_matsp = new float[3*3*_faces.size()];
   _VBO_matsh = new float[3*_faces.size()];
+  _VBO_tex  =  new float[2*3*_faces.size()];
 
   int index = 0;
+  int idxT=0;
   for (unsigned int f = 0; f < _faces.size(); ++f) {
     Material &mat = Materials[_faces[f].mat];
     for (int i = 0; i < 3; ++i) {
+      if (!_texCoords.empty() && !_faces[f].t.empty()) {
+        int T = _faces[f].t[i];
+        _VBO_tex[idxT]   = _texCoords[T];     // u
+        _VBO_tex[idxT+1] = _texCoords[T+1];   // v
+      } else {
+        _VBO_tex[idxT]   = 0.0f;
+        _VBO_tex[idxT+1] = 0.0f;
+      }
+      idxT += 2;
       int P =_faces[f].v[i];
       for (int j = 0; j < 3; ++j) {
         _VBO_vert[index+j] = _vertices[P+j];
-	if (_normals.size() != 0) {
+       if (_normals.size() != 0) {
           _VBO_norm[index+j] = _normals[_faces[f].n[i]+j];
         }
-	else {
+        else {
           _VBO_norm[index+j] = _faces[f].normalC[j];
-        }	
+        }
         _VBO_mata[index+j] = mat.ambient[j];
         _VBO_matd[index+j] = mat.diffuse[j];
         _VBO_matsp[index+j] = mat.specular[j];
@@ -491,3 +533,6 @@ static void ompleVBOs(vector<Face> &_faces,
     }
   }
 }
+
+
+

@@ -7,7 +7,7 @@
  */
 
 #ifndef MODEL_H
-#define MODEL_H    
+#define MODEL_H
 
 #include <vector>
 #include <string>
@@ -18,33 +18,38 @@ struct Material {
   float diffuse[4];
   float specular[4];
   float shininess;
+
+  std::string map_kd="";
+  std::string map_bump="";
   Material();
 };
-#ifndef __MODEL__DEF__ 
+#ifndef __MODEL__DEF__
 extern
 #endif
 std::vector<Material> Materials
 #ifdef __MODEL__DEF__
-(1); 
+(1);
 #else
 ;
 #endif
 
 typedef double Vertex;
 typedef double Normal;
+typedef double TexCoord;
 
 struct Face{
   std::vector<int> v;   // Model::load() only generates triangles, though.
   std::vector<int> n;
   int mat;
   double normalC[3];
+  std::vector<int> t;
 };
 
 class Model {
  public:
   Model();
   ~Model();
-  void load(std::string filename);
+  void load(std::string path);
   const std::vector<Vertex>& vertices() const {
     return _vertices;
   }
@@ -53,6 +58,10 @@ class Model {
   }
   const std::vector<Face>& faces() const {
     return _faces;
+  }
+
+  const std::vector<TexCoord>& texCoords() const{
+      return _texCoords;
   }
   void dumpStats() const;
   void dumpModel() const;
@@ -76,18 +85,27 @@ class Model {
     return _VBO_matshin;
   }
 
+  float *VBO_texCoords() {
+      return _VBO_texCoords;
+  }
+
+  std::string textureName;
+  std::string bumpName;
+
  private:
   std::vector<Vertex> _vertices;
   std::vector<Normal> _normals;
+  std::vector<TexCoord> _texCoords;
   std::vector<Face> _faces;
 
   float *_VBO_vertices, *_VBO_normals;
-  float *_VBO_matamb, *_VBO_matdiff, *_VBO_matspec, *_VBO_matshin;
+  float *_VBO_matamb, *_VBO_matdiff, *_VBO_matspec, *_VBO_matshin, *_VBO_texCoords;
 
   void parseVOnly(std::stringstream & ss, std::string & block);
   void parseVN(std::stringstream & ss, std::string & block);
   void parseVT(std::stringstream & ss, std::string & block);
   void parseVTN(std::stringstream & ss, std::string & block);
+
 };
 
 #endif // MODEL_H
