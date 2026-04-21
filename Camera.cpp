@@ -11,7 +11,7 @@ void Camera::init(glm::vec3 min, glm::vec3 max)
     setType(CameraType::PERSPECTIVE);
 
     R = glm::distance(max_orig, min_orig) / 2;
-    d = R + 50.0f;
+    d = R + 2.0f;
 
     OBS = glm::vec3(0.0f, 0.0f, d);
     VRP = glm::vec3(0.0f, 0.0f, 0.0f);

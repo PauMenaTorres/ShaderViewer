@@ -61,7 +61,7 @@ vec3 Phong (vec3 NormSCO, vec3 L, vec4 vertSCO)
 
 void main()
 {
-    vec3 N=normalize(normalSCO);
+    vec3 N = normalize(normalSCO);
     vec3 L = normalize(lightPos - vertexSCO.xyz);
     vec3 lightRes = Phong(N, L, vertexSCO);
     if (hasTexture == 1)
