@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     QSurfaceFormat::setDefaultFormat(f);
 
-    Widget w;
+    WidgetModels w;
 
     w.show();
 

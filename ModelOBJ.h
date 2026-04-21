@@ -15,6 +15,7 @@ public:
     ~ModelOBJ();
 
     void init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader);
+    void initTexture();
     void modelTransform(const glm::mat4& transform);
     void render(const glm::mat4& viewMat, const glm::mat4& projMat);
     glm::vec3 getCenter() const;
@@ -32,9 +33,11 @@ private:
     GLuint VBO_vert, VBO_normals, VBO_matamb, VBO_matdiff, VBO_matspec, VBO_matshin;
     GLint vertexLoc, normalLoc, matambLoc, matdiffLoc, matspecLoc, matshinLoc, TGLoc, viewLoc, projLoc;
 
-
     float xmin, xmax, ymin, ymax, zmin, zmax;
     float aabb[6];
+
+    GLuint textureID = 0;
+    GLuint hasTextureLoc, texCoordLoc, difuseTexLoc;
 
     void loadShaders(const QString& vShader, const QString& fShader);
 

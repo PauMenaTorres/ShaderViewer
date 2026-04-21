@@ -6,6 +6,7 @@ in vec3 matdif;
 in vec3 matspec;
 in float matshin;
 in vec3 normal;
+in vec2 texCoord;
 
 uniform mat4 proj;
 uniform mat4 view;
@@ -15,6 +16,7 @@ out vec3 matambFS;
 out vec3 matdifFS;
 out vec3 matspecFS;
 out float matshinFS;
+out vec2 texCoordFS;
 
 out vec3 normalSCO;
 out vec4 vertexSCO;
@@ -31,4 +33,5 @@ void main()
     normalSCO = vec3(normalMatrix * normal);
     vertexSCO = view * TG * vec4(vertex, 1.0);
     gl_Position = proj * vertexSCO;
+    texCoordFS = texCoord;
 }

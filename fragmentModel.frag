@@ -6,6 +6,7 @@ in vec3 matambFS;
 in vec3 matdifFS;
 in vec3 matspecFS;
 in float matshinFS;
+in vec2 texCoordFS;
 
 out vec4 FragColor;
 
@@ -16,6 +17,8 @@ uniform vec3 lightPos;
 uniform mat4 proj;
 uniform mat4 view;
 uniform mat4 TG;
+uniform sampler2D diffuseTex;
+uniform int hasTexture;
 
 vec3 llumAmbient = vec3(0.2, 0.2, 0.2);
 
@@ -58,6 +61,14 @@ vec3 Phong (vec3 NormSCO, vec3 L, vec4 vertSCO)
 
 void main()
 {
+    vec3 N=normalize(normalSCO);
     vec3 L = normalize(lightPos - vertexSCO.xyz);
-    FragColor = vec4(Phong(normalize(normalSCO),L,vertexSCO),1);
+    vec3 lightRes = Phong(N, L, vertexSCO);
+    if (hasTexture == 1)
+    {
+        vec4 texColor = texture(diffuseTex, texCoordFS);
+        FragColor = vec4(lightRes, 1.0) * texColor;
+    }
+    else
+        FragColor=vec4(lightRes, 1.0);
 }

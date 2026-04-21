@@ -1,6 +1,7 @@
 #include "ModelOBJ.h"
 #include <QFile>
 #include <QDebug>
+#include <QImage>
 
 ModelOBJ::ModelOBJ() : program(nullptr), TG(1.0f)
 {
@@ -20,11 +21,71 @@ void ModelOBJ::init(const QString& modelName, const QString& vertexShader, const
     initializeOpenGLFunctions();
 
     m.load(modelName.toStdString());
+    initTexture();
 
     computeAABB();
 
     loadShaders(vertexShader, fragmentShader);
     createBuffers();
+}
+
+void ModelOBJ::initTexture()
+{
+    QString s(m.textureName.c_str());
+
+    // 1. Comprovació: el path no és buit
+    if (s.isEmpty())
+    {
+        qCritical() << "ERROR: textureName buit";
+        textureID = 0;
+        return;
+    }
+
+    // 2. Comprovació: el fitxer existeix
+    if (!QFile::exists(s))
+    {
+        qCritical() << "ERROR: la textura no existeix:" << s;
+        textureID = 0;
+        return;
+    }
+
+    // 3. Carrega de la imatge
+    QImage img(s);
+    // 4. Comprovació: la imatge s'ha carregat correctament
+    if (img.isNull())
+    {
+        qCritical() << "ERROR: no s'ha pogut carregar la imatge:" << s;
+        textureID = 0;
+        return;
+    }
+    // 5. Conversió a format OpenGL
+    QImage imGL = img.convertToFormat(QImage::Format_RGBA8888).mirrored();
+    if (imGL.isNull())
+    {
+        qCritical() << "ERROR: conversió de la imatge fallida:" << s;
+        textureID = 0;
+        return;
+    }
+
+    // 6. Creació de la textura OpenGL
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                 imGL.width(), imGL.height(),
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, imGL.bits());
+    // 7. Comprovació OpenGL
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+    {
+        qCritical() << "ERROR OpenGL carregant textura:" << err;
+        textureID = 0;
+        return;
+    }
+    qDebug() << "Textura carregada correctament:" << s
+             << " mida:" << imGL.width() << "x" << imGL.height();
+
 }
 
 void ModelOBJ::loadShaders(const QString& vShader, const QString& fShader)
@@ -35,14 +96,20 @@ void ModelOBJ::loadShaders(const QString& vShader, const QString& fShader)
     program->link();
 
     program->bind();
+
+    //Atrib Location
     vertexLoc = glGetAttribLocation(program->programId(), "vertex");
     normalLoc = glGetAttribLocation(program->programId(), "normal");
     matambLoc = glGetAttribLocation(program->programId(), "matamb");
     matdiffLoc = glGetAttribLocation(program->programId(), "matdif");
     matspecLoc = glGetAttribLocation(program->programId(), "matspec");
     matshinLoc = glGetAttribLocation(program->programId(), "matshin");
+    texCoordLoc = glGetAttribLocation(program->programId(), "texCoord");
 
+    //Uniform Location
     TGLoc = glGetUniformLocation(program->programId(), "TG");
+    hasTextureLoc = glGetUniformLocation(program->programId(), "hasTexture");
+    difuseTexLoc = glGetUniformLocation(program->programId(), "diffuseTex");
     program->release();
 }
 
@@ -96,6 +163,19 @@ void ModelOBJ::createBuffers()
     glVertexAttribPointer(matshinLoc, 1, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(matshinLoc);
 
+    //Textures
+    if (m.VBO_texCoords()!=NULL)
+    {
+       GLuint vbotex;
+       glGenBuffers(1, &vbotex);
+       glBindBuffer(GL_ARRAY_BUFFER, vbotex);
+       glBufferData(GL_ARRAY_BUFFER, sizeof(float)*2*3*m.faces().size(),
+                    m.VBO_texCoords(), GL_STATIC_DRAW);
+       glVertexAttribPointer(texCoordLoc, 2, GL_FLOAT, GL_FALSE, 0,0);
+       glEnableVertexAttribArray(texCoordLoc);
+    }
+
+
     glBindVertexArray(0);
 }
 
@@ -119,6 +199,17 @@ void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);
     glBindVertexArray(0);
+
+    if (textureID != 0)
+    {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glUniform1i(difuseTexLoc, 0);
+        glUniform1i(hasTextureLoc, 1);
+    }
+    else
+        glUniform1i(hasTextureLoc, 0);
+
 
     GLuint lightPosLoc = program->uniformLocation("lightPos");
     glm::vec3 lightPos(2.0f);
