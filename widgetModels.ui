@@ -36,6 +36,19 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Texture</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -103,6 +116,7 @@
     <slot>setGlobalAmbientG(double)</slot>
     <slot>setGlobalAmbientB(double)</slot>
     <slot>addSphere()</slot>
+    <slot>activeTexture(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -121,6 +135,22 @@
     <hint type="destinationlabel">
      <x>711</x>
      <y>702</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>activeTexture(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1009</x>
+     <y>12</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>852</x>
+     <y>123</y>
     </hint>
    </hints>
   </connection>

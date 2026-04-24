@@ -196,11 +196,7 @@ void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &viewMat[0][0]);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, &projMat[0][0]);
 
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);
-    glBindVertexArray(0);
-
-    if (textureID != 0)
+    if (textureID != 0 && textureActive)
     {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, textureID);
@@ -208,12 +204,17 @@ void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
         glUniform1i(hasTextureLoc, 1);
     }
     else
+    {
         glUniform1i(hasTextureLoc, 0);
-
+    }
 
     GLuint lightPosLoc = program->uniformLocation("lightPos");
     glm::vec3 lightPos(2.0f);
     glUniform3fv(lightPosLoc, 1, &lightPos[0]);
+
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);
+    glBindVertexArray(0);
 
     program->release();
 }
@@ -262,4 +263,9 @@ glm::vec3 ModelOBJ::getCenter() const
         (aabb[2] + aabb[3]) * 0.5f,
         (aabb[4] + aabb[5]) * 0.5f
     );
+}
+
+void ModelOBJ::setTextureActive(bool active)
+{
+    textureActive = active;
 }

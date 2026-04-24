@@ -16,13 +16,12 @@ public:
 
     Camera& getCamera();
 
+    std::vector<ModelOBJ*> getModels() const;
+
 private:
 
     std::vector<ModelOBJ*> models;
     Camera camera;
-
-
-
 };
 
 #endif // SCENE_H

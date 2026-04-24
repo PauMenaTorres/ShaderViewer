@@ -23,6 +23,8 @@ public:
     glm::vec3 getMin();
     glm::vec3 getMax();
 
+    void setTextureActive(bool active);
+
 private:
 
     Model m;
@@ -35,6 +37,8 @@ private:
 
     float xmin, xmax, ymin, ymax, zmin, zmax;
     float aabb[6];
+
+    bool textureActive = true;
 
     GLuint textureID = 0;
     GLuint hasTextureLoc, texCoordLoc, difuseTexLoc;

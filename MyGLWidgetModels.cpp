@@ -111,3 +111,17 @@ void MyGLWidgetModels::keyPressEvent(QKeyEvent *e)
 void MyGLWidgetModels::setLightPosX(double x) { myLightPos.x = x; update(); }
 void MyGLWidgetModels::setLightPosY(double y) { myLightPos.y = y; update(); }
 void MyGLWidgetModels::setLightPosZ(double z) { myLightPos.z = z; update(); }
+
+void MyGLWidgetModels::activeTexture(bool isTextureActive)
+{
+    makeCurrent();
+
+    std::vector<ModelOBJ*> models = scene.getModels();
+
+    for (ModelOBJ* model : models)
+    {
+        model->setTextureActive(isTextureActive);
+    }
+
+    update();
+}

@@ -70,3 +70,8 @@ Camera& Scene::getCamera()
 {
     return camera;
 }
+
+std::vector<ModelOBJ*> Scene::getModels() const
+{
+    return models;
+}

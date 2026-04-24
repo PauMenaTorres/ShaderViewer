@@ -24,7 +24,7 @@ class MyGLWidgetModels : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         MyGLWidgetModels(QWidget *parent=0);
         ~MyGLWidgetModels();
 
-    protected:
+protected:
         void initializeGL();
         void paintGL();
         void resizeGL(int width, int height);
@@ -46,6 +46,8 @@ class MyGLWidgetModels : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         void setLightPosX(double x);
         void setLightPosY(double y);
         void setLightPosZ(double z);
+
+        void activeTexture(bool isTextureActive);
 };
 
 #endif // MYGLWIDGETMODELS_H
