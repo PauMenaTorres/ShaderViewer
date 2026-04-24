@@ -36,6 +36,8 @@ std::vector<Material> Materials
 typedef double Vertex;
 typedef double Normal;
 typedef double TexCoord;
+typedef double Tangent;
+typedef double Bitangent;
 
 struct Face{
   std::vector<int> v;   // Model::load() only generates triangles, though.
@@ -89,6 +91,14 @@ class Model {
       return _VBO_texCoords;
   }
 
+  float *VBO_tangents() {
+      return _VBO_tangents;
+  }
+
+  float *VBO_bitangents() {
+      return _VBO_bitangents;
+  }
+
   std::string textureName;
   std::string bumpName;
 
@@ -100,6 +110,7 @@ class Model {
 
   float *_VBO_vertices, *_VBO_normals;
   float *_VBO_matamb, *_VBO_matdiff, *_VBO_matspec, *_VBO_matshin, *_VBO_texCoords;
+  float *_VBO_tangents, *_VBO_bitangents;
 
   void parseVOnly(std::stringstream & ss, std::string & block);
   void parseVN(std::stringstream & ss, std::string & block);
