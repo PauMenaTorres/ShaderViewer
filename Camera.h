@@ -34,6 +34,7 @@ public:
 
     void setAspectRatio(float ratio);
 
+    void orbit(float angle);
 private:
 
     float d, R;

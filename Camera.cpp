@@ -60,6 +60,20 @@ void Camera::rotate(float angle)
     updateLookAt();
 }
 
+void Camera::orbit(float angle)
+{
+    glm::mat4 TG(1.0f);
+
+    TG = glm::translate(TG, VRP);
+    TG = glm::rotate(TG, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+    TG = glm::translate(TG, -VRP);
+
+    glm::vec4 newOBS = TG * glm::vec4(OBS, 1.0f);
+    OBS = glm::vec3(newOBS);
+
+    updateLookAt();
+}
+
 void Camera::restart()
 {
     init(min_orig, max_orig);
