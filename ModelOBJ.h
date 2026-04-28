@@ -24,6 +24,7 @@ public:
     glm::vec3 getMax();
 
     void setTextureActive(bool active);
+    void setBumpActive(bool active);
 
 private:
 
@@ -39,9 +40,11 @@ private:
     float aabb[6];
 
     bool textureActive = true;
+    bool bumpTextureActive = true;
 
     GLuint textureID = 0;
-    GLuint hasTextureLoc, texCoordLoc, difuseTexLoc;
+    GLuint textureBumpID = 0;
+    GLuint hasTextureLoc, hasBumpLoc, texCoordLoc, difuseTexLoc, bumpTextureLoc, tangentLoc, bitangentLoc;
 
     void loadShaders(const QString& vShader, const QString& fShader);
 

@@ -34,7 +34,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_5">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QCheckBox" name="checkBox">
        <property name="enabled">
@@ -42,6 +42,19 @@
        </property>
        <property name="text">
         <string>Texture</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBox_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Bump</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -117,6 +130,7 @@
     <slot>setGlobalAmbientB(double)</slot>
     <slot>addSphere()</slot>
     <slot>activeTexture(bool)</slot>
+    <slot>activeBump(bool)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -151,6 +165,22 @@
     <hint type="destinationlabel">
      <x>852</x>
      <y>123</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_2</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>activeBump(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1043</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>940</x>
+     <y>155</y>
     </hint>
    </hints>
   </connection>

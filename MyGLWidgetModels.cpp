@@ -131,3 +131,17 @@ void MyGLWidgetModels::activeTexture(bool isTextureActive)
 
     update();
 }
+
+void MyGLWidgetModels::activeBump(bool isBumpActive)
+{
+    makeCurrent();
+
+    std::vector<ModelOBJ*> models = scene.getModels();
+
+    for (ModelOBJ* model : models)
+    {
+        model->setBumpActive(isBumpActive);
+    }
+
+    update();
+}

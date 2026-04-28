@@ -8,12 +8,12 @@ Scene::Scene()
 void Scene::init()
 {
     ModelOBJ* patricio = new ModelOBJ;
-    patricio->init("Models3D/cat.obj", ":/vertexModel.vert", ":/fragmentModel.frag");
+    patricio->init("Models3D/tree.obj", ":/vertexModel.vert", ":/fragmentModel.frag");
     glm::mat4 tgPatricio(1.0f);
 
     glm::vec3 centerPatricio = patricio->getCenter();
 
-    tgPatricio = glm::rotate(tgPatricio, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    //tgPatricio = glm::rotate(tgPatricio, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     tgPatricio = glm::rotate(tgPatricio, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     tgPatricio = glm::translate(tgPatricio, -centerPatricio);
 

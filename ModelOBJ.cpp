@@ -86,6 +86,38 @@ void ModelOBJ::initTexture()
     qDebug() << "Textura carregada correctament:" << s
              << " mida:" << imGL.width() << "x" << imGL.height();
 
+    // --- Bump Texture ---
+    QString bumpPath(m.bumpName.c_str());
+    if (!bumpPath.isEmpty() && QFile::exists(bumpPath))
+    {
+        QImage bumpImg(bumpPath);
+        if (!bumpImg.isNull())
+        {
+            QImage bumpGL = bumpImg.convertToFormat(QImage::Format_RGBA8888).mirrored();
+            if (!bumpGL.isNull())
+            {
+                glGenTextures(1, &textureBumpID);
+                glBindTexture(GL_TEXTURE_2D, textureBumpID);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                             bumpGL.width(), bumpGL.height(),
+                             0, GL_RGBA, GL_UNSIGNED_BYTE, bumpGL.bits());
+                GLenum bumpErr = glGetError();
+                if (bumpErr != GL_NO_ERROR)
+                {
+                    qCritical() << "ERROR OpenGL carregant bump texture:" << bumpErr;
+                    textureBumpID = 0;
+                }
+                else
+                {
+                    qDebug() << "Bump texture carregada correctament:" << bumpPath
+                             << " mida:" << bumpGL.width() << "x" << bumpGL.height();
+                }
+            }
+        }
+    }
+
 }
 
 void ModelOBJ::loadShaders(const QString& vShader, const QString& fShader)
@@ -105,11 +137,16 @@ void ModelOBJ::loadShaders(const QString& vShader, const QString& fShader)
     matspecLoc = glGetAttribLocation(program->programId(), "matspec");
     matshinLoc = glGetAttribLocation(program->programId(), "matshin");
     texCoordLoc = glGetAttribLocation(program->programId(), "texCoord");
+    tangentLoc = glGetAttribLocation(program->programId(), "tangent");
+    bitangentLoc = glGetAttribLocation(program->programId(), "bitangent");
 
     //Uniform Location
     TGLoc = glGetUniformLocation(program->programId(), "TG");
     hasTextureLoc = glGetUniformLocation(program->programId(), "hasTexture");
+    hasBumpLoc = glGetUniformLocation(program->programId(), "hasBumpTexture");
     difuseTexLoc = glGetUniformLocation(program->programId(), "diffuseTex");
+    bumpTextureLoc = glGetUniformLocation(program->programId(), "bumpTex");
+
     program->release();
 }
 
@@ -169,12 +206,35 @@ void ModelOBJ::createBuffers()
        GLuint vbotex;
        glGenBuffers(1, &vbotex);
        glBindBuffer(GL_ARRAY_BUFFER, vbotex);
-       glBufferData(GL_ARRAY_BUFFER, sizeof(float)*2*3*m.faces().size(),
+       glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2 * 3 * m.faces().size(),
                     m.VBO_texCoords(), GL_STATIC_DRAW);
        glVertexAttribPointer(texCoordLoc, 2, GL_FLOAT, GL_FALSE, 0,0);
        glEnableVertexAttribArray(texCoordLoc);
     }
 
+    //Tangent
+    if (m.VBO_tangents()!=NULL)
+    {
+       GLuint vboTangent;
+       glGenBuffers(1, &vboTangent);
+       glBindBuffer(GL_ARRAY_BUFFER, vboTangent);
+       glBufferData(GL_ARRAY_BUFFER, sizeof(float)* 3 * 3 * m.faces().size(),
+                    m.VBO_tangents(), GL_STATIC_DRAW);
+       glVertexAttribPointer(tangentLoc, 3, GL_FLOAT, GL_FALSE, 0,0);
+       glEnableVertexAttribArray(tangentLoc);
+    }
+
+    //Bitangent
+    if (m.VBO_bitangents()!=NULL)
+    {
+       GLuint vboBitangent;
+       glGenBuffers(1, &vboBitangent);
+       glBindBuffer(GL_ARRAY_BUFFER, vboBitangent);
+       glBufferData(GL_ARRAY_BUFFER, sizeof(float)* 3 * 3 * m.faces().size(),
+                    m.VBO_bitangents(), GL_STATIC_DRAW);
+       glVertexAttribPointer(bitangentLoc, 3, GL_FLOAT, GL_FALSE, 0,0);
+       glEnableVertexAttribArray(bitangentLoc);
+    }
 
     glBindVertexArray(0);
 }
@@ -206,6 +266,18 @@ void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
     else
     {
         glUniform1i(hasTextureLoc, 0);
+    }
+
+    if (textureBumpID != 0 && bumpTextureActive)
+    {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, textureBumpID);
+        glUniform1i(bumpTextureLoc, 1);
+        glUniform1i(hasBumpLoc, 1);
+    }
+    else
+    {
+        glUniform1i(hasBumpLoc, 0);
     }
 
     GLuint lightPosLoc = program->uniformLocation("lightPos");
@@ -268,4 +340,9 @@ glm::vec3 ModelOBJ::getCenter() const
 void ModelOBJ::setTextureActive(bool active)
 {
     textureActive = active;
+}
+
+void ModelOBJ::setBumpActive(bool active)
+{
+    bumpTextureActive = active;
 }

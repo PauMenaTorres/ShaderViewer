@@ -48,6 +48,7 @@ protected:
         void setLightPosZ(double z);
 
         void activeTexture(bool isTextureActive);
+        void activeBump(bool isBumpActive);
 };
 
 #endif // MYGLWIDGETMODELS_H
