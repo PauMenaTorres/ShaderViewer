@@ -17,7 +17,7 @@ public:
     void init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader);
     void initTexture();
     void modelTransform(const glm::mat4& transform);
-    void render(const glm::mat4& viewMat, const glm::mat4& projMat);
+    void render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor);
     glm::vec3 getCenter() const;
 
     glm::vec3 getMin();

@@ -14,7 +14,7 @@ out vec4 FragColor;
 
 vec3 llumAmbient = vec3(0.2, 0.2, 0.2);
 uniform vec3 lightPos;
-
+uniform vec3 lightColor;
 
 vec4 texColor;
 
@@ -28,8 +28,6 @@ uniform sampler2D bumpTex;
 uniform int hasTexture;
 uniform int hasBumpTexture;
 
-vec3 colFocus = vec3(1, 1, 1);
-
 vec3 Lambert (vec3 NormSCO, vec3 L, vec3 diffColor)
 {
     // S'assumeix que els vectors que es reben com a paràmetres estan normalitzats
@@ -39,7 +37,7 @@ vec3 Lambert (vec3 NormSCO, vec3 L, vec3 diffColor)
 
     // Afegim component difusa, si n'hi ha
     if (dot (L, NormSCO) > 0)
-      colRes = colRes + colFocus * diffColor * dot (L, NormSCO);
+      colRes = colRes + lightColor * diffColor * dot (L, NormSCO);
     return (colRes);
 }
 
@@ -62,7 +60,7 @@ vec3 Phong (vec3 NormSCO, vec3 L, vec4 vertSCO, vec3 diffColor)
 
     // Afegim la component especular
     float shine = pow(max(0.0, dot(R, V)), matshinFS);
-    return (colRes + matspecFS * colFocus * shine);
+    return (colRes + matspecFS * lightColor * shine);
 }
 
 void main()

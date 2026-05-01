@@ -3,7 +3,8 @@
 
 MyGLWidgetModels::MyGLWidgetModels(QWidget* parent):QOpenGLWidget(parent)
 {
-
+    myLightPos = vec3(1.0, 1.0, 1.0);
+    myLightColor = vec3(1.0, 1.0, 1.0);
 }
 
 MyGLWidgetModels::~MyGLWidgetModels()
@@ -60,7 +61,10 @@ void MyGLWidgetModels::paintGL()
     GLuint lightPosLoc = glGetUniformLocation(program->programId(), "lightPos");
     glUniform3fv(lightPosLoc, 1, glm::value_ptr(myLightPos));
 
-    scene.render();
+    GLuint lightColorLoc = glGetUniformLocation(program->programId(), "lightColor");
+    glUniform3fv(lightColorLoc, 1, glm::value_ptr(myLightColor));
+
+    scene.render(myLightPos, myLightColor);
 
     program->release();
 }
@@ -114,9 +118,13 @@ void MyGLWidgetModels::keyPressEvent(QKeyEvent *e)
     update();
 }
 
-void MyGLWidgetModels::setLightPosX(double x) { myLightPos.x = x; update(); }
-void MyGLWidgetModels::setLightPosY(double y) { myLightPos.y = y; update(); }
-void MyGLWidgetModels::setLightPosZ(double z) { myLightPos.z = z; update(); }
+void MyGLWidgetModels::setLightPosX(int x) { myLightPos.x = (float)x; update(); }
+void MyGLWidgetModels::setLightPosY(int y) { myLightPos.y = (float)y; update(); }
+void MyGLWidgetModels::setLightPosZ(int z) { myLightPos.z = (float)z; update(); }
+
+void MyGLWidgetModels::setLightColorR(int r) { myLightColor.r = r / 255.0f; update(); }
+void MyGLWidgetModels::setLightColorG(int g) { myLightColor.g = g / 255.0f; update(); }
+void MyGLWidgetModels::setLightColorB(int b) { myLightColor.b = b / 255.0f; update(); }
 
 void MyGLWidgetModels::activeTexture(bool isTextureActive)
 {

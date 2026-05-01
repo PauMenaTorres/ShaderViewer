@@ -12,7 +12,7 @@ public:
 
     void init();
     void update(float dt);
-    void render();
+    void render(const glm::vec3& lightPos, const glm::vec3& lightColor);
 
     Camera& getCamera();
 

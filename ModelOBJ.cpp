@@ -244,7 +244,7 @@ void ModelOBJ::modelTransform(const glm::mat4& transform)
     TG = transform;
 }
 
-void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
+void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor)
 {
     program->bind();
 
@@ -281,8 +281,10 @@ void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat)
     }
 
     GLuint lightPosLoc = program->uniformLocation("lightPos");
-    glm::vec3 lightPos(2.0f);
     glUniform3fv(lightPosLoc, 1, &lightPos[0]);
+
+    GLuint lightColorLoc = program->uniformLocation("lightColor");
+    glUniform3fv(lightColorLoc, 1, &lightColor[0]);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);

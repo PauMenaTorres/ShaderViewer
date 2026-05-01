@@ -8,7 +8,7 @@ Scene::Scene()
 void Scene::init()
 {
     ModelOBJ* patricio = new ModelOBJ;
-    patricio->init("Models3D/tree.obj", ":/vertexModel.vert", ":/fragmentModel.frag");
+    patricio->init("Models3D/ember.obj", ":/vertexModel.vert", ":/fragmentModel.frag");
     glm::mat4 tgPatricio(1.0f);
 
     glm::vec3 centerPatricio = patricio->getCenter();
@@ -54,14 +54,14 @@ void Scene::init()
     camera.init(patricio->getMin(), patricio->getMax());
 }
 
-void Scene::render()
+void Scene::render(const glm::vec3& lightPos, const glm::vec3& lightColor)
 {
     glm::mat4 viewMat = camera.getViewMatrix();
     glm::mat4 projMat = camera.getProjectMatrix();
 
     for(ModelOBJ* model : models)
     {
-        model->render(viewMat, projMat);
+        model->render(viewMat, projMat, lightPos, lightColor);
     }
 
 }

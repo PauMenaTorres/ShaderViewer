@@ -41,11 +41,16 @@ protected:
         QOpenGLShaderProgram* program;
 
         vec3 myLightPos;
+        vec3 myLightColor;
 
     public slots:
-        void setLightPosX(double x);
-        void setLightPosY(double y);
-        void setLightPosZ(double z);
+        void setLightPosX(int x);
+        void setLightPosY(int y);
+        void setLightPosZ(int z);
+
+        void setLightColorR(int r);
+        void setLightColorG(int g);
+        void setLightColorB(int b);
 
         void activeTexture(bool isTextureActive);
         void activeBump(bool isBumpActive);
