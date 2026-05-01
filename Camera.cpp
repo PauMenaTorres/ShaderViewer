@@ -60,7 +60,25 @@ void Camera::rotate(float angle)
     updateLookAt();
 }
 
-void Camera::orbit(float angle)
+void Camera::orbitX(float angle)
+{
+    glm::vec3 right = glm::normalize(glm::cross(VRP - OBS, up_vector));
+    
+    glm::mat4 TG(1.0f);
+    TG = glm::translate(TG, VRP);
+    TG = glm::rotate(TG, angle, right);
+    TG = glm::translate(TG, -VRP);
+
+    glm::vec4 newOBS = TG * glm::vec4(OBS, 1.0f);
+    OBS = glm::vec3(newOBS);
+
+    glm::vec4 newUp = TG * glm::vec4(up_vector, 0.0f);
+    up_vector = glm::vec3(newUp);
+
+    updateLookAt();
+}
+
+void Camera::orbitY(float angle)
 {
     glm::mat4 TG(1.0f);
 
@@ -70,6 +88,20 @@ void Camera::orbit(float angle)
 
     glm::vec4 newOBS = TG * glm::vec4(OBS, 1.0f);
     OBS = glm::vec3(newOBS);
+
+    glm::vec4 newUp = TG * glm::vec4(up_vector, 0.0f);
+    up_vector = glm::vec3(newUp);
+
+    updateLookAt();
+}
+
+void Camera::orbitZ(float angle)
+{
+    glm::vec3 forward = glm::normalize(VRP - OBS);
+    
+    glm::mat4 TG(1.0f);
+    glm::vec4 newUp = glm::rotate(glm::mat4(1.0f), angle, forward) * glm::vec4(up_vector, 0.0f);
+    up_vector = glm::vec3(newUp);
 
     updateLookAt();
 }

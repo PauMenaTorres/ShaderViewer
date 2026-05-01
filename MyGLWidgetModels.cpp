@@ -105,10 +105,22 @@ void MyGLWidgetModels::keyPressEvent(QKeyEvent *e)
             scene.getCamera().restart();
             break;
         case Qt::Key_Left:
-            scene.getCamera().orbit(-angle);
+            scene.getCamera().orbitY(-angle);
             break;
         case Qt::Key_Right:
-            scene.getCamera().orbit(angle);
+            scene.getCamera().orbitY(angle);
+            break;
+        case Qt::Key_Up:
+            scene.getCamera().orbitX(-angle);
+            break;
+        case Qt::Key_Down:
+            scene.getCamera().orbitX(angle);
+            break;
+        case Qt::Key_Z:
+            scene.getCamera().orbitZ(-angle);
+            break;
+        case Qt::Key_X:
+            scene.getCamera().orbitZ(angle);
             break;
         default:
             e->ignore();
