@@ -14,6 +14,12 @@ ModelOBJ::~ModelOBJ()
     {
         delete program;
     }
+    if (textureID) glDeleteTextures(1, &textureID);
+    if (textureBumpID) glDeleteTextures(1, &textureBumpID);
+    if (VAO) glDeleteVertexArrays(1, &VAO);
+    
+    GLuint vbos[] = {VBO_vert, VBO_normals, VBO_matamb, VBO_matdiff, VBO_matspec, VBO_matshin};
+    glDeleteBuffers(6, vbos);
 }
 
 void ModelOBJ::init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader)
