@@ -12,6 +12,13 @@ MyGLWidgetModels::~MyGLWidgetModels()
 
 }
 
+void MyGLWidgetModels::loadModel(const QString& path)
+{
+    makeCurrent();
+    scene.loadModel(path);
+    update();
+}
+
 void MyGLWidgetModels::loadShaders()
 {
     program = new QOpenGLShaderProgram(this);

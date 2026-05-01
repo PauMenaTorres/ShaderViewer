@@ -54,6 +54,27 @@ void Scene::init()
     camera.init(patricio->getMin(), patricio->getMax());
 }
 
+void Scene::loadModel(const QString& path)
+{
+    for(ModelOBJ* model : models)
+    {
+        delete model;
+    }
+    models.clear();
+
+    ModelOBJ* newModel = new ModelOBJ;
+    newModel->init(path, ":/vertexModel.vert", ":/fragmentModel.frag");
+    
+    glm::mat4 tg(1.0f);
+    glm::vec3 center = newModel->getCenter();
+    tg = glm::translate(tg, -center);
+    newModel->modelTransform(tg);
+
+    models.push_back(newModel);
+
+    camera.init(newModel->getMin(), newModel->getMax());
+}
+
 void Scene::render(const glm::vec3& lightPos, const glm::vec3& lightColor)
 {
     glm::mat4 viewMat = camera.getViewMatrix();

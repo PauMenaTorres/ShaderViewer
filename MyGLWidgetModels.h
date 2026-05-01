@@ -24,6 +24,8 @@ class MyGLWidgetModels : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
         MyGLWidgetModels(QWidget *parent=0);
         ~MyGLWidgetModels();
 
+        void loadModel(const QString& path);
+
 protected:
         void initializeGL();
         void paintGL();

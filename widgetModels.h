@@ -16,6 +16,7 @@ public:
     ~WidgetModels();
 
 private slots:
+    void on_btnLoadModel_clicked();
 private:
     Ui::WidgetModels *ui;
 };
