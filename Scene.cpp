@@ -50,7 +50,9 @@ void Scene::loadModel(const QString& path)
 
     instances.push_back(inst);
 
-    camera.init(res->getMin(), res->getMax(), true);
+    glm::vec3 boxMin = res->getMin() - center;
+    glm::vec3 boxMax = res->getMax() - center;
+    camera.init(boxMin, boxMax, true);
 }
 
 void Scene::loadScene()

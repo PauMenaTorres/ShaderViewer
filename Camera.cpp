@@ -16,13 +16,13 @@ void Camera::init(glm::vec3 min, glm::vec3 max, bool adapt)
         R = glm::distance(max_orig, min_orig) / 2.0f;
         d = R + 2.0f;
         VRP = (min_orig + max_orig) / 2.0f;
-        OBS = glm::vec3(0.0f, 0.0f, d);
+        OBS = VRP + glm::vec3(0.0f, 0.0f, d);
         FOV = 2 * glm::asin(R / d);
         znear = d - R;
         zfar = d + R;
     } else {
         VRP = glm::vec3(0.0f, 0.0f, 0.0f); 
-        OBS = glm::vec3(0.0f, 0.0f, 5.0f);
+        OBS = glm::vec3(0.0f, 0.0f, 6.0f);
         FOV = glm::radians(90.0f);
         znear = 0.1f;
         zfar = 1000.0f;
