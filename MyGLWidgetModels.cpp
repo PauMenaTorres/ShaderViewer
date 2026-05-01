@@ -19,7 +19,6 @@ void MyGLWidgetModels::loadModel(const QString& path)
     update();
 }
 
-        qCritical() << "ERROR: El fitxer :/fragmentModel.frag no existeix als recursos!";
 void MyGLWidgetModels::initializeGL()
 {
     initializeOpenGLFunctions();
