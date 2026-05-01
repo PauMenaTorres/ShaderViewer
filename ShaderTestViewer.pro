@@ -12,9 +12,11 @@ INCLUDEPATH+=C:/Qt/Qt5.12.12/Tools/glm-master
 
 SOURCES += \
     Camera.cpp \
-    ModelOBJ.cpp \
+    ModelResource.cpp \
+    ModelInstance.cpp \
     MyGLWidgetSpheres.cpp \
     MyGLWidgetModels.cpp \
+    MyGLWidgetScene.cpp \
     MyLabel.cpp \
     MyLineEdit.cpp \
     Scene.cpp \
@@ -22,24 +24,29 @@ SOURCES += \
     model.cpp \
     widgetMain.cpp \
     widgetModels.cpp \
+    widgetScene.cpp \
     widgetSpheres.cpp
 
 HEADERS += \
     Camera.h \
-    ModelOBJ.h \
+    ModelResource.h \
+    ModelInstance.h \
     MyGLWidgetSpheres.h \
     MyGLWidgetModels.h \
+    MyGLWidgetScene.h \
     MyLabel.h \
     MyLineEdit.h \
     Scene.h \
     model.h \
     widgetMain.h \
     widgetModels.h \
+    widgetScene.h \
     widgetSpheres.h
 
 FORMS += \
     widgetMain.ui \
     widgetModels.ui \
+    widgetScene.ui \
     widgetSpheres.ui
 
 TRANSLATIONS += \

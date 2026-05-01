@@ -91,8 +91,7 @@ void MyGLWidgetSpheres::initializeGL()
     glClearColor(0.76, 0.69, 0.52, 1.0);
     loadShaders();
     createBuffers();
-    scene.getCamera().init(glm::vec3(-0.5f), glm::vec3(0.5f));
-    scene.getCamera().moveForward(1.0f);
+    scene.getCamera().init(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.5f, 0.5f, 1.0f), true);
 }
 
 void MyGLWidgetSpheres::paintGL()

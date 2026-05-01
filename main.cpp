@@ -2,12 +2,14 @@
 #include "widgetMain.h"
 #include "widgetSpheres.h"
 #include "widgetModels.h"
+#include "widgetScene.h"
 #include <QSurfaceFormat>
 
 int main(int argc, char *argv[])
 
 {
 
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QApplication a(argc, argv);
 
     QSurfaceFormat f;
@@ -18,7 +20,7 @@ int main(int argc, char *argv[])
 
     QSurfaceFormat::setDefaultFormat(f);
 
-    WidgetModels w;
+    WidgetScene w;
 
     w.show();
 

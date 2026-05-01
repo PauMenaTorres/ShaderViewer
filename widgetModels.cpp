@@ -2,9 +2,9 @@
 #include "ui_widgetModels.h"
 #include <QFileDialog>
 
-WidgetModels::WidgetModels(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::WidgetModels)
+WidgetModels::WidgetModels(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::WidgetModels)
 {
     ui->setupUi(this);
 }

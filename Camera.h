@@ -17,7 +17,8 @@ public:
 
     Camera();
 
-    void init(glm::vec3 min, glm::vec3 max);
+    void init(glm::vec3 min, glm::vec3 max, bool adapt = true);
+
 
     void setType(CameraType type);
 
@@ -47,6 +48,7 @@ private:
 
     glm::vec3 OBS, VRP, up_vector;
     glm::vec3 min_orig, max_orig;
+    bool adapt_orig;
 
     glm::mat4 viewMatrix, projectMatrix;
 

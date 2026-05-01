@@ -1,47 +1,40 @@
-#include "MyGLWidgetModels.h"
+#include "MyGLWidgetScene.h"
 #include <iostream>
 
-MyGLWidgetModels::MyGLWidgetModels(QWidget* parent):QOpenGLWidget(parent)
+MyGLWidgetScene::MyGLWidgetScene(QWidget* parent):QOpenGLWidget(parent)
 {
     myLightPos = vec3(1.0, 1.0, 1.0);
     myLightColor = vec3(1.0, 1.0, 1.0);
 }
 
-MyGLWidgetModels::~MyGLWidgetModels()
+MyGLWidgetScene::~MyGLWidgetScene()
 {
 
 }
 
-void MyGLWidgetModels::loadModel(const QString& path)
-{
-    makeCurrent();
-    scene.loadModel(path);
-    update();
-}
 
-        qCritical() << "ERROR: El fitxer :/fragmentModel.frag no existeix als recursos!";
-void MyGLWidgetModels::initializeGL()
+void MyGLWidgetScene::initializeGL()
 {
     initializeOpenGLFunctions();
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.76, 0.69, 0.52, 1.0);
-    scene.loadModel("Models3D/ember.obj");
+    scene.loadScene();
 }
 
-void MyGLWidgetModels::paintGL()
+void MyGLWidgetScene::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     scene.render(myLightPos, myLightColor);
 }
 
-void MyGLWidgetModels::resizeGL(int width, int height)
+void MyGLWidgetScene::resizeGL(int width, int height)
 {
     float ratio = (float)width / (float)height;
     scene.getCamera().setAspectRatio(ratio);
 }
 
-void MyGLWidgetModels::keyPressEvent(QKeyEvent *e)
+void MyGLWidgetScene::keyPressEvent(QKeyEvent *e)
 {
     makeCurrent();
     float speed = 0.5f;
@@ -96,15 +89,15 @@ void MyGLWidgetModels::keyPressEvent(QKeyEvent *e)
     update();
 }
 
-void MyGLWidgetModels::setLightPosX(int x) { myLightPos.x = (float)x; update(); }
-void MyGLWidgetModels::setLightPosY(int y) { myLightPos.y = (float)y; update(); }
-void MyGLWidgetModels::setLightPosZ(int z) { myLightPos.z = (float)z; update(); }
+void MyGLWidgetScene::setLightPosX(int x) { myLightPos.x = (float)x; update(); }
+void MyGLWidgetScene::setLightPosY(int y) { myLightPos.y = (float)y; update(); }
+void MyGLWidgetScene::setLightPosZ(int z) { myLightPos.z = (float)z; update(); }
 
-void MyGLWidgetModels::setLightColorR(int r) { myLightColor.r = r / 255.0f; update(); }
-void MyGLWidgetModels::setLightColorG(int g) { myLightColor.g = g / 255.0f; update(); }
-void MyGLWidgetModels::setLightColorB(int b) { myLightColor.b = b / 255.0f; update(); }
+void MyGLWidgetScene::setLightColorR(int r) { myLightColor.r = r / 255.0f; update(); }
+void MyGLWidgetScene::setLightColorG(int g) { myLightColor.g = g / 255.0f; update(); }
+void MyGLWidgetScene::setLightColorB(int b) { myLightColor.b = b / 255.0f; update(); }
 
-void MyGLWidgetModels::activeTexture(bool isTextureActive)
+void MyGLWidgetScene::activeTexture(bool isTextureActive)
 {
     makeCurrent();
 
@@ -118,7 +111,7 @@ void MyGLWidgetModels::activeTexture(bool isTextureActive)
     update();
 }
 
-void MyGLWidgetModels::activeBump(bool isBumpActive)
+void MyGLWidgetScene::activeBump(bool isBumpActive)
 {
     makeCurrent();
 

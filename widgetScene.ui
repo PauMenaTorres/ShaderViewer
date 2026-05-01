@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+  <class>WidgetScene</class>
+  <widget class="QWidget" name="WidgetScene">
+    <property name="geometry">
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1086</width>
+        <height>740</height>
+      </rect>
+    </property>
+    <property name="windowTitle">
+      <string>Widget</string>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+        <widget class="MyGLWidgetScene" name="openGLWidget">
+          <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>2</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="minimumSize">
+            <size>
+              <width>500</width>
+              <height>500</height>
+            </size>
+          </property>
+          <property name="focusPolicy">
+            <enum>Qt::StrongFocus</enum>
+          </property>
+        </widget>
+      </item>
+      <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+            <widget class="QTabWidget" name="tabWidget">
+              <property name="minimumSize">
+                <size>
+                  <width>400</width>
+                  <height>0</height>
+                </size>
+              </property>
+              <widget class="QWidget" name="tab_model">
+                <attribute name="title">
+                  <string>Model Props</string>
+                </attribute>
+                <layout class="QVBoxLayout">
+                  <item>
+                    <widget class="QCheckBox" name="checkBox">
+                      <property name="enabled">
+                        <bool>true</bool>
+                      </property>
+                      <property name="text">
+                        <string>Texture</string>
+                      </property>
+                      <property name="checked">
+                        <bool>true</bool>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="QCheckBox" name="checkBox_2">
+                      <property name="enabled">
+                        <bool>true</bool>
+                      </property>
+                      <property name="text">
+                        <string>Bump</string>
+                      </property>
+                      <property name="checked">
+                        <bool>true</bool>
+                      </property>
+                    </widget>
+                  </item>
+
+                  <item>
+                    <spacer name="verticalSpacer_model">
+                      <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                      </property>
+                    </spacer>
+                  </item>
+                </layout>
+              </widget>
+              <widget class="QWidget" name="tab_light">
+                <attribute name="title">
+                  <string>Lighting Props</string>
+                </attribute>
+                <layout class="QVBoxLayout">
+                  <item>
+                    <widget class="QLabel" name="label">
+                      <property name="font">
+                        <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                        </font>
+                      </property>
+                      <property name="text">
+                        <string>Light Position</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <layout class="QHBoxLayout">
+                      <item>
+                        <layout class="QVBoxLayout">
+                          <item>
+                            <widget class="QSlider" name="sliderLightX">
+                              <property name="minimumSize">
+                                <size>
+                                  <width>0</width>
+                                  <height>100</height>
+                                </size>
+                              </property>
+                              <property name="minimum">
+                                <number>-5</number>
+                              </property>
+                              <property name="maximum">
+                                <number>5</number>
+                              </property>
+                              <property name="value">
+                                <number>1</number>
+                              </property>
+                              <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QLabel" name="label">
+                              <property name="text">
+                                <string>X</string>
+                              </property>
+                              <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QSpinBox" name="spinLightX">
+                              <property name="minimum">
+                                <number>-5</number>
+                              </property>
+                              <property name="maximum">
+                                <number>5</number>
+                              </property>
+                              <property name="value">
+                                <number>1</number>
+                              </property>
+                            </widget>
+                          </item>
+                        </layout>
+                      </item>
+                      <item>
+                        <layout class="QVBoxLayout">
+                          <item>
+                            <widget class="QSlider" name="sliderLightY">
+                              <property name="minimumSize">
+                                <size>
+                                  <width>0</width>
+                                  <height>100</height>
+                                </size>
+                              </property>
+                              <property name="minimum">
+                                <number>-5</number>
+                              </property>
+                              <property name="maximum">
+                                <number>5</number>
+                              </property>
+                              <property name="value">
+                                <number>1</number>
+                              </property>
+                              <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QLabel" name="label">
+                              <property name="text">
+                                <string>Y</string>
+                              </property>
+                              <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QSpinBox" name="spinLightY">
+                              <property name="minimum">
+                                <number>-5</number>
+                              </property>
+                              <property name="maximum">
+                                <number>5</number>
+                              </property>
+                              <property name="value">
+                                <number>1</number>
+                              </property>
+                            </widget>
+                          </item>
+                        </layout>
+                      </item>
+                      <item>
+                        <layout class="QVBoxLayout">
+                          <item>
+                            <widget class="QSlider" name="sliderLightZ">
+                              <property name="minimumSize">
+                                <size>
+                                  <width>0</width>
+                                  <height>100</height>
+                                </size>
+                              </property>
+                              <property name="minimum">
+                                <number>-5</number>
+                              </property>
+                              <property name="maximum">
+                                <number>5</number>
+                              </property>
+                              <property name="value">
+                                <number>1</number>
+                              </property>
+                              <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QLabel" name="label">
+                              <property name="text">
+                                <string>Z</string>
+                              </property>
+                              <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QSpinBox" name="spinLightZ">
+                              <property name="minimum">
+                                <number>-5</number>
+                              </property>
+                              <property name="maximum">
+                                <number>5</number>
+                              </property>
+                              <property name="value">
+                                <number>1</number>
+                              </property>
+                            </widget>
+                          </item>
+                        </layout>
+                      </item>
+                    </layout>
+                  </item>
+                  <item>
+                    <widget class="QLabel" name="label">
+                      <property name="font">
+                        <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                        </font>
+                      </property>
+                      <property name="text">
+                        <string>Light Color</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <layout class="QHBoxLayout">
+                      <item>
+                        <layout class="QVBoxLayout">
+                          <item>
+                            <widget class="QSlider" name="sliderLightR">
+                              <property name="minimumSize">
+                                <size>
+                                  <width>0</width>
+                                  <height>100</height>
+                                </size>
+                              </property>
+                              <property name="maximum">
+                                <number>255</number>
+                              </property>
+                              <property name="value">
+                                <number>255</number>
+                              </property>
+                              <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QSpinBox" name="spinLightR">
+                              <property name="maximum">
+                                <number>255</number>
+                              </property>
+                              <property name="value">
+                                <number>255</number>
+                              </property>
+                            </widget>
+                          </item>
+                        </layout>
+                      </item>
+                      <item>
+                        <layout class="QVBoxLayout">
+                          <item>
+                            <widget class="QSlider" name="sliderLightG">
+                              <property name="minimumSize">
+                                <size>
+                                  <width>0</width>
+                                  <height>100</height>
+                                </size>
+                              </property>
+                              <property name="maximum">
+                                <number>255</number>
+                              </property>
+                              <property name="value">
+                                <number>255</number>
+                              </property>
+                              <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QSpinBox" name="spinLightG">
+                              <property name="maximum">
+                                <number>255</number>
+                              </property>
+                              <property name="value">
+                                <number>255</number>
+                              </property>
+                            </widget>
+                          </item>
+                        </layout>
+                      </item>
+                      <item>
+                        <layout class="QVBoxLayout">
+                          <item>
+                            <widget class="QSlider" name="sliderLightB">
+                              <property name="minimumSize">
+                                <size>
+                                  <width>0</width>
+                                  <height>100</height>
+                                </size>
+                              </property>
+                              <property name="maximum">
+                                <number>255</number>
+                              </property>
+                              <property name="value">
+                                <number>255</number>
+                              </property>
+                              <property name="orientation">
+                                <enum>Qt::Vertical</enum>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QSpinBox" name="spinLightB">
+                              <property name="maximum">
+                                <number>255</number>
+                              </property>
+                              <property name="value">
+                                <number>255</number>
+                              </property>
+                            </widget>
+                          </item>
+                        </layout>
+                      </item>
+                    </layout>
+                  </item>
+                  <item>
+                    <spacer name="verticalSpacer_light">
+                      <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                      </property>
+                    </spacer>
+                  </item>
+                </layout>
+              </widget>
+            </widget>
+          </item>
+          <item>
+            <spacer name="verticalSpacer">
+              <property name="orientation">
+                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+                <size>
+                  <width>20</width>
+                  <height>17</height>
+                </size>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <widget class="QPushButton" name="pushButton">
+              <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                </sizepolicy>
+              </property>
+              <property name="text">
+                <string>Exit</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <customwidgets>
+    <customwidget>
+      <class>MyGLWidgetScene</class>
+      <extends>QOpenGLWidget</extends>
+      <header>MyGLWidgetScene.h</header>
+      <slots>
+        <slot>setLightPosX(double)</slot>
+        <slot>setLightPosY(double)</slot>
+        <slot>setLightPosZ(double)</slot>
+        <slot>changeToRed(int)</slot>
+        <slot>changeToButton1()</slot>
+        <slot>changeToButton2()</slot>
+        <slot>changeToButton3()</slot>
+        <slot>changeToButton4()</slot>
+        <slot>showState(int)</slot>
+        <slot>setCurrentCenterX(double)</slot>
+        <slot>setCurrentCenterY(double)</slot>
+        <slot>setCurrentCenterZ(double)</slot>
+        <slot>setCurrentColorR(int)</slot>
+        <slot>setCurrentColorG(int)</slot>
+        <slot>setCurrentColorB(int)</slot>
+        <slot>setCurrentRadius(double)</slot>
+        <slot>setCurrentKaR(double)</slot>
+        <slot>setCurrentKaG(double)</slot>
+        <slot>setCurrentKaB(double)</slot>
+        <slot>setCurrentKdR(double)</slot>
+        <slot>setCurrentKdG(double)</slot>
+        <slot>setCurrentKdB(double)</slot>
+        <slot>setCurrentKsB(double)</slot>
+        <slot>setCurrentKsR(double)</slot>
+        <slot>setCurrentKsG(double)</slot>
+        <slot>setLightColorR(double)</slot>
+        <slot>setLightColorG(double)</slot>
+        <slot>setLightColorB(double)</slot>
+        <slot>setGlobalAmbientR(double)</slot>
+        <slot>setGlobalAmbientG(double)</slot>
+        <slot>setGlobalAmbientB(double)</slot>
+        <slot>addSphere()</slot>
+        <slot>activeTexture(bool)</slot>
+        <slot>activeBump(bool)</slot>
+        <slot>setLightColorR(int)</slot>
+        <slot>setLightColorG(int)</slot>
+        <slot>setLightColorB(int)</slot>
+      </slots>
+    </customwidget>
+  </customwidgets>
+  <resources />
+  <connections>
+    <connection>
+      <sender>pushButton</sender>
+      <signal>clicked()</signal>
+      <receiver>WidgetScene</receiver>
+      <slot>close()</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1073</x>
+          <y>727</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>711</x>
+          <y>702</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>checkBox</sender>
+      <signal>clicked(bool)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>activeTexture(bool)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1009</x>
+          <y>12</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>852</x>
+          <y>123</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>checkBox_2</sender>
+      <signal>clicked(bool)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>activeBump(bool)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1043</x>
+          <y>55</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>940</x>
+          <y>155</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightX</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinLightX</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>812</x>
+          <y>85</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>812</x>
+          <y>215</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinLightX</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderLightX</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>812</x>
+          <y>215</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>812</x>
+          <y>85</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightX</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setLightPosX(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>812</x>
+          <y>85</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>20</x>
+          <y>20</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightY</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinLightY</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>938</x>
+          <y>85</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>938</x>
+          <y>215</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinLightY</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderLightY</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>938</x>
+          <y>215</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>938</x>
+          <y>85</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightY</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setLightPosY(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>938</x>
+          <y>85</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>20</x>
+          <y>20</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightZ</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinLightZ</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1065</x>
+          <y>85</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>1065</x>
+          <y>215</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinLightZ</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderLightZ</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1065</x>
+          <y>215</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>1065</x>
+          <y>85</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightZ</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setLightPosZ(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1065</x>
+          <y>85</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>20</x>
+          <y>20</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightR</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinLightR</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>812</x>
+          <y>268</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>812</x>
+          <y>375</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinLightR</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderLightR</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>812</x>
+          <y>375</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>812</x>
+          <y>268</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightR</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setLightColorR(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>812</x>
+          <y>268</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>20</x>
+          <y>20</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightG</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinLightG</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>938</x>
+          <y>268</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>938</x>
+          <y>375</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinLightG</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderLightG</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>938</x>
+          <y>375</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>938</x>
+          <y>268</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightG</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setLightColorG(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>938</x>
+          <y>268</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>20</x>
+          <y>20</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightB</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinLightB</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1065</x>
+          <y>268</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>1065</x>
+          <y>375</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinLightB</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderLightB</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1065</x>
+          <y>375</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>1065</x>
+          <y>268</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>sliderLightB</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setLightColorB(int)</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>1065</x>
+          <y>268</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>20</x>
+          <y>20</y>
+        </hint>
+      </hints>
+    </connection>
+  </connections>
+</ui>

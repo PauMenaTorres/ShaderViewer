@@ -4,24 +4,31 @@ Camera::Camera()
 {
 
 }
-void Camera::init(glm::vec3 min, glm::vec3 max)
+void Camera::init(glm::vec3 min, glm::vec3 max, bool adapt)
 {
     min_orig = min;
     max_orig = max;
+    adapt_orig = adapt;
     setType(CameraType::PERSPECTIVE);
 
-    R = glm::distance(max_orig, min_orig) / 2;
-    d = R + 2.0f;
 
-    OBS = glm::vec3(0.0f, 0.0f, d);
-    VRP = glm::vec3(0.0f, 0.0f, 0.0f);
-
-    FOV = 2 * glm::asin(R / d);
+    if (adapt) {
+        R = glm::distance(max_orig, min_orig) / 2.0f;
+        d = R + 2.0f;
+        VRP = (min_orig + max_orig) / 2.0f;
+        OBS = glm::vec3(0.0f, 0.0f, d);
+        FOV = 2 * glm::asin(R / d);
+        znear = d - R;
+        zfar = d + R;
+    } else {
+        VRP = glm::vec3(0.0f, 0.0f, 0.0f); 
+        OBS = glm::vec3(0.0f, 0.0f, 5.0f);
+        FOV = glm::radians(90.0f);
+        znear = 0.1f;
+        zfar = 1000.0f;
+    }
 
     up_vector = glm::vec3(0.0f, 1.0f, 0.0f);
-
-    znear = d - R;
-    zfar = d + R;
 
     updateLookAt();
     updatePerspective();
@@ -120,7 +127,7 @@ void Camera::orbitZ(float angle)
 
 void Camera::restart()
 {
-    init(min_orig, max_orig);
+    init(min_orig, max_orig, adapt_orig);
 }
 
 void Camera::updatePerspective()
@@ -169,4 +176,3 @@ void Camera::setAspectRatio(float ratio)
     ra = ratio;
     updatePerspective();
 }
-

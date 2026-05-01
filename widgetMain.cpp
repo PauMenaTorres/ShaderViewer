@@ -2,6 +2,7 @@
 #include "ui_widgetMain.h"
 #include "widgetSpheres.h"
 #include "widgetModels.h"
+#include "widgetScene.h"
 #include <QMessageBox>
 #include <QStyleOption>
 #include <QPainter>
@@ -20,16 +21,23 @@ Widget::~Widget()
 
 void Widget::on_btnSpheres_clicked()
 {
-    WidgetSpheres *ws = new WidgetSpheres();
-    ws->setAttribute(Qt::WA_DeleteOnClose);
+    WidgetSpheres *ws = new WidgetSpheres(this);
+    ws->setWindowFlags(Qt::Window);
     ws->show();
 }
 
 void Widget::on_btnModels_clicked()
 {
-    WidgetModels *wm = new WidgetModels();
-    wm->setAttribute(Qt::WA_DeleteOnClose);
+    WidgetModels *wm = new WidgetModels(this);
+    wm->setWindowFlags(Qt::Window);
     wm->show();
+}
+
+void Widget::on_btnScene_clicked()
+{
+    WidgetScene *ws = new WidgetScene(this);
+    ws->setWindowFlags(Qt::Window);
+    ws->show();
 }
 
 

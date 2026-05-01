@@ -1,14 +1,14 @@
-#include "ModelOBJ.h"
+#include "ModelResource.h"
 #include <QFile>
 #include <QDebug>
 #include <QImage>
 
-ModelOBJ::ModelOBJ() : program(nullptr), TG(1.0f)
+ModelResource::ModelResource() : program(nullptr)
 {
 
 }
 
-ModelOBJ::~ModelOBJ()
+ModelResource::~ModelResource()
 {
     if (program)
     {
@@ -22,7 +22,7 @@ ModelOBJ::~ModelOBJ()
     glDeleteBuffers(6, vbos);
 }
 
-void ModelOBJ::init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader)
+void ModelResource::init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader)
 {
     initializeOpenGLFunctions();
 
@@ -35,7 +35,7 @@ void ModelOBJ::init(const QString& modelName, const QString& vertexShader, const
     createBuffers();
 }
 
-void ModelOBJ::initTexture()
+void ModelResource::initTexture()
 {
     QString s(m.textureName.c_str());
 
@@ -126,7 +126,7 @@ void ModelOBJ::initTexture()
 
 }
 
-void ModelOBJ::loadShaders(const QString& vShader, const QString& fShader)
+void ModelResource::loadShaders(const QString& vShader, const QString& fShader)
 {
     program = new QOpenGLShaderProgram();
     program->addShaderFromSourceFile(QOpenGLShader::Vertex, vShader);
@@ -156,7 +156,7 @@ void ModelOBJ::loadShaders(const QString& vShader, const QString& fShader)
     program->release();
 }
 
-void ModelOBJ::createBuffers()
+void ModelResource::createBuffers()
 {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -245,12 +245,7 @@ void ModelOBJ::createBuffers()
     glBindVertexArray(0);
 }
 
-void ModelOBJ::modelTransform(const glm::mat4& transform)
-{
-    TG = transform;
-}
-
-void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor)
+void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive)
 {
     program->bind();
 
@@ -299,17 +294,17 @@ void ModelOBJ::render(const glm::mat4& viewMat, const glm::mat4& projMat, const 
     program->release();
 }
 
-glm::vec3 ModelOBJ::getMin()
+glm::vec3 ModelResource::getMin()
 {
     return glm::vec3(xmin, ymin, zmin);
 }
 
-glm::vec3 ModelOBJ::getMax()
+glm::vec3 ModelResource::getMax()
 {
     return glm::vec3(xmax, ymax, zmax);
 }
 
-void ModelOBJ::computeAABB()
+void ModelResource::computeAABB()
 {
     xmin = xmax = m.vertices()[0];
     ymin = ymax = m.vertices()[1];
@@ -336,21 +331,11 @@ void ModelOBJ::computeAABB()
 
 }
 
-glm::vec3 ModelOBJ::getCenter() const
+glm::vec3 ModelResource::getCenter() const
 {
     return glm::vec3(
         (aabb[0] + aabb[1]) * 0.5f,
         (aabb[2] + aabb[3]) * 0.5f,
         (aabb[4] + aabb[5]) * 0.5f
     );
-}
-
-void ModelOBJ::setTextureActive(bool active)
-{
-    textureActive = active;
-}
-
-void ModelOBJ::setBumpActive(bool active)
-{
-    bumpTextureActive = active;
 }

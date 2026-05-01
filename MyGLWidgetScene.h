@@ -1,5 +1,5 @@
-#ifndef MYGLWIDGETMODELS_H
-#define MYGLWIDGETMODELS_H
+#ifndef MyGLWidgetScene_H
+#define MyGLWidgetScene_H
 
 #include <QOpenGLFunctions_4_3_Core>
 #include <QOpenGLWidget>
@@ -16,15 +16,13 @@
 
 using namespace glm;
 
-class MyGLWidgetModels : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
+class MyGLWidgetScene : public QOpenGLWidget, QOpenGLFunctions_4_3_Core
 {
     Q_OBJECT
 
     public:
-        MyGLWidgetModels(QWidget *parent=0);
-        ~MyGLWidgetModels();
-
-        void loadModel(const QString& path);
+        MyGLWidgetScene(QWidget *parent=0);
+        ~MyGLWidgetScene();
 
 protected:
         void initializeGL();
@@ -55,4 +53,4 @@ protected:
         void activeBump(bool isBumpActive);
 };
 
-#endif // MYGLWIDGETMODELS_H
+#endif // MyGLWidgetScene_H

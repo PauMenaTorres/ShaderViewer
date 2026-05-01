@@ -1,27 +1,36 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include <ModelOBJ.h>
-#include <Camera.h>
+#include "ModelResource.h"
+#include "ModelInstance.h"
+#include "Camera.h"
+#include <vector>
+#include <map>
+#include <QString>
 
 class Scene
 {
 public:
 
     Scene();
+    ~Scene();
 
     void init();
     void loadModel(const QString& path);
+    void loadScene();
     void update(float dt);
     void render(const glm::vec3& lightPos, const glm::vec3& lightColor);
 
     Camera& getCamera();
 
-    std::vector<ModelOBJ*> getModels() const;
+    std::vector<ModelInstance*> getInstances() const;
+
+    ModelResource* getResource(const QString& path);
 
 private:
 
-    std::vector<ModelOBJ*> models;
+    std::map<QString, ModelResource*> resources;
+    std::vector<ModelInstance*> instances;
     Camera camera;
 };
 

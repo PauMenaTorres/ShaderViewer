@@ -1,5 +1,5 @@
-#ifndef MODELOBJ_H
-#define MODELOBJ_H
+#ifndef MODELRESOURCE_H
+#define MODELRESOURCE_H
 
 #include <QOpenGLFunctions_4_3_Core>
 #include <QOpenGLShaderProgram>
@@ -8,28 +8,26 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "model.h"
 
-class ModelOBJ : public QOpenGLFunctions_4_3_Core
+class ModelResource : public QOpenGLFunctions_4_3_Core
 {
 public:
-    ModelOBJ();
-    ~ModelOBJ();
+    ModelResource();
+    ~ModelResource();
 
     void init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader);
-    void initTexture();
-    void modelTransform(const glm::mat4& transform);
-    void render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor);
+    void render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive);
+    
     glm::vec3 getCenter() const;
-
     glm::vec3 getMin();
     glm::vec3 getMax();
 
-    void setTextureActive(bool active);
-    void setBumpActive(bool active);
-
 private:
+    void initTexture();
+    void loadShaders(const QString& vShader, const QString& fShader);
+    void createBuffers();
+    void computeAABB();
 
     Model m;
-    glm::mat4 TG = glm::mat4(1.0f);
     QOpenGLShaderProgram* program;
 
     GLuint VAO;
@@ -39,17 +37,9 @@ private:
     float xmin, xmax, ymin, ymax, zmin, zmax;
     float aabb[6];
 
-    bool textureActive = true;
-    bool bumpTextureActive = true;
-
     GLuint textureID = 0;
     GLuint textureBumpID = 0;
     GLuint hasTextureLoc, hasBumpLoc, texCoordLoc, difuseTexLoc, bumpTextureLoc, tangentLoc, bitangentLoc;
-
-    void loadShaders(const QString& vShader, const QString& fShader);
-
-    void createBuffers();
-    void computeAABB();
 };
 
-#endif // MODELOBJ_H
+#endif // MODELRESOURCE_H
