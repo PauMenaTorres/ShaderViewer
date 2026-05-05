@@ -12,35 +12,42 @@ in vec3 bitangent;
 
 uniform mat4 proj;
 uniform mat4 view;
+uniform mat4 TG;
 
-out vec3 vertexFS;
 out vec3 matambFS;
 out vec3 matdifFS;
 out vec3 matspecFS;
 out float matshinFS;
 out vec2 texCoordFS;
-out mat3 TBN;
 
 out vec3 normalSCO;
 out vec4 vertexSCO;
 
-uniform mat4 TG;
+out mat3 TBN;
 
 void main()
 {
+    // Material
     matambFS = matamb;
     matdifFS = matdif;
     matspecFS = matspec;
     matshinFS = matshin;
-    mat3 normalMatrix = inverse(transpose(mat3 (view * TG)));
-    normalSCO = vec3(normalMatrix * normal);
-    vertexSCO = view * TG * vec4(vertex, 1.0);
-    gl_Position = proj * vertexSCO;
-    texCoordFS = texCoord;
 
+    // Transformaciones
+    mat4 modelView = view * TG;
+
+    vertexSCO = modelView * vec4(vertex, 1.0);
+    gl_Position = proj * vertexSCO;
+
+    // Normales
+    mat3 normalMatrix = inverse(transpose(mat3(modelView)));
+    normalSCO = normalize(normalMatrix * normal);
+
+    // Tangent space (para bump)
     vec3 T = normalize(normalMatrix * tangent);
     vec3 B = normalize(normalMatrix * bitangent);
     vec3 N = normalize(normalMatrix * normal);
-    TBN = mat3(T,B,N);
+    TBN = mat3(T, B, N);
 
+    texCoordFS = texCoord;
 }

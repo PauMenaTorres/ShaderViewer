@@ -59,51 +59,75 @@ void Scene::loadScene()
 {
     init();
 
-    ModelResource* treeRes = getResource("Models3D/tree.obj");
-    ModelResource* catRes = getResource("Models3D/cat.obj");
-    ModelResource* patricioRes = getResource("Models3D/Patricio.obj");
+    ModelResource* wallRes = getResource("Models3D/graf_wall.obj");
+    glm::vec3 wallCenter = wallRes->getCenter();
 
-    ModelInstance* catInst = new ModelInstance(catRes);
-    glm::mat4 tgCat(1.0f);
-    tgCat = glm::translate(tgCat, glm::vec3(-2.0f, 0.0f, 0.0f));
-    tgCat = glm::scale(tgCat, glm::vec3(0.08f));
-    tgCat = glm::rotate(tgCat, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    tgCat = glm::rotate(tgCat, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    glm::vec3 catCenter = catRes->getCenter();
-    tgCat = glm::translate(tgCat, -catCenter);
-    catInst->modelTransform(tgCat);
-    instances.push_back(catInst);
+    glm::vec3 wallMin = wallRes->getMin();
+    glm::vec3 wallMax = wallRes->getMax();
 
-    ModelInstance* patInst = new ModelInstance(patricioRes);
-    glm::mat4 tgPat(1.0f);
-    tgPat = glm::translate(tgPat, glm::vec3(1.5f, 0.0f, 0.0f)); // Close to center
-    tgPat = glm::rotate(tgPat, glm::radians(-45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::vec3 patCenter = patricioRes->getCenter();
-    tgPat = glm::translate(tgPat, -patCenter);
-    patInst->modelTransform(tgPat);
-    instances.push_back(patInst);
+    float alturaActualWall = wallMax.y - wallMin.y;
 
-    float radius = 5.0f;
-    for (int i = 0; i < 20; ++i) {
-        ModelInstance* treeInst = new ModelInstance(treeRes);
-        float angle = (i / 20.0f) * 2.0f * glm::pi<float>();
-        float x = cos(angle) * radius * (0.8f + (rand() % 40) / 100.0f);
-        float z = sin(angle) * radius * (0.8f + (rand() % 40) / 100.0f);
-        if (z > 4.5f) continue; 
-        glm::mat4 tgTree(1.0f);
-        tgTree = glm::translate(tgTree, glm::vec3(x, -0.5f, z));
-        float randomScale = 0.03f + (rand() % 30) / 1000.0f;
-        tgTree = glm::scale(tgTree, glm::vec3(randomScale));
-        glm::vec3 treeCenter = treeRes->getCenter();
-        tgTree = glm::translate(tgTree, -treeCenter);
-        treeInst->modelTransform(tgTree);
-        instances.push_back(treeInst);
-    }
+    float alturaDeseadaWall = 3.0f;
+    float scaleFactorWall = alturaDeseadaWall / alturaActualWall;
 
-    camera.init(glm::vec3(-10.0f), glm::vec3(10.0f), false);
+    ModelResource* farolaRes = getResource("Models3D/farola1.obj");
+    glm::vec3 farolaCenter = farolaRes->getCenter();
+
+    glm::vec3 farolaMin = farolaRes->getMin();
+    glm::vec3 farolaMax = farolaRes->getMax();
+
+    float alturaActualFarola = farolaMax.y - farolaMin.y;
+
+    float alturaDeseadaFarola = 1.5f;
+    float scaleFactorFarola = alturaDeseadaFarola / alturaActualFarola;
+
+
+    ModelInstance* wallInst = new ModelInstance(wallRes);
+    glm::mat4 tgWall(1.0f);
+    tgWall = glm::scale(tgWall, glm::vec3(scaleFactorWall));
+    tgWall = glm::rotate(tgWall, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    tgWall = glm::translate(tgWall, -wallCenter);
+    wallInst->modelTransform(tgWall);
+    instances.push_back(wallInst);
+
+    ModelInstance* farolaInst1 = new ModelInstance(farolaRes);
+    glm::mat4 tgFarola1(1.0f);
+
+    tgFarola1 = glm::translate(tgFarola1, glm::vec3(-farolaCenter));
+    tgFarola1 = glm::scale(tgFarola1, glm::vec3(scaleFactorFarola));
+    tgFarola1 = glm::rotate(tgFarola1, glm::radians(-90.0f), glm::vec3(0,1,0));
+    tgFarola1 = glm::translate(tgFarola1, glm::vec3(-0.5f, 0.0f, 3.5f));
+
+    farolaInst1->modelTransform(tgFarola1);
+    instances.push_back(farolaInst1);
+
+    ModelInstance* farolaInst2 = new ModelInstance(farolaRes);
+    glm::mat4 tgFarola2(1.0f);
+
+    tgFarola2 = glm::translate(tgFarola2, glm::vec3(-farolaCenter));
+    tgFarola2 = glm::scale(tgFarola2, glm::vec3(scaleFactorFarola));
+    tgFarola2 = glm::rotate(tgFarola2, glm::radians(-90.0f), glm::vec3(0,1,0));
+    tgFarola2 = glm::translate(tgFarola2, glm::vec3(-0.5f, 0.0f, 1.5f));
+
+    farolaInst2->modelTransform(tgFarola2);
+    instances.push_back(farolaInst2);
+
+
+    ModelInstance* farolaInst3 = new ModelInstance(farolaRes);
+    glm::mat4 tgFarola3(1.0f);
+
+    tgFarola3 = glm::translate(tgFarola3, glm::vec3(-farolaCenter));
+    tgFarola3 = glm::scale(tgFarola3, glm::vec3(scaleFactorFarola));
+    tgFarola3 = glm::rotate(tgFarola3, glm::radians(-90.0f), glm::vec3(0,1,0));
+    tgFarola3 = glm::translate(tgFarola3, glm::vec3(-0.5f, 0.0f, 0.5f));
+
+    farolaInst3->modelTransform(tgFarola3);
+    instances.push_back(farolaInst3);
+
+    camera.init(wallRes->getMin(), wallRes->getMax(), true);
 }
 
-void Scene::update(float dt)
+void Scene::update()
 {
 }
 

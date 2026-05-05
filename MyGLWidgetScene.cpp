@@ -3,8 +3,8 @@
 
 MyGLWidgetScene::MyGLWidgetScene(QWidget* parent):QOpenGLWidget(parent)
 {
-    myLightPos = vec3(1.0, 1.0, 1.0);
-    myLightColor = vec3(1.0, 1.0, 1.0);
+    myLightPos = glm::vec3(-0.5f, 1.5f, 2.0f);
+    myLightColor = glm::vec3(1.0f, 1.0f, 1.0f);
 }
 
 MyGLWidgetScene::~MyGLWidgetScene()
@@ -17,7 +17,7 @@ void MyGLWidgetScene::initializeGL()
 {
     initializeOpenGLFunctions();
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.76, 0.69, 0.52, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     scene.loadScene();
 }
 

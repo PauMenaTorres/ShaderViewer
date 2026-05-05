@@ -1,0 +1,15 @@
+# Blender MTL File: 'untitled.blend'
+# Material Count: 4
+
+newmtl graf_wall_1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.00000 0.00000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd graf_walls.png
+map_Ka graf_walls.png
+map_bump graf_walls_normal.png

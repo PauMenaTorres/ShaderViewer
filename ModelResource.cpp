@@ -287,6 +287,7 @@ void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const 
     GLuint lightColorLoc = program->uniformLocation("lightColor");
     glUniform3fv(lightColorLoc, 1, &lightColor[0]);
 
+
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);
     glBindVertexArray(0);
