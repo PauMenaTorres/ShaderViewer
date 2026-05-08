@@ -22,7 +22,7 @@ uniform mat4 proj;
 uniform mat4 view;
 uniform mat4 TG;
 
-float att = 0.9;
+uniform float att;
 float kc = 1.0;
 float kl = 0.5;
 float kq = 0.2;

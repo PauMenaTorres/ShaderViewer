@@ -19,7 +19,7 @@ public:
     void loadModel(const QString& path);
     void loadScene();
     void update();
-    void render(const glm::vec3& lightPos, const glm::vec3& lightColor);
+    void render(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue);
 
     Camera& getCamera();
 

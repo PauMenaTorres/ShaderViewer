@@ -5,6 +5,7 @@ MyGLWidgetScene::MyGLWidgetScene(QWidget* parent):QOpenGLWidget(parent)
 {
     myLightPos = glm::vec3(-0.5f, 1.5f, 2.0f);
     myLightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+    myAtt = 0.9f;
 }
 
 MyGLWidgetScene::~MyGLWidgetScene()
@@ -25,7 +26,7 @@ void MyGLWidgetScene::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    scene.render(myLightPos, myLightColor);
+    scene.render(myLightPos, myLightColor, myAtt);
 }
 
 void MyGLWidgetScene::resizeGL(int width, int height)
@@ -89,13 +90,17 @@ void MyGLWidgetScene::keyPressEvent(QKeyEvent *e)
     update();
 }
 
-void MyGLWidgetScene::setLightPosX(int x) { myLightPos.x = (float)x; update(); }
-void MyGLWidgetScene::setLightPosY(int y) { myLightPos.y = (float)y; update(); }
-void MyGLWidgetScene::setLightPosZ(int z) { myLightPos.z = (float)z; update(); }
+// Light position: slider sends ×10 values, we divide by 10 for float precision
+void MyGLWidgetScene::setLightPosX(int x) { myLightPos.x = x / 10.0f; update(); }
+void MyGLWidgetScene::setLightPosY(int y) { myLightPos.y = y / 10.0f; update(); }
+void MyGLWidgetScene::setLightPosZ(int z) { myLightPos.z = z / 10.0f; update(); }
 
 void MyGLWidgetScene::setLightColorR(int r) { myLightColor.r = r / 255.0f; update(); }
 void MyGLWidgetScene::setLightColorG(int g) { myLightColor.g = g / 255.0f; update(); }
 void MyGLWidgetScene::setLightColorB(int b) { myLightColor.b = b / 255.0f; update(); }
+
+// Attenuation: slider sends 0-100, we divide by 100 for 0.0-1.0
+void MyGLWidgetScene::setAtt(int value) { myAtt = value / 100.0f; update(); }
 
 void MyGLWidgetScene::activeTexture(bool isTextureActive)
 {

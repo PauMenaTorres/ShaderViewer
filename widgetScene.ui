@@ -11,7 +11,7 @@
       </rect>
     </property>
     <property name="windowTitle">
-      <string>Widget</string>
+      <string>Scene Viewer</string>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -90,7 +90,7 @@
                 </attribute>
                 <layout class="QVBoxLayout">
                   <item>
-                    <widget class="QLabel" name="label">
+                    <widget class="QLabel" name="labelLightPos">
                       <property name="font">
                         <font>
                           <weight>75</weight>
@@ -115,13 +115,13 @@
                                 </size>
                               </property>
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>-5</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -129,7 +129,7 @@
                             </widget>
                           </item>
                           <item>
-                            <widget class="QLabel" name="label">
+                            <widget class="QLabel" name="labelX">
                               <property name="text">
                                 <string>X</string>
                               </property>
@@ -141,13 +141,13 @@
                           <item>
                             <widget class="QSpinBox" name="spinLightX">
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>-5</number>
                               </property>
                             </widget>
                           </item>
@@ -164,13 +164,13 @@
                                 </size>
                               </property>
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>15</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -178,7 +178,7 @@
                             </widget>
                           </item>
                           <item>
-                            <widget class="QLabel" name="label">
+                            <widget class="QLabel" name="labelY">
                               <property name="text">
                                 <string>Y</string>
                               </property>
@@ -190,13 +190,13 @@
                           <item>
                             <widget class="QSpinBox" name="spinLightY">
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>15</number>
                               </property>
                             </widget>
                           </item>
@@ -213,13 +213,13 @@
                                 </size>
                               </property>
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>20</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -227,7 +227,7 @@
                             </widget>
                           </item>
                           <item>
-                            <widget class="QLabel" name="label">
+                            <widget class="QLabel" name="labelZ">
                               <property name="text">
                                 <string>Z</string>
                               </property>
@@ -239,13 +239,13 @@
                           <item>
                             <widget class="QSpinBox" name="spinLightZ">
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>20</number>
                               </property>
                             </widget>
                           </item>
@@ -254,7 +254,7 @@
                     </layout>
                   </item>
                   <item>
-                    <widget class="QLabel" name="label">
+                    <widget class="QLabel" name="labelLightColor">
                       <property name="font">
                         <font>
                           <weight>75</weight>
@@ -370,6 +370,52 @@
                     </layout>
                   </item>
                   <item>
+                    <widget class="QLabel" name="labelAttenuation">
+                      <property name="font">
+                        <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                        </font>
+                      </property>
+                      <property name="text">
+                        <string>Attenuation (att)</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <layout class="QHBoxLayout">
+                      <item>
+                        <widget class="QSlider" name="sliderAtt">
+                          <property name="minimum">
+                            <number>0</number>
+                          </property>
+                          <property name="maximum">
+                            <number>100</number>
+                          </property>
+                          <property name="value">
+                            <number>90</number>
+                          </property>
+                          <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QSpinBox" name="spinAtt">
+                          <property name="minimum">
+                            <number>0</number>
+                          </property>
+                          <property name="maximum">
+                            <number>100</number>
+                          </property>
+                          <property name="value">
+                            <number>90</number>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </item>
+                  <item>
                     <spacer name="verticalSpacer_light">
                       <property name="orientation">
                         <enum>Qt::Vertical</enum>
@@ -416,110 +462,62 @@
       <extends>QOpenGLWidget</extends>
       <header>MyGLWidgetScene.h</header>
       <slots>
-        <slot>setLightPosX(double)</slot>
-        <slot>setLightPosY(double)</slot>
-        <slot>setLightPosZ(double)</slot>
-        <slot>changeToRed(int)</slot>
-        <slot>changeToButton1()</slot>
-        <slot>changeToButton2()</slot>
-        <slot>changeToButton3()</slot>
-        <slot>changeToButton4()</slot>
-        <slot>showState(int)</slot>
-        <slot>setCurrentCenterX(double)</slot>
-        <slot>setCurrentCenterY(double)</slot>
-        <slot>setCurrentCenterZ(double)</slot>
-        <slot>setCurrentColorR(int)</slot>
-        <slot>setCurrentColorG(int)</slot>
-        <slot>setCurrentColorB(int)</slot>
-        <slot>setCurrentRadius(double)</slot>
-        <slot>setCurrentKaR(double)</slot>
-        <slot>setCurrentKaG(double)</slot>
-        <slot>setCurrentKaB(double)</slot>
-        <slot>setCurrentKdR(double)</slot>
-        <slot>setCurrentKdG(double)</slot>
-        <slot>setCurrentKdB(double)</slot>
-        <slot>setCurrentKsB(double)</slot>
-        <slot>setCurrentKsR(double)</slot>
-        <slot>setCurrentKsG(double)</slot>
-        <slot>setLightColorR(double)</slot>
-        <slot>setLightColorG(double)</slot>
-        <slot>setLightColorB(double)</slot>
-        <slot>setGlobalAmbientR(double)</slot>
-        <slot>setGlobalAmbientG(double)</slot>
-        <slot>setGlobalAmbientB(double)</slot>
-        <slot>addSphere()</slot>
-        <slot>activeTexture(bool)</slot>
-        <slot>activeBump(bool)</slot>
+        <slot>setLightPosX(int)</slot>
+        <slot>setLightPosY(int)</slot>
+        <slot>setLightPosZ(int)</slot>
         <slot>setLightColorR(int)</slot>
         <slot>setLightColorG(int)</slot>
         <slot>setLightColorB(int)</slot>
+        <slot>setAtt(int)</slot>
+        <slot>activeTexture(bool)</slot>
+        <slot>activeBump(bool)</slot>
       </slots>
     </customwidget>
   </customwidgets>
   <resources />
   <connections>
+    <!-- Exit button -->
     <connection>
       <sender>pushButton</sender>
       <signal>clicked()</signal>
       <receiver>WidgetScene</receiver>
       <slot>close()</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1073</x>
-          <y>727</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>711</x>
-          <y>702</y>
-        </hint>
+        <hint type="sourcelabel"><x>1073</x><y>727</y></hint>
+        <hint type="destinationlabel"><x>711</x><y>702</y></hint>
       </hints>
     </connection>
+    <!-- Texture checkbox -->
     <connection>
       <sender>checkBox</sender>
       <signal>clicked(bool)</signal>
       <receiver>openGLWidget</receiver>
       <slot>activeTexture(bool)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1009</x>
-          <y>12</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>852</x>
-          <y>123</y>
-        </hint>
+        <hint type="sourcelabel"><x>1009</x><y>12</y></hint>
+        <hint type="destinationlabel"><x>852</x><y>123</y></hint>
       </hints>
     </connection>
+    <!-- Bump checkbox -->
     <connection>
       <sender>checkBox_2</sender>
       <signal>clicked(bool)</signal>
       <receiver>openGLWidget</receiver>
       <slot>activeBump(bool)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1043</x>
-          <y>55</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>940</x>
-          <y>155</y>
-        </hint>
+        <hint type="sourcelabel"><x>1043</x><y>55</y></hint>
+        <hint type="destinationlabel"><x>940</x><y>155</y></hint>
       </hints>
     </connection>
+    <!-- Light X: slider <-> spinbox sync -->
     <connection>
       <sender>sliderLightX</sender>
       <signal>valueChanged(int)</signal>
       <receiver>spinLightX</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>812</x>
-          <y>85</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>812</x>
-          <y>215</y>
-        </hint>
+        <hint type="sourcelabel"><x>812</x><y>85</y></hint>
+        <hint type="destinationlabel"><x>812</x><y>215</y></hint>
       </hints>
     </connection>
     <connection>
@@ -528,46 +526,30 @@
       <receiver>sliderLightX</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>812</x>
-          <y>215</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>812</x>
-          <y>85</y>
-        </hint>
+        <hint type="sourcelabel"><x>812</x><y>215</y></hint>
+        <hint type="destinationlabel"><x>812</x><y>85</y></hint>
       </hints>
     </connection>
+    <!-- Light X: slider -> GL widget -->
     <connection>
       <sender>sliderLightX</sender>
       <signal>valueChanged(int)</signal>
       <receiver>openGLWidget</receiver>
       <slot>setLightPosX(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>812</x>
-          <y>85</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>20</x>
-          <y>20</y>
-        </hint>
+        <hint type="sourcelabel"><x>812</x><y>85</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
       </hints>
     </connection>
+    <!-- Light Y: slider <-> spinbox sync -->
     <connection>
       <sender>sliderLightY</sender>
       <signal>valueChanged(int)</signal>
       <receiver>spinLightY</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>938</x>
-          <y>85</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>938</x>
-          <y>215</y>
-        </hint>
+        <hint type="sourcelabel"><x>938</x><y>85</y></hint>
+        <hint type="destinationlabel"><x>938</x><y>215</y></hint>
       </hints>
     </connection>
     <connection>
@@ -576,46 +558,30 @@
       <receiver>sliderLightY</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>938</x>
-          <y>215</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>938</x>
-          <y>85</y>
-        </hint>
+        <hint type="sourcelabel"><x>938</x><y>215</y></hint>
+        <hint type="destinationlabel"><x>938</x><y>85</y></hint>
       </hints>
     </connection>
+    <!-- Light Y: slider -> GL widget -->
     <connection>
       <sender>sliderLightY</sender>
       <signal>valueChanged(int)</signal>
       <receiver>openGLWidget</receiver>
       <slot>setLightPosY(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>938</x>
-          <y>85</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>20</x>
-          <y>20</y>
-        </hint>
+        <hint type="sourcelabel"><x>938</x><y>85</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
       </hints>
     </connection>
+    <!-- Light Z: slider <-> spinbox sync -->
     <connection>
       <sender>sliderLightZ</sender>
       <signal>valueChanged(int)</signal>
       <receiver>spinLightZ</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1065</x>
-          <y>85</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>1065</x>
-          <y>215</y>
-        </hint>
+        <hint type="sourcelabel"><x>1065</x><y>85</y></hint>
+        <hint type="destinationlabel"><x>1065</x><y>215</y></hint>
       </hints>
     </connection>
     <connection>
@@ -624,46 +590,30 @@
       <receiver>sliderLightZ</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1065</x>
-          <y>215</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>1065</x>
-          <y>85</y>
-        </hint>
+        <hint type="sourcelabel"><x>1065</x><y>215</y></hint>
+        <hint type="destinationlabel"><x>1065</x><y>85</y></hint>
       </hints>
     </connection>
+    <!-- Light Z: slider -> GL widget -->
     <connection>
       <sender>sliderLightZ</sender>
       <signal>valueChanged(int)</signal>
       <receiver>openGLWidget</receiver>
       <slot>setLightPosZ(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1065</x>
-          <y>85</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>20</x>
-          <y>20</y>
-        </hint>
+        <hint type="sourcelabel"><x>1065</x><y>85</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
       </hints>
     </connection>
+    <!-- Light R: slider <-> spinbox sync -->
     <connection>
       <sender>sliderLightR</sender>
       <signal>valueChanged(int)</signal>
       <receiver>spinLightR</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>812</x>
-          <y>268</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>812</x>
-          <y>375</y>
-        </hint>
+        <hint type="sourcelabel"><x>812</x><y>268</y></hint>
+        <hint type="destinationlabel"><x>812</x><y>375</y></hint>
       </hints>
     </connection>
     <connection>
@@ -672,46 +622,30 @@
       <receiver>sliderLightR</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>812</x>
-          <y>375</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>812</x>
-          <y>268</y>
-        </hint>
+        <hint type="sourcelabel"><x>812</x><y>375</y></hint>
+        <hint type="destinationlabel"><x>812</x><y>268</y></hint>
       </hints>
     </connection>
+    <!-- Light R: slider -> GL widget -->
     <connection>
       <sender>sliderLightR</sender>
       <signal>valueChanged(int)</signal>
       <receiver>openGLWidget</receiver>
       <slot>setLightColorR(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>812</x>
-          <y>268</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>20</x>
-          <y>20</y>
-        </hint>
+        <hint type="sourcelabel"><x>812</x><y>268</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
       </hints>
     </connection>
+    <!-- Light G: slider <-> spinbox sync -->
     <connection>
       <sender>sliderLightG</sender>
       <signal>valueChanged(int)</signal>
       <receiver>spinLightG</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>938</x>
-          <y>268</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>938</x>
-          <y>375</y>
-        </hint>
+        <hint type="sourcelabel"><x>938</x><y>268</y></hint>
+        <hint type="destinationlabel"><x>938</x><y>375</y></hint>
       </hints>
     </connection>
     <connection>
@@ -720,46 +654,30 @@
       <receiver>sliderLightG</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>938</x>
-          <y>375</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>938</x>
-          <y>268</y>
-        </hint>
+        <hint type="sourcelabel"><x>938</x><y>375</y></hint>
+        <hint type="destinationlabel"><x>938</x><y>268</y></hint>
       </hints>
     </connection>
+    <!-- Light G: slider -> GL widget -->
     <connection>
       <sender>sliderLightG</sender>
       <signal>valueChanged(int)</signal>
       <receiver>openGLWidget</receiver>
       <slot>setLightColorG(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>938</x>
-          <y>268</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>20</x>
-          <y>20</y>
-        </hint>
+        <hint type="sourcelabel"><x>938</x><y>268</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
       </hints>
     </connection>
+    <!-- Light B: slider <-> spinbox sync -->
     <connection>
       <sender>sliderLightB</sender>
       <signal>valueChanged(int)</signal>
       <receiver>spinLightB</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1065</x>
-          <y>268</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>1065</x>
-          <y>375</y>
-        </hint>
+        <hint type="sourcelabel"><x>1065</x><y>268</y></hint>
+        <hint type="destinationlabel"><x>1065</x><y>375</y></hint>
       </hints>
     </connection>
     <connection>
@@ -768,30 +686,51 @@
       <receiver>sliderLightB</receiver>
       <slot>setValue(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1065</x>
-          <y>375</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>1065</x>
-          <y>268</y>
-        </hint>
+        <hint type="sourcelabel"><x>1065</x><y>375</y></hint>
+        <hint type="destinationlabel"><x>1065</x><y>268</y></hint>
       </hints>
     </connection>
+    <!-- Light B: slider -> GL widget -->
     <connection>
       <sender>sliderLightB</sender>
       <signal>valueChanged(int)</signal>
       <receiver>openGLWidget</receiver>
       <slot>setLightColorB(int)</slot>
       <hints>
-        <hint type="sourcelabel">
-          <x>1065</x>
-          <y>268</y>
-        </hint>
-        <hint type="destinationlabel">
-          <x>20</x>
-          <y>20</y>
-        </hint>
+        <hint type="sourcelabel"><x>1065</x><y>268</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
+      </hints>
+    </connection>
+    <!-- Attenuation: slider <-> spinbox sync -->
+    <connection>
+      <sender>sliderAtt</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinAtt</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>600</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>750</x><y>500</y></hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinAtt</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderAtt</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>750</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>600</x><y>500</y></hint>
+      </hints>
+    </connection>
+    <!-- Attenuation: slider -> GL widget -->
+    <connection>
+      <sender>sliderAtt</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setAtt(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>600</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
       </hints>
     </connection>
   </connections>

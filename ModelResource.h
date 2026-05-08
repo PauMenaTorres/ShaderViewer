@@ -15,7 +15,7 @@ public:
     ~ModelResource();
 
     void init(const QString& modelName, const QString& vertexShader, const QString& fragmentShader);
-    void render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive);
+    void render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive, float attValue);
     
     glm::vec3 getCenter() const;
     glm::vec3 getMin();
@@ -40,6 +40,7 @@ private:
     GLuint textureID = 0;
     GLuint textureBumpID = 0;
     GLuint hasTextureLoc, hasBumpLoc, texCoordLoc, difuseTexLoc, bumpTextureLoc, tangentLoc, bitangentLoc;
+    GLint attLoc;
 };
 
 #endif // MODELRESOURCE_H

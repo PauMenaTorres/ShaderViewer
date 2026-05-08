@@ -14,10 +14,10 @@ void ModelInstance::modelTransform(const glm::mat4& transform)
     TG = transform;
 }
 
-void ModelInstance::render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor)
+void ModelInstance::render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue)
 {
     if (resource) {
-        resource->render(TG, viewMat, projMat, lightPos, lightColor, textureActive, bumpTextureActive);
+        resource->render(TG, viewMat, projMat, lightPos, lightColor, textureActive, bumpTextureActive, attValue);
     }
 }
 

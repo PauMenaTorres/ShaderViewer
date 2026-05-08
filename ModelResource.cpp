@@ -152,6 +152,7 @@ void ModelResource::loadShaders(const QString& vShader, const QString& fShader)
     hasBumpLoc = glGetUniformLocation(program->programId(), "hasBumpTexture");
     difuseTexLoc = glGetUniformLocation(program->programId(), "diffuseTex");
     bumpTextureLoc = glGetUniformLocation(program->programId(), "bumpTex");
+    attLoc = glGetUniformLocation(program->programId(), "att");
 
     program->release();
 }
@@ -245,7 +246,7 @@ void ModelResource::createBuffers()
     glBindVertexArray(0);
 }
 
-void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive)
+void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive, float attValue)
 {
     program->bind();
 
@@ -256,6 +257,9 @@ void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const 
 
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &viewMat[0][0]);
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, &projMat[0][0]);
+
+    // Attenuation
+    glUniform1f(attLoc, attValue);
 
     if (textureID != 0 && textureActive)
     {
@@ -281,8 +285,9 @@ void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const 
         glUniform1i(hasBumpLoc, 0);
     }
 
+    glm::vec3 lightPosSCO = glm::vec3(viewMat * glm::vec4(lightPos, 1.0f));
     GLuint lightPosLoc = program->uniformLocation("lightPos");
-    glUniform3fv(lightPosLoc, 1, &lightPos[0]);
+    glUniform3fv(lightPosLoc, 1, &lightPosSCO[0]);
 
     GLuint lightColorLoc = program->uniformLocation("lightColor");
     glUniform3fv(lightColorLoc, 1, &lightColor[0]);

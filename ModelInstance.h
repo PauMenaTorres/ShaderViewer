@@ -11,7 +11,7 @@ public:
     ~ModelInstance();
 
     void modelTransform(const glm::mat4& transform);
-    void render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor);
+    void render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue);
 
     void setTextureActive(bool active);
     void setBumpActive(bool active);

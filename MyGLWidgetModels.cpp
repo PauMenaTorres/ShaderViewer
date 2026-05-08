@@ -31,7 +31,7 @@ void MyGLWidgetModels::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    scene.render(myLightPos, myLightColor);
+    scene.render(myLightPos, myLightColor, 0.9f);
 }
 
 void MyGLWidgetModels::resizeGL(int width, int height)

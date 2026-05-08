@@ -39,6 +39,7 @@ protected:
 
         vec3 myLightPos;
         vec3 myLightColor;
+        float myAtt = 0.9f;
 
     public slots:
         void setLightPosX(int x);
@@ -48,6 +49,8 @@ protected:
         void setLightColorR(int r);
         void setLightColorG(int g);
         void setLightColorB(int b);
+
+        void setAtt(int value);
 
         void activeTexture(bool isTextureActive);
         void activeBump(bool isBumpActive);
