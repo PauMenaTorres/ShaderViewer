@@ -3,7 +3,7 @@
 
 MyGLWidgetScene::MyGLWidgetScene(QWidget* parent):QOpenGLWidget(parent)
 {
-    myLightPos = glm::vec3(-0.5f, 1.5f, 2.0f);
+    myLightPos = glm::vec3(0.0f, 0.0f, 0.0f);
     myLightColor = glm::vec3(1.0f, 1.0f, 1.0f);
     myAtt = 0.9f;
 }

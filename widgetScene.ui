@@ -121,7 +121,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>-5</number>
+                                <number>0</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -147,7 +147,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>-5</number>
+                                <number>0</number>
                               </property>
                             </widget>
                           </item>
@@ -170,7 +170,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>15</number>
+                                <number>0</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -196,7 +196,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>15</number>
+                                <number>0</number>
                               </property>
                             </widget>
                           </item>
@@ -219,7 +219,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>20</number>
+                                <number>0</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -245,7 +245,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>20</number>
+                                <number>0</number>
                               </property>
                             </widget>
                           </item>
