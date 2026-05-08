@@ -6,6 +6,7 @@
 #include <QOpenGLShaderProgram>
 #include <QFile>
 #include <QKeyEvent>
+#include <QVector3D>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -36,6 +37,18 @@ protected:
 
         float halfVP;
         vec2 resolution;
+
+        // G-Buffer
+        GLuint gBuffer;
+        GLuint gPosition, gNormal, gAlbedoSpec;
+        GLuint rboDepth;
+        void initGBuffer();
+
+        // Lighting Pass
+        QOpenGLShaderProgram *lightingShader;
+        GLuint quadVAO, quadVBO;
+        void initQuad();
+        void renderQuad();
 
         vec3 myLightPos;
         vec3 myLightColor;

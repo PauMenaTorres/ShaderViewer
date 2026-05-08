@@ -9,5 +9,8 @@
         <file>fragmentGreen.frag</file>
         <file>fragmentRed.frag</file>
         <file>Logo.png</file>
+        <file>geometryPass.frag</file>
+        <file>lightingPass.vert</file>
+        <file>lightingPass.frag</file>
     </qresource>
 </RCC>

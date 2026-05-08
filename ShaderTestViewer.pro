@@ -68,5 +68,8 @@ DISTFILES += \
     fragmentModel.frag \
     fragmentRed.frag \
     fragmentSphere.frag \
+    geometryPass.frag \
+    lightingPass.frag \
+    lightingPass.vert \
     vertex.vert \
     vertexModel.vert
