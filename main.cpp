@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
     QSurfaceFormat::setDefaultFormat(f);
 
-    WidgetScene w;
+    Widget w;
 
     w.show();
 

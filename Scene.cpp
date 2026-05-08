@@ -17,14 +17,15 @@ Scene::~Scene()
     resources.clear();
 }
 
-ModelResource* Scene::getResource(const QString& path)
+ModelResource* Scene::getResource(const QString& path, const QString& fragShader)
 {
-    if (resources.find(path) == resources.end()) {
+    QString key = path + fragShader;
+    if (resources.find(key) == resources.end()) {
         ModelResource* res = new ModelResource();
-        res->init(path, ":/vertexModel.vert", ":/fragmentModel.frag");
-        resources[path] = res;
+        res->init(path, ":/vertexModel.vert", fragShader);
+        resources[key] = res;
     }
-    return resources[path];
+    return resources[key];
 }
 
 void Scene::init()
@@ -59,7 +60,7 @@ void Scene::loadScene()
 {
     init();
 
-    ModelResource* wallRes = getResource("Models3D/graf_wall.obj");
+    ModelResource* wallRes = getResource("Models3D/graf_wall.obj", ":/fragmentScene.frag");
     glm::vec3 wallCenter = wallRes->getCenter();
 
     glm::vec3 wallMin = wallRes->getMin();
@@ -70,7 +71,7 @@ void Scene::loadScene()
     float alturaDeseadaWall = 3.0f;
     float scaleFactorWall = alturaDeseadaWall / alturaActualWall;
 
-    ModelResource* farolaRes = getResource("Models3D/farola1.obj");
+    ModelResource* farolaRes = getResource("Models3D/farola1.obj", ":/fragmentScene.frag");
     glm::vec3 farolaCenter = farolaRes->getCenter();
 
     glm::vec3 farolaMin = farolaRes->getMin();

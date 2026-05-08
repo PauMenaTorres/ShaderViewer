@@ -4,6 +4,7 @@
         <file>vertex.vert</file>
         <file>fragmentSphere.frag</file>
         <file>fragmentModel.frag</file>
+        <file>fragmentScene.frag</file>
         <file>vertexModel.vert</file>
         <file>fragmentGreen.frag</file>
         <file>fragmentRed.frag</file>

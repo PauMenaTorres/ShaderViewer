@@ -22,6 +22,10 @@ uniform mat4 proj;
 uniform mat4 view;
 uniform mat4 TG;
 
+uniform float att;
+float kc = 1.0;
+float kl = 0.5;
+float kq = 0.2;
 
 uniform sampler2D diffuseTex;
 uniform sampler2D bumpTex;
@@ -29,19 +33,19 @@ uniform sampler2D bumpTex;
 uniform int hasTexture;
 uniform int hasBumpTexture;
 
-vec3 Lambert (vec3 NormSCO, vec3 L, vec3 diffColor)
+vec3 Lambert (vec3 NormSCO, vec3 L, vec3 diffColor, float at)
 {
     vec3 colRes = vec3(0.0);
 
     if (dot (L, NormSCO) > 0)
-      colRes = lightColor * diffColor * dot (L, NormSCO);
+      colRes = lightColor * at * diffColor * dot (L, NormSCO);
 
     return colRes;
 }
 
-vec3 Phong (vec3 NormSCO, vec3 L, vec4 vertSCO, vec3 diffColor)
+vec3 Phong (vec3 NormSCO, vec3 L, vec4 vertSCO, vec3 diffColor, float at)
 {
-    vec3 colRes = Lambert (NormSCO, L, diffColor);
+    vec3 colRes = Lambert (NormSCO, L, diffColor, at);
 
     if (dot(NormSCO, L) < 0)
       return colRes;
@@ -53,7 +57,7 @@ vec3 Phong (vec3 NormSCO, vec3 L, vec4 vertSCO, vec3 diffColor)
       return colRes;
 
     float shine = pow(max(0.0, dot(R, V)), matshinFS);
-    return colRes + matspecFS * lightColor * shine;
+    return colRes + matspecFS * lightColor * at * shine;
 }
 
 void main()
@@ -71,16 +75,22 @@ void main()
         N = normalize(normalSCO);
     }
 
+    // 1. Calculem la distància entre el vèrtex i la posició de la llum
+    float dist = distance(lightPos, vertexSCO.xyz);
+
+    // 2. Apliquem la fórmula d'atenuació
+    float at = att / (kc + kl * dist + kq * (dist * dist));
+
     vec3 L = normalize(lightPos - vertexSCO.xyz);
 
     if (hasTexture == 1)
     {
         vec4 texColor = texture(diffuseTex, texCoordFS);
-        lightRes = Phong(N, L, vertexSCO, texColor.rgb);
+        lightRes = Phong(N, L, vertexSCO, texColor.rgb, at);
     }
     else
     {
-        lightRes = Phong(N, L, vertexSCO, matdifFS);
+        lightRes = Phong(N, L, vertexSCO, matdifFS, at);
     }
 
     FragColor = vec4(lightRes, 1.0);

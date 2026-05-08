@@ -121,13 +121,13 @@
                                 </size>
                               </property>
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>10</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -147,13 +147,13 @@
                           <item>
                             <widget class="QSpinBox" name="spinLightX">
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>10</number>
                               </property>
                             </widget>
                           </item>
@@ -170,13 +170,13 @@
                                 </size>
                               </property>
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>10</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -196,13 +196,13 @@
                           <item>
                             <widget class="QSpinBox" name="spinLightY">
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>10</number>
                               </property>
                             </widget>
                           </item>
@@ -219,13 +219,13 @@
                                 </size>
                               </property>
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>10</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -245,13 +245,13 @@
                           <item>
                             <widget class="QSpinBox" name="spinLightZ">
                               <property name="minimum">
-                                <number>-5</number>
+                                <number>-50</number>
                               </property>
                               <property name="maximum">
-                                <number>5</number>
+                                <number>50</number>
                               </property>
                               <property name="value">
-                                <number>1</number>
+                                <number>10</number>
                               </property>
                             </widget>
                           </item>

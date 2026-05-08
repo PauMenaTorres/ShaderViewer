@@ -95,9 +95,9 @@ void MyGLWidgetModels::keyPressEvent(QKeyEvent *e)
     update();
 }
 
-void MyGLWidgetModels::setLightPosX(int x) { myLightPos.x = (float)x; update(); }
-void MyGLWidgetModels::setLightPosY(int y) { myLightPos.y = (float)y; update(); }
-void MyGLWidgetModels::setLightPosZ(int z) { myLightPos.z = (float)z; update(); }
+void MyGLWidgetModels::setLightPosX(int x) { myLightPos.x = x / 10.0f; update(); }
+void MyGLWidgetModels::setLightPosY(int y) { myLightPos.y = y / 10.0f; update(); }
+void MyGLWidgetModels::setLightPosZ(int z) { myLightPos.z = z / 10.0f; update(); }
 
 void MyGLWidgetModels::setLightColorR(int r) { myLightColor.r = r / 255.0f; update(); }
 void MyGLWidgetModels::setLightColorG(int g) { myLightColor.g = g / 255.0f; update(); }
