@@ -29,6 +29,8 @@ public:
 
 private:
 
+    glm::mat4 createModelTransform(ModelResource* res, const glm::vec3& position, float targetHeight);
+
     std::map<QString, ModelResource*> resources;
     std::vector<ModelInstance*> instances;
     Camera camera;

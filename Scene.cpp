@@ -28,6 +28,22 @@ ModelResource* Scene::getResource(const QString& path, const QString& fragShader
     return resources[key];
 }
 
+glm::mat4 Scene::createModelTransform(ModelResource* res, const glm::vec3& position, float targetHeight)
+{
+    glm::vec3 center = res->getCenter();
+    glm::vec3 minBB  = res->getMin();
+    glm::vec3 maxBB  = res->getMax();
+
+    float currentHeight = maxBB.y - minBB.y;
+    float scaleFactor   = targetHeight / currentHeight;
+
+    glm::mat4 tg(1.0f);
+    tg = glm::translate(tg, position);       // 3. colocar en posición final
+    tg = glm::scale(tg, glm::vec3(scaleFactor)); // 2. escalar a la altura deseada
+    tg = glm::translate(tg, -center);        // 1. centrar el objeto en el origen
+    return tg;
+}
+
 void Scene::init()
 {
     for(ModelInstance* inst : instances)
@@ -60,71 +76,34 @@ void Scene::loadScene()
 {
     init();
 
-    ModelResource* wallRes = getResource("Models3D/graf_wall.obj", ":/geometryPass.frag");
-    glm::vec3 wallCenter = wallRes->getCenter();
-
-    glm::vec3 wallMin = wallRes->getMin();
-    glm::vec3 wallMax = wallRes->getMax();
-
-    float alturaActualWall = wallMax.y - wallMin.y;
-
-    float alturaDeseadaWall = 3.0f;
-    float scaleFactorWall = alturaDeseadaWall / alturaActualWall;
-
-    ModelResource* farolaRes = getResource("Models3D/farola1.obj", ":/geometryPass.frag");
-    glm::vec3 farolaCenter = farolaRes->getCenter();
-
-    glm::vec3 farolaMin = farolaRes->getMin();
-    glm::vec3 farolaMax = farolaRes->getMax();
-
-    float alturaActualFarola = farolaMax.y - farolaMin.y;
-
-    float alturaDeseadaFarola = 1.5f;
-    float scaleFactorFarola = alturaDeseadaFarola / alturaActualFarola;
+    ModelResource* wallRes   = getResource("Models3D/graf_wall.obj", ":/geometryPass.frag");
+    ModelResource* farolaRes = getResource("Models3D/farola1.obj",   ":/geometryPass.frag");
 
     // --- Pared: centrada en (0,0,0), altura 3 ---
     ModelInstance* wallInst = new ModelInstance(wallRes);
-    glm::mat4 tgWall(1.0f);
-    tgWall = glm::scale(tgWall, glm::vec3(scaleFactorWall));
-    tgWall = glm::rotate(tgWall, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    tgWall = glm::translate(tgWall, -wallCenter);
-    wallInst->modelTransform(tgWall);
+    wallInst->modelTransform(createModelTransform(wallRes, glm::vec3(0.0f), 3.0f));
     instances.push_back(wallInst);
 
     // --- Farola 1: posición (-0.5, 0, 3.5) ---
     ModelInstance* farolaInst1 = new ModelInstance(farolaRes);
-    glm::mat4 tgFarola1(1.0f);
-    tgFarola1 = glm::rotate(tgFarola1, glm::radians(-90.0f), glm::vec3(0,1,0));
-    tgFarola1 = glm::translate(tgFarola1, glm::vec3(-0.5f, 0.0f, 3.5f));
-    tgFarola1 = glm::scale(tgFarola1, glm::vec3(scaleFactorFarola));
-    tgFarola1 = glm::translate(tgFarola1, -farolaCenter);
-    farolaInst1->modelTransform(tgFarola1);
+    farolaInst1->modelTransform(createModelTransform(farolaRes, glm::vec3(-0.5f, 0.0f, 3.5f), 1.5f));
     instances.push_back(farolaInst1);
 
     // --- Farola 2: posición (-0.5, 0, 1.5) ---
     ModelInstance* farolaInst2 = new ModelInstance(farolaRes);
-    glm::mat4 tgFarola2(1.0f);
-    tgFarola2 = glm::rotate(tgFarola2, glm::radians(-90.0f), glm::vec3(0,1,0));
-    tgFarola2 = glm::translate(tgFarola2, glm::vec3(-0.5f, 0.0f, 1.5f));
-    tgFarola2 = glm::scale(tgFarola2, glm::vec3(scaleFactorFarola));
-    tgFarola2 = glm::translate(tgFarola2, -farolaCenter);
-    farolaInst2->modelTransform(tgFarola2);
+    farolaInst2->modelTransform(createModelTransform(farolaRes, glm::vec3(-0.5f, 0.0f, 1.5f), 1.5f));
     instances.push_back(farolaInst2);
 
     // --- Farola 3: posición (-0.5, 0, -0.5) ---
     ModelInstance* farolaInst3 = new ModelInstance(farolaRes);
-    glm::mat4 tgFarola3(1.0f);
-    tgFarola3 = glm::rotate(tgFarola3, glm::radians(-90.0f), glm::vec3(0,1,0));
-    tgFarola3 = glm::translate(tgFarola3, glm::vec3(-0.5f, 0.0f, -0.5f));
-    tgFarola3 = glm::scale(tgFarola3, glm::vec3(scaleFactorFarola));
-    tgFarola3 = glm::translate(tgFarola3, -farolaCenter);
-    farolaInst3->modelTransform(tgFarola3);
+    farolaInst3->modelTransform(createModelTransform(farolaRes, glm::vec3(-0.5f, 0.0f, -0.5f), 1.5f));
     instances.push_back(farolaInst3);
 
     // --- Cámara: bounding box global que envuelve toda la escena ---
     glm::vec3 sceneMin = glm::vec3(-2.0f, -1.5f, -1.0f);
     glm::vec3 sceneMax = glm::vec3(2.0f, 2.0f, 4.5f);
     camera.init(sceneMin, sceneMax, true);
+    camera.orbitY(glm::radians(90.0f));
 }
 
 void Scene::update()
