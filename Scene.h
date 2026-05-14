@@ -18,6 +18,7 @@ public:
     void init();
     void loadModel(const QString& path);
     void loadScene();
+    void loadWaterScene();
     void update();
     void render(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue);
 

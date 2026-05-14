@@ -18,8 +18,8 @@ void MyGLWidgetScene::initializeGL()
 {
     initializeOpenGLFunctions();
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    scene.loadScene();
+    glClearColor(0.6f, 0.5f, 0.4f, 1.0f); // Dark beige
+    scene.loadWaterScene();
 
     initGBuffer();
     initQuad();

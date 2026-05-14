@@ -106,6 +106,21 @@ void Scene::loadScene()
     camera.orbitY(glm::radians(90.0f));
 }
 
+void Scene::loadWaterScene()
+{
+    loadScene();
+
+    // --- Geometría Base del Agua (Paso 1) ---
+    // Usamos el shader normal por ahora, más adelante crearemos water.frag
+    ModelResource* waterRes = getResource("Models3D/water_quad.obj", ":/geometryPass.frag");
+    ModelInstance* waterInst = new ModelInstance(waterRes);
+    glm::mat4 waterTg(1.0f);
+    waterTg = glm::translate(waterTg, glm::vec3(0.0f, 0.01f, 0.0f)); // Un poco por encima del suelo para evitar Z-fighting
+    waterTg = glm::scale(waterTg, glm::vec3(5.0f, 1.0f, 5.0f));      // Hacemos el quad grande
+    waterInst->modelTransform(waterTg);
+    instances.push_back(waterInst);
+}
+
 void Scene::update()
 {
 }
