@@ -11,6 +11,11 @@ Scene::~Scene()
     }
     instances.clear();
     
+    if (waterInst) {
+        delete waterInst;
+        waterInst = nullptr;
+    }
+    
     for (auto const& pair : resources) {
         delete pair.second;
     }
@@ -56,6 +61,11 @@ void Scene::init()
         delete inst;
     }
     instances.clear();
+    
+    if (waterInst) {
+        delete waterInst;
+        waterInst = nullptr;
+    }
 }
 
 void Scene::loadModel(const QString& path)
@@ -117,12 +127,11 @@ void Scene::loadWaterScene()
 
     // --- Geometría Base del Agua (Paso 1 y 2) ---
     ModelResource* waterRes = getResource("Models3D/water_quad.obj", ":/water.vert", ":/water.frag");
-    ModelInstance* waterInst = new ModelInstance(waterRes);
+    waterInst = new ModelInstance(waterRes);
     glm::mat4 waterTg(1.0f);
     waterTg = glm::translate(waterTg, glm::vec3(0.0f, 0.0f, 0.0f)); 
-    waterTg = glm::scale(waterTg, glm::vec3(5.0f, 1.0f, 5.0f));
+    waterTg = glm::scale(waterTg, glm::vec3(5.0f, 1.0f, 5.0f));      // Hacemos el quad grande
     waterInst->modelTransform(waterTg);
-    instances.push_back(waterInst);
 
     // --- Cámara: Ajustamos para ver el agua desde arriba/diagonal ---
     glm::vec3 sceneMin = glm::vec3(-5.0f, -0.5f, -5.0f);
@@ -138,8 +147,21 @@ void Scene::update()
 
 void Scene::render(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue)
 {
+    renderModelsOnly(lightPos, lightColor, attValue);
+    renderWaterOnly(lightPos, lightColor, attValue);
+}
+
+void Scene::renderModelsOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue)
+{
     for (ModelInstance* inst : instances) {
         inst->render(camera.getViewMatrix(), camera.getProjectMatrix(), lightPos, lightColor, attValue);
+    }
+}
+
+void Scene::renderWaterOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue)
+{
+    if (waterInst) {
+        waterInst->render(camera.getViewMatrix(), camera.getProjectMatrix(), lightPos, lightColor, attValue);
     }
 }
 

@@ -21,6 +21,8 @@ public:
     void loadWaterScene();
     void update();
     void render(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue);
+    void renderModelsOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue);
+    void renderWaterOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue);
 
     Camera& getCamera();
 
@@ -35,6 +37,7 @@ private:
 
     std::map<QString, ModelResource*> resources;
     std::vector<ModelInstance*> instances;
+    ModelInstance* waterInst = nullptr;
     Camera camera;
 };
 

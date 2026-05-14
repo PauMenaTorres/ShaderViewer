@@ -25,7 +25,8 @@ SOURCES += \
     widgetMain.cpp \
     widgetModels.cpp \
     widgetScene.cpp \
-    widgetSpheres.cpp
+    widgetSpheres.cpp \
+    WaterFrameBuffers.cpp
 
 HEADERS += \
     Camera.h \
@@ -41,7 +42,8 @@ HEADERS += \
     widgetMain.h \
     widgetModels.h \
     widgetScene.h \
-    widgetSpheres.h
+    widgetSpheres.h \
+    WaterFrameBuffers.h
 
 FORMS += \
     widgetMain.ui \

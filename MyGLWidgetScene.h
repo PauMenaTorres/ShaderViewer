@@ -14,6 +14,7 @@
 
 #include <model.h>
 #include <Scene.h>
+#include "WaterFrameBuffers.h"
 
 using namespace glm;
 
@@ -43,6 +44,8 @@ protected:
         GLuint gPosition, gNormal, gAlbedoSpec;
         GLuint rboDepth;
         void initGBuffer();
+        
+        WaterFrameBuffers* waterFbos = nullptr;
 
         // Lighting Pass
         QOpenGLShaderProgram *lightingShader;

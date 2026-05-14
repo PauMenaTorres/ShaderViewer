@@ -10,7 +10,9 @@ MyGLWidgetScene::MyGLWidgetScene(QWidget* parent):QOpenGLWidget(parent)
 
 MyGLWidgetScene::~MyGLWidgetScene()
 {
-
+    if (waterFbos) {
+        delete waterFbos;
+    }
 }
 
 
@@ -20,6 +22,10 @@ void MyGLWidgetScene::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glClearColor(0, 0, 0, 0);
     scene.loadWaterScene();
+
+    int w = width() * devicePixelRatio();
+    int h = height() * devicePixelRatio();
+    waterFbos = new WaterFrameBuffers(w, h);
 
     initGBuffer();
     initQuad();
@@ -38,11 +44,30 @@ void MyGLWidgetScene::initializeGL()
 
 void MyGLWidgetScene::paintGL()
 {
-    // 1. Geometry Pass: render scene data to G-Buffer
+    int w = width() * devicePixelRatio();
+    int h = height() * devicePixelRatio();
+
+    // 1. Render Reflection (Paso 3 y 4 de la teoría)
+    waterFbos->bindReflectionFrameBuffer();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // TODO: Mover cámara debajo del agua e invertir pitch
+    // scene.renderModelsOnly(myLightPos, myLightColor, myAtt);
+    
+    // 2. Render Refraction (Paso 3 y 4 de la teoría)
+    waterFbos->bindRefractionFrameBuffer();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // TODO: Aplicar clipping plane a la altura del agua
+    // scene.renderModelsOnly(myLightPos, myLightColor, myAtt);
+
+    // 3. Geometry Pass normal: render scene data to G-Buffer
+    waterFbos->unbindCurrentFrameBuffer(w, h);
     glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    scene.render(myLightPos, myLightColor, myAtt);
+    // Aquí dibujamos la escena regular y luego el agua
+    scene.renderModelsOnly(myLightPos, myLightColor, myAtt);
+    // TODO: Pasar texturas reflection/refraction a los shaders del agua
+    scene.renderWaterOnly(myLightPos, myLightColor, myAtt);
     
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebufferObject());
 
