@@ -12,5 +12,7 @@
         <file>geometryPass.frag</file>
         <file>lightingPass.vert</file>
         <file>lightingPass.frag</file>
+        <file>water.vert</file>
+        <file>water.frag</file>
     </qresource>
 </RCC>

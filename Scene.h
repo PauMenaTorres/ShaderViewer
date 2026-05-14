@@ -27,6 +27,7 @@ public:
     std::vector<ModelInstance*> getInstances() const;
 
     ModelResource* getResource(const QString& path, const QString& fragShader = ":/geometryPass.frag");
+    ModelResource* getResource(const QString& path, const QString& vertShader, const QString& fragShader);
 
 private:
 

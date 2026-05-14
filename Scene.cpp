@@ -19,10 +19,15 @@ Scene::~Scene()
 
 ModelResource* Scene::getResource(const QString& path, const QString& fragShader)
 {
-    QString key = path + fragShader;
+    return getResource(path, ":/vertexModel.vert", fragShader);
+}
+
+ModelResource* Scene::getResource(const QString& path, const QString& vertShader, const QString& fragShader)
+{
+    QString key = path + vertShader + fragShader;
     if (resources.find(key) == resources.end()) {
         ModelResource* res = new ModelResource();
-        res->init(path, ":/vertexModel.vert", fragShader);
+        res->init(path, vertShader, fragShader);
         resources[key] = res;
     }
     return resources[key];
@@ -108,17 +113,23 @@ void Scene::loadScene()
 
 void Scene::loadWaterScene()
 {
-    loadScene();
+    init();
 
-    // --- Geometría Base del Agua (Paso 1) ---
-    // Usamos el shader normal por ahora, más adelante crearemos water.frag
-    ModelResource* waterRes = getResource("Models3D/water_quad.obj", ":/geometryPass.frag");
+    // --- Geometría Base del Agua (Paso 1 y 2) ---
+    ModelResource* waterRes = getResource("Models3D/water_quad.obj", ":/water.vert", ":/water.frag");
     ModelInstance* waterInst = new ModelInstance(waterRes);
     glm::mat4 waterTg(1.0f);
-    waterTg = glm::translate(waterTg, glm::vec3(0.0f, 0.01f, 0.0f)); // Un poco por encima del suelo para evitar Z-fighting
-    waterTg = glm::scale(waterTg, glm::vec3(5.0f, 1.0f, 5.0f));      // Hacemos el quad grande
+    waterTg = glm::translate(waterTg, glm::vec3(0.0f, 0.0f, 0.0f)); 
+    waterTg = glm::scale(waterTg, glm::vec3(5.0f, 1.0f, 5.0f));
     waterInst->modelTransform(waterTg);
     instances.push_back(waterInst);
+
+    // --- Cámara: Ajustamos para ver el agua desde arriba/diagonal ---
+    glm::vec3 sceneMin = glm::vec3(-5.0f, -0.5f, -5.0f);
+    glm::vec3 sceneMax = glm::vec3(5.0f, 2.0f, 5.0f);
+    camera.init(sceneMin, sceneMax, true);
+    camera.orbitY(glm::radians(45.0f));  // Rotación diagonal
+    camera.orbitX(glm::radians(-20.0f)); // Miramos un poco hacia abajo
 }
 
 void Scene::update()
