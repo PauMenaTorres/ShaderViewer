@@ -14,10 +14,17 @@ void ModelInstance::modelTransform(const glm::mat4& transform)
     TG = transform;
 }
 
-void ModelInstance::render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue)
+void ModelInstance::render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, const glm::vec4& clipPlane)
 {
     if (resource) {
-        resource->render(TG, viewMat, projMat, lightPos, lightColor, textureActive, bumpTextureActive, attValue);
+        resource->render(TG, viewMat, projMat, lightPos, lightColor, textureActive, bumpTextureActive, attValue, clipPlane);
+    }
+}
+
+void ModelInstance::renderWater(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor, const glm::vec3& cameraPos)
+{
+    if (resource) {
+        resource->renderWater(TG, viewMat, projMat, lightPos, lightColor, attValue, reflectionTex, refractionTex, dudvTex, normalTex, moveFactor, cameraPos);
     }
 }
 

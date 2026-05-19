@@ -246,7 +246,7 @@ void ModelResource::createBuffers()
     glBindVertexArray(0);
 }
 
-void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive, float attValue)
+void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive, float attValue, const glm::vec4& clipPlane)
 {
     program->bind();
 
@@ -260,6 +260,13 @@ void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const 
 
     // Attenuation
     glUniform1f(attLoc, attValue);
+
+    // Pass clipPlane uniform
+    GLuint clipPlaneLoc = program->uniformLocation("clipPlane");
+    if (clipPlaneLoc != -1)
+    {
+        glUniform4fv(clipPlaneLoc, 1, &clipPlane[0]);
+    }
 
     if (textureID != 0 && textureActive)
     {
@@ -292,6 +299,68 @@ void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const 
     GLuint lightColorLoc = program->uniformLocation("lightColor");
     glUniform3fv(lightColorLoc, 1, &lightColor[0]);
 
+
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);
+    glBindVertexArray(0);
+
+    program->release();
+}
+
+void ModelResource::renderWater(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor, const glm::vec3& cameraPos)
+{
+    program->bind();
+
+    glUniformMatrix4fv(TGLoc, 1, GL_FALSE, &TG[0][0]);
+
+    GLuint viewLoc = program->uniformLocation("view");
+    GLuint projLoc = program->uniformLocation("proj");
+
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &viewMat[0][0]);
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, &projMat[0][0]);
+
+    // Attenuation
+    glUniform1f(attLoc, attValue);
+
+    // Bind textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, reflectionTex);
+    program->setUniformValue("reflectionTexture", 0);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, refractionTex);
+    program->setUniformValue("refractionTexture", 1);
+
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, dudvTex);
+    program->setUniformValue("dudvMap", 2);
+
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, normalTex);
+    program->setUniformValue("normalMap", 3);
+
+    // Uniforms
+    program->setUniformValue("moveFactor", moveFactor);
+    program->setUniformValue("cameraPosition", QVector3D(cameraPos.x, cameraPos.y, cameraPos.z));
+
+    // Also clip plane for water itself (neutral, default to no-clipping for standard draw)
+    GLuint clipPlaneLoc = program->uniformLocation("clipPlane");
+    if (clipPlaneLoc != -1)
+    {
+        glm::vec4 neutralClipPlane(0.0f, 1.0f, 0.0f, 100000.0f);
+        glUniform4fv(clipPlaneLoc, 1, &neutralClipPlane[0]);
+    }
+
+    glm::vec3 lightPosSCO = glm::vec3(viewMat * glm::vec4(lightPos, 1.0f));
+    GLuint lightPosLoc = program->uniformLocation("lightPos");
+    glUniform3fv(lightPosLoc, 1, &lightPosSCO[0]);
+
+    GLuint lightColorLoc = program->uniformLocation("lightColor");
+    glUniform3fv(lightColorLoc, 1, &lightColor[0]);
+
+    // Shine / reflectivity
+    program->setUniformValue("shineDamper", 20.0f);
+    program->setUniformValue("reflectivity", 0.6f);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, m.faces().size() * 3);

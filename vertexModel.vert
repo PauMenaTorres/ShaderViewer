@@ -13,6 +13,7 @@ in vec3 bitangent;
 uniform mat4 proj;
 uniform mat4 view;
 uniform mat4 TG;
+uniform vec4 clipPlane = vec4(0.0, 1.0, 0.0, 100000.0); // default neutral plane
 
 out vec3 matambFS;
 out vec3 matdifFS;
@@ -27,6 +28,10 @@ out mat3 TBN;
 
 void main()
 {
+    // Clip distance calculation
+    vec4 worldPosition = TG * vec4(vertex, 1.0);
+    gl_ClipDistance[0] = dot(worldPosition, clipPlane);
+
     // Material
     matambFS = matamb;
     matdifFS = matdif;

@@ -20,6 +20,13 @@ void main()
     vec3 Albedo = AlbedoSpec.rgb;
     float Specular = AlbedoSpec.a * 128.0; // This was stored as matshinFS / 128.0
 
+    // If it is a background pixel (no geometry normal), render the clear albedo color (sky color) directly
+    if (length(Normal) < 0.1)
+    {
+        FragColor = vec4(Albedo, 1.0);
+        return;
+    }
+
     // Ambient
     vec3 ambient = Albedo * 0.2; 
     

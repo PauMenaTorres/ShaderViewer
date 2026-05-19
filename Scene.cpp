@@ -125,6 +125,13 @@ void Scene::loadWaterScene()
 {
     init();
 
+    ModelResource* patricioRes = getResource("Models3D/Patricio.obj", ":/geometryPass.frag");
+
+    // --- Patricio: Colocado justo encima del agua (pies rozando Y = 0.0f) ---
+    ModelInstance* patricioInst = new ModelInstance(patricioRes);
+    patricioInst->modelTransform(createModelTransform(patricioRes, glm::vec3(0.0f, 1.8f, 0.0f), 1.6f));
+    instances.push_back(patricioInst);
+
     // --- Geometría Base del Agua (Paso 1 y 2) ---
     ModelResource* waterRes = getResource("Models3D/water_quad.obj", ":/water.vert", ":/water.frag");
     waterInst = new ModelInstance(waterRes);
@@ -151,17 +158,17 @@ void Scene::render(const glm::vec3& lightPos, const glm::vec3& lightColor, float
     renderWaterOnly(lightPos, lightColor, attValue);
 }
 
-void Scene::renderModelsOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue)
+void Scene::renderModelsOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, const glm::vec4& clipPlane)
 {
     for (ModelInstance* inst : instances) {
-        inst->render(camera.getViewMatrix(), camera.getProjectMatrix(), lightPos, lightColor, attValue);
+        inst->render(camera.getViewMatrix(), camera.getProjectMatrix(), lightPos, lightColor, attValue, clipPlane);
     }
 }
 
-void Scene::renderWaterOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue)
+void Scene::renderWaterOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor)
 {
     if (waterInst) {
-        waterInst->render(camera.getViewMatrix(), camera.getProjectMatrix(), lightPos, lightColor, attValue);
+        waterInst->renderWater(camera.getViewMatrix(), camera.getProjectMatrix(), lightPos, lightColor, attValue, reflectionTex, refractionTex, dudvTex, normalTex, moveFactor, camera.getOBS());
     }
 }
 

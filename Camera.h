@@ -38,6 +38,10 @@ public:
     void orbitX(float angle);
     void orbitY(float angle);
     void orbitZ(float angle);
+
+    glm::vec3 getOBS() const { return OBS; }
+    glm::vec3 getVRP() const { return VRP; }
+    glm::vec3 getUpVector() const { return up_vector; }
 private:
 
     float d, R;

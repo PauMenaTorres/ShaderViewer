@@ -16,6 +16,9 @@ out vec3 matdifFS;
 out vec3 normalSCO;
 out vec4 vertexSCO;
 out vec3 toCameraVector;
+out vec4 clipSpaceCoords;
+out vec2 texCoordsFS;
+out mat3 TBN;
 
 void main()
 {
@@ -23,11 +26,21 @@ void main()
 
     mat4 modelView = view * TG;
     vertexSCO = modelView * vec4(vertex, 1.0);
-    gl_Position = proj * vertexSCO;
+    clipSpaceCoords = proj * vertexSCO;
+    gl_Position = clipSpaceCoords;
 
     mat3 normalMatrix = inverse(transpose(mat3(modelView)));
     normalSCO = normalize(normalMatrix * normal);
 
-    // Vector desde el vértice a la cámara. En SCO la cámara está en (0,0,0)
+    // Compute SCO tangent-space basis (TBN) for the flat water quad (horizontal on XZ plane)
+    vec3 T = normalize(normalMatrix * vec3(1.0, 0.0, 0.0));
+    vec3 B = normalize(normalMatrix * vec3(0.0, 0.0, 1.0));
+    vec3 N = normalize(normalMatrix * vec3(0.0, 1.0, 0.0));
+    TBN = mat3(T, B, N);
+
+    // Tile the texture coordinates to make wave details more fine-grained
+    texCoordsFS = texCoord * 8.0;
+
+    // Vector from vertex to camera (in SCO, camera is at origin)
     toCameraVector = -vertexSCO.xyz; 
 }

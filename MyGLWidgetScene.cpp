@@ -20,7 +20,8 @@ void MyGLWidgetScene::initializeGL()
 {
     initializeOpenGLFunctions();
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0, 0, 0, 0);
+    glClearColor(0.25f, 0.61f, 0.9f, 1.0f);
+    
     scene.loadWaterScene();
 
     int w = width() * devicePixelRatio();
@@ -29,6 +30,7 @@ void MyGLWidgetScene::initializeGL()
 
     initGBuffer();
     initQuad();
+    initWaterTextures();
 
     lightingShader = new QOpenGLShaderProgram();
     lightingShader->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/lightingPass.vert");
@@ -47,31 +49,63 @@ void MyGLWidgetScene::paintGL()
     int w = width() * devicePixelRatio();
     int h = height() * devicePixelRatio();
 
-    // 1. Render Reflection (Paso 3 y 4 de la teoría)
+    // Increment moveFactor to animate waves
+    moveFactor += 0.003f;
+    if (moveFactor >= 1.0f) moveFactor -= 1.0f;
+
+    // 1. Render Reflection (Y > 0.0f)
     waterFbos->bindReflectionFrameBuffer();
+    glClearColor(0.25f, 0.61f, 0.9f, 1.0f); // Beautiful sky blue background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // TODO: Mover cámara debajo del agua e invertir pitch
-    // scene.renderModelsOnly(myLightPos, myLightColor, myAtt);
+
+    // Calculate reflected lookAt camera vectors
+    glm::vec3 obs = scene.getCamera().getOBS();
+    glm::vec3 vrp = scene.getCamera().getVRP();
+    glm::vec3 up = scene.getCamera().getUpVector();
+
+    // Flip the Y coordinates for horizontal plane reflection (Y = 0)
+    glm::vec3 obsRef = glm::vec3(obs.x, -obs.y, obs.z);
+    glm::vec3 vrpRef = glm::vec3(vrp.x, -vrp.y, vrp.z);
+    glm::vec3 upRef = glm::vec3(up.x, -up.y, up.z);
+
+    glm::mat4 reflectionViewMat = glm::lookAt(obsRef, vrpRef, upRef);
+    glm::mat4 projMat = scene.getCamera().getProjectMatrix();
+
+    // Render all models from the reflected view, clipping everything below water (Y < 0)
+    for (ModelInstance* inst : scene.getInstances()) {
+        inst->render(reflectionViewMat, projMat, myLightPos, myLightColor, myAtt, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+    }
     
-    // 2. Render Refraction (Paso 3 y 4 de la teoría)
+    // 2. Render Refraction (Y < 0.0f)
     waterFbos->bindRefractionFrameBuffer();
+    glClearColor(0.25f, 0.61f, 0.9f, 1.0f); // Consistent sky blue background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // TODO: Aplicar clipping plane a la altura del agua
-    // scene.renderModelsOnly(myLightPos, myLightColor, myAtt);
+
+    // Render all models from normal view, clipping everything above water (Y > 0)
+    for (ModelInstance* inst : scene.getInstances()) {
+        inst->render(scene.getCamera().getViewMatrix(), projMat, myLightPos, myLightColor, myAtt, glm::vec4(0.0f, -1.0f, 0.0f, 0.0f));
+    }
 
     // 3. Geometry Pass normal: render scene data to G-Buffer
     waterFbos->unbindCurrentFrameBuffer(w, h);
     glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
+    glClearColor(0.25f, 0.61f, 0.9f, 1.0f); // Sky clear color for deferred background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    // Aquí dibujamos la escena regular y luego el agua
-    scene.renderModelsOnly(myLightPos, myLightColor, myAtt);
-    // TODO: Pasar texturas reflection/refraction a los shaders del agua
-    scene.renderWaterOnly(myLightPos, myLightColor, myAtt);
+    // Render models normally without clipping
+    scene.renderModelsOnly(myLightPos, myLightColor, myAtt, glm::vec4(0.0f, 1.0f, 0.0f, 100000.0f));
+    
+    // Render water with reflection/refraction and procedural DuDv/Normal maps
+    scene.renderWaterOnly(myLightPos, myLightColor, myAtt, 
+                          waterFbos->getReflectionTexture(), 
+                          waterFbos->getRefractionTexture(), 
+                          dudvTexture, 
+                          normalTexture, 
+                          moveFactor);
     
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebufferObject());
 
-    // 2. Lighting Pass: calculate lighting using G-Buffer textures
+    // 4. Lighting Pass: calculate lighting using G-Buffer textures
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     lightingShader->bind();
     
@@ -91,6 +125,9 @@ void MyGLWidgetScene::paintGL()
     renderQuad();
     
     lightingShader->release();
+
+    // Trigger next frame update for continuous wave animation
+    update();
 }
 
 void MyGLWidgetScene::resizeGL(int width, int height)
@@ -278,4 +315,76 @@ void MyGLWidgetScene::renderQuad()
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
+}
+
+void MyGLWidgetScene::initWaterTextures()
+{
+    makeCurrent();
+
+    const int width = 256;
+    const int height = 256;
+    const float pi = 3.14159265f;
+
+    // Generate DuDv Map (distortion map)
+    std::vector<unsigned char> dudvData(width * height * 4); // RGBA
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            float fx = (float)x / width * 2.0f * pi * 4.0f; // frequency
+            float fy = (float)y / height * 2.0f * pi * 4.0f;
+            
+            float du = sin(fx + fy) * cos(fy) * 0.5f + 0.5f;
+            float dv = cos(fx - fy) * sin(fx) * 0.5f + 0.5f;
+            
+            int idx = (y * width + x) * 4;
+            dudvData[idx + 0] = (unsigned char)(du * 255.0f); // R -> X offset
+            dudvData[idx + 1] = (unsigned char)(dv * 255.0f); // G -> Y offset
+            dudvData[idx + 2] = 0;                            // B
+            dudvData[idx + 3] = 255;                          // A
+        }
+    }
+
+    glGenTextures(1, &dudvTexture);
+    glBindTexture(GL_TEXTURE_2D, dudvTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dudvData.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // Generate Normal Map (tangent space)
+    std::vector<unsigned char> normalData(width * height * 4); // RGBA
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            auto getHeight = [](float px, float py) {
+                float h = 0.0f;
+                h += sin(px * 0.15f + py * 0.08f) * 1.2f;
+                h += cos(px * 0.10f - py * 0.14f) * 0.8f;
+                h += sin(px * 0.25f + py * 0.20f) * 0.4f;
+                return h;
+            };
+
+            float h_center = getHeight(x, y);
+            float h_r = getHeight(x + 1, y);
+            float h_u = getHeight(x, y + 1);
+
+            float dh_dx = h_r - h_center;
+            float dh_dy = h_u - h_center;
+
+            glm::vec3 normal = glm::normalize(glm::vec3(-dh_dx * 2.5f, 1.0f, -dh_dy * 2.5f));
+
+            int idx = (y * width + x) * 4;
+            normalData[idx + 0] = (unsigned char)((normal.x * 0.5f + 0.5f) * 255.0f);
+            normalData[idx + 1] = (unsigned char)((normal.z * 0.5f + 0.5f) * 255.0f);
+            normalData[idx + 2] = (unsigned char)((normal.y * 0.5f + 0.5f) * 255.0f);
+            normalData[idx + 3] = 255;
+        }
+    }
+
+    glGenTextures(1, &normalTexture);
+    glBindTexture(GL_TEXTURE_2D, normalTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, normalData.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }

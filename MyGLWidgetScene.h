@@ -47,6 +47,11 @@ protected:
         
         WaterFrameBuffers* waterFbos = nullptr;
 
+        GLuint dudvTexture = 0;
+        GLuint normalTexture = 0;
+        float moveFactor = 0.0f;
+        void initWaterTextures();
+
         // Lighting Pass
         QOpenGLShaderProgram *lightingShader;
         GLuint quadVAO, quadVBO;
