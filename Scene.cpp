@@ -165,10 +165,10 @@ void Scene::renderModelsOnly(const glm::vec3& lightPos, const glm::vec3& lightCo
     }
 }
 
-void Scene::renderWaterOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor)
+void Scene::renderWaterOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor, float waveStrength, float waterShininess)
 {
     if (waterInst) {
-        waterInst->renderWater(camera.getViewMatrix(), camera.getProjectMatrix(), lightPos, lightColor, attValue, reflectionTex, refractionTex, dudvTex, normalTex, moveFactor, camera.getOBS());
+        waterInst->renderWater(camera.getViewMatrix(), camera.getProjectMatrix(), lightPos, lightColor, attValue, reflectionTex, refractionTex, dudvTex, normalTex, moveFactor, camera.getOBS(), waveStrength, waterShininess);
     }
 }
 

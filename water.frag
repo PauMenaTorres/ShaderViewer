@@ -18,41 +18,44 @@ uniform sampler2D normalMap;
 
 uniform float moveFactor;
 uniform vec3 cameraPosition; // in world space
+uniform vec2 viewportSize;   // dynamic viewport resolution
 
-const float WAVE_STRENGTH = 0.02;
+uniform float waveStrength = 0.02;     // customizable wave amplitude/strength
+uniform float waterShininess = 32.0;   // customizable specular shininess (damper)
 
 void main()
 {
-    // 1. Calculate projective coordinates (clip space to NDC)
-    vec2 ndc = (clipSpaceCoords.xy / clipSpaceCoords.w) / 2.0 + 0.5;
+    // 1. Calculate projective coordinates (screen space to NDC)
+    vec2 ndc = gl_FragCoord.xy / viewportSize;
     
     vec2 refractTexCoords = vec2(ndc.x, ndc.y);
-    vec2 reflectTexCoords = vec2(ndc.x, 1.0 - ndc.y); // Flip Y for reflection texture mapping
-
+    vec2 reflectTexCoords = vec2(ndc.x, ndc.y); // No flip needed when using a mathematically reflected view matrix!
+    
     // 2. Sample DuDv map twice to create overlapping organic wave distortions
     vec2 distortedTexCoords = texture(dudvMap, vec2(texCoordsFS.x + moveFactor, texCoordsFS.y)).rg * 0.1;
     distortedTexCoords = texCoordsFS + vec2(distortedTexCoords.x, distortedTexCoords.y + moveFactor);
     
-    vec2 distortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * WAVE_STRENGTH;
+    vec2 distortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength;
     
     // Apply distortion
     refractTexCoords = clamp(refractTexCoords + distortion, 0.001, 0.999);
     reflectTexCoords.x = clamp(reflectTexCoords.x + distortion.x, 0.001, 0.999);
     reflectTexCoords.y = clamp(reflectTexCoords.y + distortion.y, 0.001, 0.999);
 
-    // 3. Sample normal map & perturb normal in SCO
-    vec4 normalColor = texture(normalMap, distortedTexCoords);
-    vec3 tangentNormal = vec3(
-        normalColor.r * 2.0 - 1.0,
-        normalColor.b * 3.0,          // Amplified Y component (upward normal of plane)
-        normalColor.g * 2.0 - 1.0
-    );
-    vec3 perturbedNormalSCO = normalize(TBN * tangentNormal);
+    // 3. Normal mapping
+    vec3 normalColor = texture(normalMap, distortedTexCoords).rgb;
+    vec3 normalTangent = normalize(normalColor * 2.0 - 1.0);
+    
+    // Smooth out normal perturbation for cleaner waves
+    normalTangent.xy *= 0.6;
+    normalTangent = normalize(normalTangent);
+    
+    vec3 perturbedNormalSCO = normalize(TBN * normalTangent);
 
     // 4. Fresnel effect
     vec3 viewVector = normalize(toCameraVector);
     float refractiveFactor = dot(viewVector, perturbedNormalSCO);
-    refractiveFactor = clamp(pow(refractiveFactor, 0.6), 0.0, 1.0); // pow factor for aesthetic tuning
+    refractiveFactor = clamp(pow(refractiveFactor, 3.0), 0.15, 0.85); // Tuned to make reflection highly dominant and clear!
 
     // 5. Sample FBO reflection/refraction colors
     vec3 reflectColour = texture(reflectionTexture, reflectTexCoords).rgb;
@@ -60,8 +63,8 @@ void main()
 
     // 6. Blend colors and apply characteristic water tint
     vec3 finalColor = mix(reflectColour, refractColour, refractiveFactor);
-    vec3 waterTint = vec3(0.05, 0.35, 0.55); // Rich deep blue-green aqua color
-    finalColor = mix(finalColor, waterTint, 0.25);
+    vec3 waterTint = vec3(0.02, 0.25, 0.45); // Sleek deep blue-green aqua color
+    finalColor = mix(finalColor, waterTint, 0.15); // Low mix factor to keep reflection colors crisp and visible!
 
     // Write attributes to the Deferred G-Buffer
     gPosition = vertexSCO.xyz;
@@ -69,6 +72,5 @@ void main()
     gAlbedoSpec.rgb = finalColor;
     
     // Pass high shininess (Specular intensity) in alpha channel for deferred specular lighting!
-    // We map a specular damper of 32.0, so: shininess = 32.0 / 128.0 = 0.25
-    gAlbedoSpec.a = 32.0 / 128.0; 
+    gAlbedoSpec.a = waterShininess / 128.0; 
 }

@@ -424,6 +424,158 @@
                   </item>
                 </layout>
               </widget>
+              <widget class="QWidget" name="tab_water">
+                <attribute name="title">
+                  <string>Water Props</string>
+                </attribute>
+                <layout class="QVBoxLayout">
+                  <item>
+                    <widget class="QLabel" name="labelWaveSpeed">
+                      <property name="font">
+                        <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                        </font>
+                      </property>
+                      <property name="text">
+                        <string>Wave Speed</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <layout class="QHBoxLayout">
+                      <item>
+                        <widget class="QSlider" name="sliderWaveSpeed">
+                          <property name="minimum">
+                            <number>0</number>
+                          </property>
+                          <property name="maximum">
+                            <number>200</number>
+                          </property>
+                          <property name="value">
+                            <number>30</number>
+                          </property>
+                          <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QSpinBox" name="spinWaveSpeed">
+                          <property name="minimum">
+                            <number>0</number>
+                          </property>
+                          <property name="maximum">
+                            <number>200</number>
+                          </property>
+                          <property name="value">
+                            <number>30</number>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </item>
+                  <item>
+                    <widget class="QLabel" name="labelWaveStrength">
+                      <property name="font">
+                        <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                        </font>
+                      </property>
+                      <property name="text">
+                        <string>Wave Strength</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <layout class="QHBoxLayout">
+                      <item>
+                        <widget class="QSlider" name="sliderWaveStrength">
+                          <property name="minimum">
+                            <number>0</number>
+                          </property>
+                          <property name="maximum">
+                            <number>100</number>
+                          </property>
+                          <property name="value">
+                            <number>20</number>
+                          </property>
+                          <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QSpinBox" name="spinWaveStrength">
+                          <property name="minimum">
+                            <number>0</number>
+                          </property>
+                          <property name="maximum">
+                            <number>100</number>
+                          </property>
+                          <property name="value">
+                            <number>20</number>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </item>
+                  <item>
+                    <widget class="QLabel" name="labelReflectivity">
+                      <property name="font">
+                        <font>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                        </font>
+                      </property>
+                      <property name="text">
+                        <string>Water Shininess</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <layout class="QHBoxLayout">
+                      <item>
+                        <widget class="QSlider" name="sliderReflectivity">
+                          <property name="minimum">
+                            <number>1</number>
+                          </property>
+                          <property name="maximum">
+                            <number>128</number>
+                          </property>
+                          <property name="value">
+                            <number>32</number>
+                          </property>
+                          <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QSpinBox" name="spinReflectivity">
+                          <property name="minimum">
+                            <number>1</number>
+                          </property>
+                          <property name="maximum">
+                            <number>128</number>
+                          </property>
+                          <property name="value">
+                            <number>32</number>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </item>
+                  <item>
+                    <spacer name="verticalSpacer_water">
+                      <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                      </property>
+                    </spacer>
+                  </item>
+                </layout>
+              </widget>
             </widget>
           </item>
           <item>
@@ -471,6 +623,9 @@
         <slot>setAtt(int)</slot>
         <slot>activeTexture(bool)</slot>
         <slot>activeBump(bool)</slot>
+        <slot>setWaveSpeed(int)</slot>
+        <slot>setWaveStrength(int)</slot>
+        <slot>setReflectivity(int)</slot>
       </slots>
     </customwidget>
   </customwidgets>
@@ -728,6 +883,104 @@
       <signal>valueChanged(int)</signal>
       <receiver>openGLWidget</receiver>
       <slot>setAtt(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>600</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
+      </hints>
+    </connection>
+    <!-- Wave Speed: slider <-> spinbox sync -->
+    <connection>
+      <sender>sliderWaveSpeed</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinWaveSpeed</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>600</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>750</x><y>500</y></hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinWaveSpeed</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderWaveSpeed</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>750</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>600</x><y>500</y></hint>
+      </hints>
+    </connection>
+    <!-- Wave Speed -> GL widget -->
+    <connection>
+      <sender>sliderWaveSpeed</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setWaveSpeed(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>600</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
+      </hints>
+    </connection>
+
+    <!-- Wave Strength: slider <-> spinbox sync -->
+    <connection>
+      <sender>sliderWaveStrength</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinWaveStrength</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>600</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>750</x><y>500</y></hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinWaveStrength</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderWaveStrength</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>750</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>600</x><y>500</y></hint>
+      </hints>
+    </connection>
+    <!-- Wave Strength -> GL widget -->
+    <connection>
+      <sender>sliderWaveStrength</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setWaveStrength(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>600</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>20</x><y>20</y></hint>
+      </hints>
+    </connection>
+
+    <!-- Reflectivity: slider <-> spinbox sync -->
+    <connection>
+      <sender>sliderReflectivity</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>spinReflectivity</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>600</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>750</x><y>500</y></hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>spinReflectivity</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>sliderReflectivity</receiver>
+      <slot>setValue(int)</slot>
+      <hints>
+        <hint type="sourcelabel"><x>750</x><y>500</y></hint>
+        <hint type="destinationlabel"><x>600</x><y>500</y></hint>
+      </hints>
+    </connection>
+    <!-- Reflectivity -> GL widget -->
+    <connection>
+      <sender>sliderReflectivity</sender>
+      <signal>valueChanged(int)</signal>
+      <receiver>openGLWidget</receiver>
+      <slot>setReflectivity(int)</slot>
       <hints>
         <hint type="sourcelabel"><x>600</x><y>500</y></hint>
         <hint type="destinationlabel"><x>20</x><y>20</y></hint>

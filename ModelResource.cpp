@@ -246,9 +246,10 @@ void ModelResource::createBuffers()
     glBindVertexArray(0);
 }
 
-void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive, float attValue, const glm::vec4& clipPlane)
+void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, bool textureActive, bool bumpTextureActive, float attValue, const glm::vec4& clipPlane, bool isReflectionOrRefraction)
 {
     program->bind();
+    program->setUniformValue("isReflectionOrRefraction", isReflectionOrRefraction);
 
     glUniformMatrix4fv(TGLoc, 1, GL_FALSE, &TG[0][0]);
 
@@ -307,7 +308,7 @@ void ModelResource::render(const glm::mat4& TG, const glm::mat4& viewMat, const 
     program->release();
 }
 
-void ModelResource::renderWater(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor, const glm::vec3& cameraPos)
+void ModelResource::renderWater(const glm::mat4& TG, const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor, const glm::vec3& cameraPos, float waveStrength, float waterShininess)
 {
     program->bind();
 
@@ -342,6 +343,13 @@ void ModelResource::renderWater(const glm::mat4& TG, const glm::mat4& viewMat, c
     // Uniforms
     program->setUniformValue("moveFactor", moveFactor);
     program->setUniformValue("cameraPosition", QVector3D(cameraPos.x, cameraPos.y, cameraPos.z));
+
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    program->setUniformValue("viewportSize", QVector2D(viewport[2], viewport[3]));
+
+    program->setUniformValue("waveStrength", waveStrength);
+    program->setUniformValue("waterShininess", waterShininess);
 
     // Also clip plane for water itself (neutral, default to no-clipping for standard draw)
     GLuint clipPlaneLoc = program->uniformLocation("clipPlane");

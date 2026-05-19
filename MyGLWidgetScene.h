@@ -62,6 +62,10 @@ protected:
         vec3 myLightColor;
         float myAtt = 0.9f;
 
+        float myWaveSpeed = 0.003f;
+        float myWaveStrength = 0.02f;
+        float myWaterShininess = 32.0f;
+
     public slots:
         void setLightPosX(int x);
         void setLightPosY(int y);
@@ -75,6 +79,10 @@ protected:
 
         void activeTexture(bool isTextureActive);
         void activeBump(bool isBumpActive);
+
+        void setWaveSpeed(int speed);
+        void setWaveStrength(int strength);
+        void setReflectivity(int reflectivity);
 };
 
 #endif // MyGLWidgetScene_H

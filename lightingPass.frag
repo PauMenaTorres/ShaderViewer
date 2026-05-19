@@ -23,7 +23,7 @@ void main()
     // If it is a background pixel (no geometry normal), render the clear albedo color (sky color) directly
     if (length(Normal) < 0.1)
     {
-        FragColor = vec4(Albedo, 1.0);
+        FragColor = vec4(0.25, 0.61, 0.9, 1.0); // Beautiful sky-blue background color
         return;
     }
 

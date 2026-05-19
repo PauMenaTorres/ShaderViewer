@@ -49,8 +49,8 @@ void MyGLWidgetScene::paintGL()
     int w = width() * devicePixelRatio();
     int h = height() * devicePixelRatio();
 
-    // Increment moveFactor to animate waves
-    moveFactor += 0.003f;
+    // Increment moveFactor to animate waves using dynamic speed
+    moveFactor += myWaveSpeed;
     if (moveFactor >= 1.0f) moveFactor -= 1.0f;
 
     // 1. Render Reflection (Y > 0.0f)
@@ -58,22 +58,15 @@ void MyGLWidgetScene::paintGL()
     glClearColor(0.25f, 0.61f, 0.9f, 1.0f); // Beautiful sky blue background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Calculate reflected lookAt camera vectors
-    glm::vec3 obs = scene.getCamera().getOBS();
-    glm::vec3 vrp = scene.getCamera().getVRP();
-    glm::vec3 up = scene.getCamera().getUpVector();
-
-    // Flip the Y coordinates for horizontal plane reflection (Y = 0)
-    glm::vec3 obsRef = glm::vec3(obs.x, -obs.y, obs.z);
-    glm::vec3 vrpRef = glm::vec3(vrp.x, -vrp.y, vrp.z);
-    glm::vec3 upRef = glm::vec3(up.x, -up.y, up.z);
-
-    glm::mat4 reflectionViewMat = glm::lookAt(obsRef, vrpRef, upRef);
+    // Calculate reflected view matrix by negating the Y-scaling column of the normal view matrix (reflection across Y = 0)
+    glm::mat4 normalViewMat = scene.getCamera().getViewMatrix();
+    glm::mat4 reflectionViewMat = normalViewMat;
+    reflectionViewMat[1] = -normalViewMat[1]; // Column 1 corresponds to Y scaling in GLM (column-major)
     glm::mat4 projMat = scene.getCamera().getProjectMatrix();
 
-    // Render all models from the reflected view, clipping everything below water (Y < 0)
+    // Render all models from the reflected view, clipping everything below water (Y < 0), with reflection/refraction lighting enabled
     for (ModelInstance* inst : scene.getInstances()) {
-        inst->render(reflectionViewMat, projMat, myLightPos, myLightColor, myAtt, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+        inst->render(reflectionViewMat, projMat, myLightPos, myLightColor, myAtt, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f), true);
     }
     
     // 2. Render Refraction (Y < 0.0f)
@@ -81,15 +74,15 @@ void MyGLWidgetScene::paintGL()
     glClearColor(0.25f, 0.61f, 0.9f, 1.0f); // Consistent sky blue background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Render all models from normal view, clipping everything above water (Y > 0)
+    // Render all models from normal view, clipping everything above water (Y > 0), with reflection/refraction lighting enabled
     for (ModelInstance* inst : scene.getInstances()) {
-        inst->render(scene.getCamera().getViewMatrix(), projMat, myLightPos, myLightColor, myAtt, glm::vec4(0.0f, -1.0f, 0.0f, 0.0f));
+        inst->render(scene.getCamera().getViewMatrix(), projMat, myLightPos, myLightColor, myAtt, glm::vec4(0.0f, -1.0f, 0.0f, 0.0f), true);
     }
 
     // 3. Geometry Pass normal: render scene data to G-Buffer
     waterFbos->unbindCurrentFrameBuffer(w, h);
     glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
-    glClearColor(0.25f, 0.61f, 0.9f, 1.0f); // Sky clear color for deferred background
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Clear G-Buffer with zero (normals will have length 0 on background)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Render models normally without clipping
@@ -101,7 +94,9 @@ void MyGLWidgetScene::paintGL()
                           waterFbos->getRefractionTexture(), 
                           dudvTexture, 
                           normalTexture, 
-                          moveFactor);
+                          moveFactor,
+                          myWaveStrength,
+                          myWaterShininess);
     
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebufferObject());
 
@@ -387,4 +382,22 @@ void MyGLWidgetScene::initWaterTextures()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
+
+void MyGLWidgetScene::setWaveSpeed(int speed)
+{
+    myWaveSpeed = (float)speed / 10000.0f;
+    update();
+}
+
+void MyGLWidgetScene::setWaveStrength(int strength)
+{
+    myWaveStrength = (float)strength / 1000.0f;
+    update();
+}
+
+void MyGLWidgetScene::setReflectivity(int reflectivity)
+{
+    myWaterShininess = (float)reflectivity;
+    update();
 }

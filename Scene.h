@@ -22,7 +22,7 @@ public:
     void update();
     void render(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue);
     void renderModelsOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, const glm::vec4& clipPlane = glm::vec4(0.0f, 1.0f, 0.0f, 100000.0f));
-    void renderWaterOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex = 0, GLuint refractionTex = 0, GLuint dudvTex = 0, GLuint normalTex = 0, float moveFactor = 0.0f);
+    void renderWaterOnly(const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex = 0, GLuint refractionTex = 0, GLuint dudvTex = 0, GLuint normalTex = 0, float moveFactor = 0.0f, float waveStrength = 0.02f, float waterShininess = 32.0f);
 
     Camera& getCamera();
 

@@ -11,8 +11,8 @@ public:
     ~ModelInstance();
 
     void modelTransform(const glm::mat4& transform);
-    void render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, const glm::vec4& clipPlane = glm::vec4(0.0f, 1.0f, 0.0f, 100000.0f));
-    void renderWater(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor, const glm::vec3& cameraPos);
+    void render(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, const glm::vec4& clipPlane = glm::vec4(0.0f, 1.0f, 0.0f, 100000.0f), bool isReflectionOrRefraction = false);
+    void renderWater(const glm::mat4& viewMat, const glm::mat4& projMat, const glm::vec3& lightPos, const glm::vec3& lightColor, float attValue, GLuint reflectionTex, GLuint refractionTex, GLuint dudvTex, GLuint normalTex, float moveFactor, const glm::vec3& cameraPos, float waveStrength = 0.02f, float waterShininess = 32.0f);
 
     void setTextureActive(bool active);
     void setBumpActive(bool active);

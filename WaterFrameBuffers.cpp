@@ -45,6 +45,10 @@ void WaterFrameBuffers::initialiseReflectionFrameBuffer()
     reflectionTexture = createTextureAttachment(REFLECTION_WIDTH, REFLECTION_HEIGHT);
     reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH, REFLECTION_HEIGHT);
     
+    // Route shader location 2 (gAlbedoSpec) to GL_COLOR_ATTACHMENT0 (reflectionTexture)
+    GLenum drawBuffers[] = { GL_NONE, GL_NONE, GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(3, drawBuffers);
+
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         qDebug("Reflection Framebuffer not complete!");
         
@@ -57,6 +61,10 @@ void WaterFrameBuffers::initialiseRefractionFrameBuffer()
     refractionTexture = createTextureAttachment(REFRACTION_WIDTH, REFRACTION_HEIGHT);
     refractionDepthTexture = createDepthTextureAttachment(REFRACTION_WIDTH, REFRACTION_HEIGHT);
     
+    // Route shader location 2 (gAlbedoSpec) to GL_COLOR_ATTACHMENT0 (refractionTexture)
+    GLenum drawBuffers[] = { GL_NONE, GL_NONE, GL_COLOR_ATTACHMENT0 };
+    glDrawBuffers(3, drawBuffers);
+
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         qDebug("Refraction Framebuffer not complete!");
         
