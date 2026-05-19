@@ -72,5 +72,5 @@ void main()
     gAlbedoSpec.rgb = finalColor;
     
     // Pass high shininess (Specular intensity) in alpha channel for deferred specular lighting!
-    gAlbedoSpec.a = waterShininess / 128.0; 
+    gAlbedoSpec.a = -waterShininess / 128.0; 
 }

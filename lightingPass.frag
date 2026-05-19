@@ -18,7 +18,13 @@ void main()
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec4 AlbedoSpec = texture(gAlbedoSpec, TexCoords);
     vec3 Albedo = AlbedoSpec.rgb;
-    float Specular = AlbedoSpec.a * 128.0; // This was stored as matshinFS / 128.0
+    float SpecularVal = AlbedoSpec.a * 128.0;
+    bool isWater = false;
+    if (SpecularVal < 0.0)
+    {
+        isWater = true;
+        SpecularVal = -SpecularVal;
+    }
 
     // If it is a background pixel (no geometry normal), render the clear albedo color (sky color) directly
     if (length(Normal) < 0.1)
@@ -27,27 +33,39 @@ void main()
         return;
     }
 
-    // Ambient
-    vec3 ambient = Albedo * 0.2; 
-    
     // Lighting
     vec3 lightDir = normalize(lightPos - FragPos);
+    vec3 viewDir = normalize(-FragPos);
+    vec3 reflectDir = reflect(-lightDir, Normal);
+    
+    // Attenuation
+    float dist = length(lightPos - FragPos);
+    float attenuation = att / (1.0 + 0.5 * dist + 0.2 * (dist * dist));
+
+    if (isWater)
+    {
+        // Water specular highlight (glisten)
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), SpecularVal);
+        vec3 specular = lightColor * spec * 0.8; // High specular factor for extra glistening water!
+        
+        // Blend final color: Mixed reflection/refraction albedo remains crisp and bright,
+        // with the specular light glisten added dynamically on top!
+        vec3 lighting = Albedo + specular * attenuation;
+        FragColor = vec4(lighting, 1.0);
+        return;
+    }
+
+    // Ambient
+    vec3 ambient = Albedo * 0.2; 
     
     // Diffuse
     float diff = max(dot(Normal, lightDir), 0.0);
     vec3 diffuse = lightColor * diff * Albedo;
     
     // Specular
-    vec3 viewDir = normalize(-FragPos);
-    vec3 reflectDir = reflect(-lightDir, Normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), Specular);
-    vec3 specular = lightColor * spec * 0.5; // Simplified specular
-    
-    // Attenuation
-    float dist = length(lightPos - FragPos);
-    float attenuation = att / (1.0 + 0.5 * dist + 0.2 * (dist * dist));
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), SpecularVal);
+    vec3 specular = lightColor * spec * 0.5; // Simplified specular for standard models
     
     vec3 lighting = ambient + (diffuse + specular) * attenuation;
-    
     FragColor = vec4(lighting, 1.0);
 }

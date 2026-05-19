@@ -44,14 +44,25 @@ void main()
     vertexSCO = modelView * vec4(vertex, 1.0);
     gl_Position = proj * vertexSCO;
 
-    // Normales
+    // Normales (Flip normals if determinant is negative due to planar reflection matrix)
     mat3 normalMatrix = inverse(transpose(mat3(modelView)));
-    normalSCO = normalize(normalMatrix * normal);
+    vec3 n = normalMatrix * normal;
+    float det = determinant(mat3(modelView));
+    if (det < 0.0)
+    {
+        n = -n;
+    }
+    normalSCO = normalize(n);
 
     // Tangent space (para bump)
     vec3 T = normalize(normalMatrix * tangent);
     vec3 B = normalize(normalMatrix * bitangent);
-    vec3 N = normalize(normalMatrix * normal);
+    vec3 N = normalSCO; // Use the corrected normal
+    if (det < 0.0)
+    {
+        T = -T;
+        B = -B;
+    }
     TBN = mat3(T, B, N);
 
     texCoordFS = texCoord;
