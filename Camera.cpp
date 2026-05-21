@@ -18,8 +18,8 @@ void Camera::init(glm::vec3 min, glm::vec3 max, bool adapt)
         VRP = (min_orig + max_orig) / 2.0f;
         OBS = VRP + glm::vec3(0.0f, 0.0f, d);
         FOV = 2 * glm::asin(R / d);
-        znear = d - R;
-        zfar = d + R;
+        znear = 0.01f; // Highly generous near plane to prevent sailboat clipping
+        zfar = 1000.0f; // Highly generous far plane to prevent mountain clipping
     } else {
         VRP = glm::vec3(0.0f, 0.0f, 0.0f); 
         OBS = glm::vec3(0.0f, 0.0f, 6.0f);

@@ -121,7 +121,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>-5</number>
+                                <number>0</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -147,7 +147,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>-5</number>
+                                <number>0</number>
                               </property>
                             </widget>
                           </item>
@@ -170,7 +170,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>15</number>
+                                <number>0</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -196,7 +196,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>15</number>
+                                <number>0</number>
                               </property>
                             </widget>
                           </item>
@@ -219,7 +219,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>20</number>
+                                <number>0</number>
                               </property>
                               <property name="orientation">
                                 <enum>Qt::Vertical</enum>
@@ -245,7 +245,7 @@
                                 <number>50</number>
                               </property>
                               <property name="value">
-                                <number>20</number>
+                                <number>0</number>
                               </property>
                             </widget>
                           </item>
@@ -302,71 +302,71 @@
                         </layout>
                       </item>
                       <item>
-                        <layout class="QVBoxLayout">
-                          <item>
-                            <widget class="QSlider" name="sliderLightG">
-                              <property name="minimumSize">
-                                <size>
-                                  <width>0</width>
-                                  <height>100</height>
-                                </size>
-                              </property>
-                              <property name="maximum">
-                                <number>255</number>
-                              </property>
-                              <property name="value">
-                                <number>255</number>
-                              </property>
-                              <property name="orientation">
-                                <enum>Qt::Vertical</enum>
-                              </property>
-                            </widget>
-                          </item>
-                          <item>
-                            <widget class="QSpinBox" name="spinLightG">
-                              <property name="maximum">
-                                <number>255</number>
-                              </property>
-                              <property name="value">
-                                <number>255</number>
-                              </property>
-                            </widget>
-                          </item>
-                        </layout>
-                      </item>
-                      <item>
-                        <layout class="QVBoxLayout">
-                          <item>
-                            <widget class="QSlider" name="sliderLightB">
-                              <property name="minimumSize">
-                                <size>
-                                  <width>0</width>
-                                  <height>100</height>
-                                </size>
-                              </property>
-                              <property name="maximum">
-                                <number>255</number>
-                              </property>
-                              <property name="value">
-                                <number>255</number>
-                              </property>
-                              <property name="orientation">
-                                <enum>Qt::Vertical</enum>
-                              </property>
-                            </widget>
-                          </item>
-                          <item>
-                            <widget class="QSpinBox" name="spinLightB">
-                              <property name="maximum">
-                                <number>255</number>
-                              </property>
-                              <property name="value">
-                                <number>255</number>
-                              </property>
-                            </widget>
-                          </item>
-                        </layout>
-                      </item>
+                         <layout class="QVBoxLayout">
+                           <item>
+                             <widget class="QSlider" name="sliderLightG">
+                               <property name="minimumSize">
+                                 <size>
+                                   <width>0</width>
+                                   <height>100</height>
+                                 </size>
+                               </property>
+                               <property name="maximum">
+                                 <number>255</number>
+                               </property>
+                               <property name="value">
+                                 <number>150</number>
+                               </property>
+                               <property name="orientation">
+                                 <enum>Qt::Vertical</enum>
+                               </property>
+                             </widget>
+                           </item>
+                           <item>
+                             <widget class="QSpinBox" name="spinLightG">
+                               <property name="maximum">
+                                 <number>255</number>
+                               </property>
+                               <property name="value">
+                                 <number>150</number>
+                               </property>
+                             </widget>
+                           </item>
+                         </layout>
+                       </item>
+                       <item>
+                         <layout class="QVBoxLayout">
+                           <item>
+                             <widget class="QSlider" name="sliderLightB">
+                               <property name="minimumSize">
+                                 <size>
+                                   <width>0</width>
+                                   <height>100</height>
+                                 </size>
+                               </property>
+                               <property name="maximum">
+                                 <number>255</number>
+                               </property>
+                               <property name="value">
+                                 <number>80</number>
+                               </property>
+                               <property name="orientation">
+                                 <enum>Qt::Vertical</enum>
+                               </property>
+                             </widget>
+                           </item>
+                           <item>
+                             <widget class="QSpinBox" name="spinLightB">
+                               <property name="maximum">
+                                 <number>255</number>
+                               </property>
+                               <property name="value">
+                                 <number>80</number>
+                               </property>
+                             </widget>
+                           </item>
+                         </layout>
+                       </item>
                     </layout>
                   </item>
                   <item>
@@ -393,7 +393,7 @@
                             <number>100</number>
                           </property>
                           <property name="value">
-                            <number>90</number>
+                            <number>100</number>
                           </property>
                           <property name="orientation">
                             <enum>Qt::Horizontal</enum>
@@ -409,7 +409,7 @@
                             <number>100</number>
                           </property>
                           <property name="value">
-                            <number>90</number>
+                            <number>100</number>
                           </property>
                         </widget>
                       </item>
@@ -453,7 +453,7 @@
                             <number>200</number>
                           </property>
                           <property name="value">
-                            <number>30</number>
+                            <number>2</number>
                           </property>
                           <property name="orientation">
                             <enum>Qt::Horizontal</enum>
@@ -469,7 +469,7 @@
                             <number>200</number>
                           </property>
                           <property name="value">
-                            <number>30</number>
+                            <number>2</number>
                           </property>
                         </widget>
                       </item>
@@ -499,7 +499,7 @@
                             <number>100</number>
                           </property>
                           <property name="value">
-                            <number>20</number>
+                            <number>10</number>
                           </property>
                           <property name="orientation">
                             <enum>Qt::Horizontal</enum>
@@ -515,7 +515,7 @@
                             <number>100</number>
                           </property>
                           <property name="value">
-                            <number>20</number>
+                            <number>10</number>
                           </property>
                         </widget>
                       </item>
@@ -545,7 +545,7 @@
                             <number>128</number>
                           </property>
                           <property name="value">
-                            <number>32</number>
+                            <number>16</number>
                           </property>
                           <property name="orientation">
                             <enum>Qt::Horizontal</enum>
@@ -561,7 +561,7 @@
                             <number>128</number>
                           </property>
                           <property name="value">
-                            <number>32</number>
+                            <number>16</number>
                           </property>
                         </widget>
                       </item>

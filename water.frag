@@ -55,7 +55,7 @@ void main()
     // 4. Fresnel effect
     vec3 viewVector = normalize(toCameraVector);
     float refractiveFactor = dot(viewVector, perturbedNormalSCO);
-    refractiveFactor = clamp(pow(refractiveFactor, 3.0), 0.15, 0.85); // Tuned to make reflection highly dominant and clear!
+    refractiveFactor = clamp(pow(refractiveFactor, 4.0), 0.05, 0.55); // Adjusted to make reflections heavily dominant across the entire lake!
 
     // 5. Sample FBO reflection/refraction colors
     vec3 reflectColour = texture(reflectionTexture, reflectTexCoords).rgb;
@@ -64,7 +64,7 @@ void main()
     // 6. Blend colors and apply characteristic water tint
     vec3 finalColor = mix(reflectColour, refractColour, refractiveFactor);
     vec3 waterTint = vec3(0.02, 0.25, 0.45); // Sleek deep blue-green aqua color
-    finalColor = mix(finalColor, waterTint, 0.15); // Low mix factor to keep reflection colors crisp and visible!
+    finalColor = mix(finalColor, waterTint, 0.05); // Reduced mix factor to keep reflection colors extremely crisp and prominent!
 
     // Write attributes to the Deferred G-Buffer
     gPosition = vertexSCO.xyz;

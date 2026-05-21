@@ -3,9 +3,9 @@
 
 MyGLWidgetScene::MyGLWidgetScene(QWidget* parent):QOpenGLWidget(parent)
 {
-    myLightPos = glm::vec3(-0.5f, 1.5f, 2.0f);
-    myLightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-    myAtt = 0.9f;
+    myLightPos = glm::vec3(0.0f, 0.0f, 0.0f); // Center of the lake valley
+    myLightColor = glm::vec3(1.0f, 0.588f, 0.314f); // Warm sunset golden-orange light
+    myAtt = 1.0f; // Default attenuation to 100 (1.0f)
 }
 
 MyGLWidgetScene::~MyGLWidgetScene()
@@ -20,7 +20,7 @@ void MyGLWidgetScene::initializeGL()
 {
     initializeOpenGLFunctions();
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.25f, 0.61f, 0.9f, 1.0f);
+    glClearColor(0.95f, 0.45f, 0.18f, 1.0f); // Beautiful sunset orange sky
     
     scene.loadWaterScene();
 
@@ -55,7 +55,7 @@ void MyGLWidgetScene::paintGL()
 
     // 1. Render Reflection (Y > 0.0f)
     waterFbos->bindReflectionFrameBuffer();
-    glClearColor(0.25f, 0.61f, 0.9f, 1.0f); // Beautiful sky blue background
+    glClearColor(0.95f, 0.45f, 0.18f, 1.0f); // Beautiful sunset orange background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Calculate reflected view matrix by negating the Y-scaling column of the normal view matrix (reflection across Y = 0)
@@ -71,7 +71,7 @@ void MyGLWidgetScene::paintGL()
     
     // 2. Render Refraction (Y < 0.0f)
     waterFbos->bindRefractionFrameBuffer();
-    glClearColor(0.25f, 0.61f, 0.9f, 1.0f); // Consistent sky blue background
+    glClearColor(0.95f, 0.45f, 0.18f, 1.0f); // Consistent sunset orange background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Render all models from normal view, clipping everything above water (Y > 0), with reflection/refraction lighting enabled

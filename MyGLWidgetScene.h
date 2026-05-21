@@ -60,11 +60,11 @@ protected:
 
         vec3 myLightPos;
         vec3 myLightColor;
-        float myAtt = 0.9f;
+        float myAtt = 1.0f;
 
-        float myWaveSpeed = 0.003f;
-        float myWaveStrength = 0.02f;
-        float myWaterShininess = 32.0f;
+        float myWaveSpeed = 0.0002f;
+        float myWaveStrength = 0.01f;
+        float myWaterShininess = 16.0f;
 
     public slots:
         void setLightPosX(int x);

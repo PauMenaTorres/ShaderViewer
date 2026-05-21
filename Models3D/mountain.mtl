@@ -1,0 +1,5 @@
+newmtl MountainMaterial
+Ka 0.2 0.2 0.2
+Kd 0.45 0.38 0.34
+Ks 0.1 0.1 0.1
+Ns 10.0

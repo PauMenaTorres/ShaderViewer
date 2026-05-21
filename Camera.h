@@ -42,6 +42,9 @@ public:
     glm::vec3 getOBS() const { return OBS; }
     glm::vec3 getVRP() const { return VRP; }
     glm::vec3 getUpVector() const { return up_vector; }
+    void setOBS(const glm::vec3& obs) { OBS = obs; updateLookAt(); }
+    void setVRP(const glm::vec3& vrp) { VRP = vrp; updateLookAt(); }
+    void setUpVector(const glm::vec3& up) { up_vector = up; updateLookAt(); }
 private:
 
     float d, R;

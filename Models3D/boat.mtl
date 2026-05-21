@@ -1,0 +1,17 @@
+newmtl Wood
+Kd 0.45 0.28 0.16
+Ka 0.2 0.2 0.2
+Ks 0.1 0.1 0.1
+Ns 10
+
+newmtl Mast
+Kd 0.3 0.15 0.05
+Ka 0.1 0.1 0.1
+Ks 0.2 0.2 0.2
+Ns 20
+
+newmtl Sail
+Kd 0.95 0.95 0.9
+Ka 0.3 0.3 0.3
+Ks 0.1 0.1 0.1
+Ns 5
