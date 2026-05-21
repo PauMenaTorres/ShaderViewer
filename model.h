@@ -12,6 +12,11 @@
 #include <vector>
 #include <string>
 
+// Assimp C-API headers
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 struct Material {
   std::string name;
   float ambient[4];
@@ -111,12 +116,6 @@ class Model {
   float *_VBO_vertices, *_VBO_normals;
   float *_VBO_matamb, *_VBO_matdiff, *_VBO_matspec, *_VBO_matshin, *_VBO_texCoords;
   float *_VBO_tangents, *_VBO_bitangents;
-
-  void parseVOnly(std::stringstream & ss, std::string & block);
-  void parseVN(std::stringstream & ss, std::string & block);
-  void parseVT(std::stringstream & ss, std::string & block);
-  void parseVTN(std::stringstream & ss, std::string & block);
-
 };
 
 #endif // MODEL_H

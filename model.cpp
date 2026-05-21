@@ -16,9 +16,6 @@
 
 using namespace std;
 // === Local stuff:
-static int material = 1;
-static void loadMTL(std::string filename);
-static int findMat(string material);
 static void omplenormals(vector<Face> &_faces,
              vector<Vertex> const &_vertices);
 static void ompleVBOs(vector<Face> &_faces,
@@ -29,9 +26,6 @@ static void ompleVBOs(vector<Face> &_faces,
               float *&_VBO_mata, float *&_VBO_matd, float *&_VBO_matsp, float *&_VBO_matsh, float *&_VBO_tex,
               float *&_VBO_tangents, float *&_VBO_bitangents);
 
-static bool fvtn = false;
-static bool fvt = false;
-static bool texcoord = false;
 static string modelPath("");
 
 // ======== Constructors and Destructors =======
@@ -68,402 +62,180 @@ Material::Material() : name("__load_object_default_material__") {
 void Model::load(std::string filename) {
   if (! _vertices.empty()) {
     // unload previous model:
-    _vertices.erase(_vertices.begin(), _vertices.end());
-    _normals.erase(_normals.begin(), _normals.end());
-    _faces.erase(_faces.begin(), _faces.end());
-    _texCoords.erase(_texCoords.begin(), _texCoords.end());
+    _vertices.clear();
+    _normals.clear();
+    _faces.clear();
+    _texCoords.clear();
   }
+
+  Materials.clear();
+  Materials.push_back(Material()); // Default material at index 0
+
+  this->textureName = "";
+  this->bumpName = "";
+
   size_t fiPath = filename.rfind("/");
   if (fiPath == string::npos) modelPath = "";
   else modelPath = filename.substr(0, fiPath+1);
 
-  fstream input(filename.data(), ios::in);
-  if (input.rdstate() != ios::goodbit) {
-    cerr << "Cannot load OBJ file " << filename << endl;
-    return;
-  }
-  string line;
-  stringstream ss;
-  while (getline(input, line)) {
-#if DEBUGPARSER
-    cerr << "Just read '" << line << "'" << endl;
-#endif
-    ss.clear(); ss.str(line);
-    char c = '#'; // to skip whitelines...
-    ss >> c;
-    // The following variables need to be declared before entering the switch.
-    // They are intended for use in the different cases...
-    string tail;
-    double coord;
-    Face auxFace;
-    stringstream auxss;
-    size_t first, second;
-    switch(c){
-      //-------------
-    case '#':    // comment line
-      break;
-      //-------------
-    case 'v':    // vertex information...
-      ss >> noskipws >> c >> skipws;
-      switch (c) {
-      case ' ':  // coordinates
-    for (int i = 0; i < 3; ++i) { ss >> coord; _vertices.push_back(coord);}
-    break;
-      case 'n':  // normal components
-    for (int i = 0; i < 3; ++i) { ss >> coord; _normals.push_back(coord);}
-    break;
-      case 't':  // texture coords.
-        for (int i=0;i<2;++i) {ss >> coord; _texCoords.push_back(coord);}
-        break;
-      default:
-    cerr << "Seen unknown vertex info of type '" << c << "', ignoring it..." << endl;
-    break;
-      }
-      break;
-      //-------------
-    case 'f':  // face info
-      ss >> tail;   // tail will contain o d/d/d o d/d o d//d o d:  (same for the rest underneath...)
-      first = tail.find("/");
-      if (first == string::npos) parseVOnly(ss, tail);
-      else {
-    second = tail.find("/", first + 1);
-    if (second == first + 1)  parseVN(ss, tail);
-    else if (second == string::npos) parseVT(ss, tail);
-    else parseVTN(ss, tail);
-      }
-      break;
-      //-------------
-    case 'm':  // material library
-      ss >> tail;
-      if (tail != "tllib") {
-    cerr << "unknown line of type 'm" << tail << "'. Ignoring..." << endl;
-    break;
-      }
-      ss >> tail;
-      loadMTL(modelPath+tail);
-      if (Materials[Materials.size()-1].map_kd!="")
-        this->textureName=modelPath+Materials[Materials.size()-1].map_kd;
-      if (Materials[Materials.size()-1].map_bump!="")
-        this->bumpName=modelPath+Materials[Materials.size()-1].map_bump;
-      break;
-      //-------------
-    case 'u':  // material info
-      ss >> tail;
-      if (tail != "semtl") {
-    cerr << "unknown line of type 'u" << tail << "'. Ignoring..." << endl;
-    break;
-      }
-      ss >> tail;
-      material = findMat(tail);
-      break;
-      //-------------
-    case 'g':
-#if DEBUGPARSER
-      cout << "[outer]:Seen line of type '" << c << "', which is not supported. Ignoring it..." << endl;
-#endif
-      break;
-      //-------------
-    case 's':
-#if DEBUGPARSER
-      cout << "[outer]:Seen line of type '" << c << "', which is not supported. Ignoring it..." << endl;
-#endif
-      break;
-      //-------------
-    case 'o':
-#if DEBUGPARSER
-      cout << "[outer]:Seen line of type '" << c << "', which is not supported. Ignoring it..." << endl;
-#endif
-      break;
-      //-------------
-    default:
-      cout << "[outer]:Seen unknown line of type '" << c << "', ignoring it..." << endl;
-      break;
-    }
-  }
-  omplenormals(_faces, _vertices);  // afegim normals per cara...
+  // Import the file using Assimp's C API
+  const aiScene* scene = aiImportFile(filename.c_str(),
+      aiProcess_Triangulate |
+      aiProcess_GenSmoothNormals |
+      aiProcess_JoinIdenticalVertices);
 
-  // Omplim els vectors per als VBO
+  if (!scene) {
+      cerr << "Cannot load model file " << filename << ". Error: " << aiGetErrorString() << endl;
+      return;
+  }
+
+  // 1. Load materials
+  for (unsigned int i = 0; i < scene->mNumMaterials; ++i) {
+      const aiMaterial* mat = scene->mMaterials[i];
+      Material noumat;
+
+      // Get material name
+      aiString name;
+      if (aiGetMaterialString(mat, AI_MATKEY_NAME, &name) == aiReturn_SUCCESS) {
+          noumat.name = name.C_Str();
+      }
+
+      // Get ambient color
+      aiColor4D ambientColor;
+      if (aiGetMaterialColor(mat, AI_MATKEY_COLOR_AMBIENT, &ambientColor) == aiReturn_SUCCESS) {
+          noumat.ambient[0] = ambientColor.r;
+          noumat.ambient[1] = ambientColor.g;
+          noumat.ambient[2] = ambientColor.b;
+          noumat.ambient[3] = ambientColor.a;
+      } else {
+          noumat.ambient[0] = noumat.ambient[1] = noumat.ambient[2] = 0.1f;
+          noumat.ambient[3] = 1.0f;
+      }
+
+      // Get diffuse color
+      aiColor4D diffuseColor;
+      if (aiGetMaterialColor(mat, AI_MATKEY_COLOR_DIFFUSE, &diffuseColor) == aiReturn_SUCCESS) {
+          noumat.diffuse[0] = diffuseColor.r;
+          noumat.diffuse[1] = diffuseColor.g;
+          noumat.diffuse[2] = diffuseColor.b;
+          noumat.diffuse[3] = diffuseColor.a;
+      } else {
+          noumat.diffuse[0] = noumat.diffuse[1] = 0.7f;
+          noumat.diffuse[2] = 0.0f;
+          noumat.diffuse[3] = 1.0f;
+      }
+
+      // Get specular color
+      aiColor4D specularColor;
+      if (aiGetMaterialColor(mat, AI_MATKEY_COLOR_SPECULAR, &specularColor) == aiReturn_SUCCESS) {
+          noumat.specular[0] = specularColor.r;
+          noumat.specular[1] = specularColor.g;
+          noumat.specular[2] = specularColor.b;
+          noumat.specular[3] = specularColor.a;
+      } else {
+          noumat.specular[0] = noumat.specular[1] = noumat.specular[2] = 1.0f;
+          noumat.specular[3] = 1.0f;
+      }
+
+      // Get shininess
+      unsigned int max = 1;
+      float shininess = 0.0f;
+      if (aiGetMaterialFloatArray(mat, AI_MATKEY_SHININESS, &shininess, &max) == aiReturn_SUCCESS) {
+          noumat.shininess = shininess;
+      } else {
+          noumat.shininess = 64.0f;
+      }
+
+      // Get diffuse texture
+      aiString path;
+      if (aiGetMaterialTexture(mat, aiTextureType_DIFFUSE, 0, &path) == aiReturn_SUCCESS) {
+          noumat.map_kd = path.C_Str();
+          this->textureName = modelPath + noumat.map_kd;
+      }
+
+      // Get bump/height texture
+      aiString bumpPath;
+      if (aiGetMaterialTexture(mat, aiTextureType_HEIGHT, 0, &bumpPath) == aiReturn_SUCCESS) {
+          noumat.map_bump = bumpPath.C_Str();
+          this->bumpName = modelPath + noumat.map_bump;
+      } else if (aiGetMaterialTexture(mat, aiTextureType_NORMALS, 0, &bumpPath) == aiReturn_SUCCESS) {
+          noumat.map_bump = bumpPath.C_Str();
+          this->bumpName = modelPath + noumat.map_bump;
+      }
+
+      Materials.push_back(noumat);
+  }
+
+  // 2. Load meshes
+  for (unsigned int m = 0; m < scene->mNumMeshes; ++m) {
+      const aiMesh* mesh = scene->mMeshes[m];
+
+      unsigned int vertexOffset = _vertices.size() / 3;
+      unsigned int normalOffset = _normals.size() / 3;
+      unsigned int texCoordOffset = _texCoords.size() / 2;
+
+      // Append vertices
+      for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+          _vertices.push_back(mesh->mVertices[i].x);
+          _vertices.push_back(mesh->mVertices[i].y);
+          _vertices.push_back(mesh->mVertices[i].z);
+      }
+
+      // Append normals
+      if (mesh->mNormals != NULL) {
+          for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+              _normals.push_back(mesh->mNormals[i].x);
+              _normals.push_back(mesh->mNormals[i].y);
+              _normals.push_back(mesh->mNormals[i].z);
+          }
+      }
+
+      // Append texture coordinates
+      if (mesh->mTextureCoords[0] != NULL) {
+          for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+              _texCoords.push_back(mesh->mTextureCoords[0][i].x);
+              _texCoords.push_back(mesh->mTextureCoords[0][i].y);
+          }
+      }
+
+      // Append faces
+      for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
+          const aiFace& face = mesh->mFaces[i];
+          if (face.mNumIndices == 3) {
+              Face f;
+              f.mat = mesh->mMaterialIndex + 1; // Maps to index in Materials
+
+              f.v.push_back(3 * (vertexOffset + face.mIndices[0]));
+              f.v.push_back(3 * (vertexOffset + face.mIndices[1]));
+              f.v.push_back(3 * (vertexOffset + face.mIndices[2]));
+
+              if (mesh->mNormals != NULL) {
+                  f.n.push_back(3 * (normalOffset + face.mIndices[0]));
+                  f.n.push_back(3 * (normalOffset + face.mIndices[1]));
+                  f.n.push_back(3 * (normalOffset + face.mIndices[2]));
+              }
+
+              if (mesh->mTextureCoords[0] != NULL) {
+                  f.t.push_back(2 * (texCoordOffset + face.mIndices[0]));
+                  f.t.push_back(2 * (texCoordOffset + face.mIndices[1]));
+                  f.t.push_back(2 * (texCoordOffset + face.mIndices[2]));
+              }
+
+              _faces.push_back(f);
+          }
+      }
+  }
+
+  // Release Assimp Scene
+  aiReleaseImport(scene);
+
+  // Compute normals for faces (if they were generated/computed)
+  omplenormals(_faces, _vertices);
+
+  // Populate OpenGL VBOs
   ompleVBOs(_faces, _vertices, _normals, _texCoords, _VBO_vertices, _VBO_normals,
             _VBO_matamb, _VBO_matdiff, _VBO_matspec, _VBO_matshin, _VBO_texCoords,
             _VBO_tangents, _VBO_bitangents);
-}
-
-// ======= helper methods for checking and debugging ==========
-void Model::dumpStats() const {
-  cout << "Model Stats:" << endl;
-  cout << "Vertices:   " << _vertices.size() << " components [" << _vertices.size()/3. << " vertices]" << endl;
-  cout << "Normals:    " << _normals.size() << " components [" << _normals.size()/3. << " normals]" << endl;
-  cout << "Faces:      " << _faces.size() << endl;
-}
-
-void Model::dumpModel() const {
-  for (unsigned int i = 0; i < _vertices.size(); ++i) {
-    if (i%3 == 0) cout << "v ";
-    cout << _vertices[i];
-    if (i%3 == 2) cout << endl;
-    else cout << " ";
-  }
-
-  for (unsigned int i = 0; i < _normals.size(); ++i) {
-    if (i%3 == 0) cout << "vn ";
-    cout << _normals[i];
-    if (i%3 == 2) cout << endl;
-    else cout << " ";
-  }
-
-  for (unsigned int i = 0; i < _faces.size(); ++i) {
-    cout << "f";
-    if (_faces[i].n.empty()){
-      for (int j = 0; j < 3; ++j)
-    cout << " " << _faces[i].v[j]/3 + 1;
-      cout << endl;
-    } else {
-      for (int j = 0; j < 3; ++j)
-    cout << " " << _faces[i].v[j]/3 + 1 << "//" << _faces[i].n[j]/3 + 1;
-      cout << endl;
-    }
-  }
-}
-
-//======== private methods and auxiliary functions ==========
-void Model::parseVOnly(stringstream & ss, string & block) {
-#if DEBUGPARSER
-  cout << "Entering parseVOnly(..., \""<< block << "\")" << endl;
-#endif
-  Face f;
-  stringstream ssb;
-  ssb.str(block);
-  int index;
-  ssb >> index;
-  f.v.push_back(3*index-3);
-
-  ss >> index;
-  f.v.push_back(3*index-3);
-
-  ss >> index;
-  f.v.push_back(3*index-3);
-  f.mat = material;
-  _faces.push_back(f);
-  Face fAnt(f);
-  while(ss >> index) {
-    f.v.clear();
-    f.v.push_back(fAnt.v[0]);
-    f.v.push_back(fAnt.v[2]);
-    f.v.push_back(3*index-3);
-    _faces.push_back(f);
-    fAnt = f;
-  }
-}
-
-void Model::parseVN(stringstream & ss, string & block) {
-#if DEBUGPARSER
-  cout << "Entering parseVN(..., \""<< block << "\")" << endl;
-#endif
-  Face f;
-  stringstream ssb;
-  ssb.str(block);
-  int index, n;
-  char sep;
-  ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> sep; assert(sep == '/');
-  ssb >> n;
-  f.v.push_back(3*index-3); f.n.push_back(3*n-3);
-
-  ss >> block;
-  ssb.clear(); ssb.str(block);
-  ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> sep; assert(sep == '/');
-  ssb >> n;
-  f.v.push_back(3*index-3); f.n.push_back(3*n-3);
-
-  ss >> block;
-  ssb.clear(); ssb.str(block);
-  ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> sep; assert(sep == '/');
-  ssb >> n;
-  f.v.push_back(3*index-3); f.n.push_back(3*n-3);
-  f.mat = material;
-  _faces.push_back(f);
-  Face fAnt(f);
-  while(ss >> block) {
-    f.v.clear(); f.n.clear();
-    ssb.clear(); ssb.str(block);
-    ssb >> index; ssb >> sep; assert(sep == '/'); ssb >> sep; assert(sep == '/');
-    ssb >> n;
-    f.v.push_back(fAnt.v[0]); f.n.push_back(fAnt.n[0]);
-    f.v.push_back(fAnt.v[2]); f.n.push_back(fAnt.n[2]);
-    f.v.push_back(3*index-3); f.n.push_back(3*n-3);
-    _faces.push_back(f);
-    fAnt = f;
-  }
-}
-
-void Model::parseVT(stringstream & ss, string & block) {
-#if DEBUGPARSER
-  cout << "Entering parseVT(..., \""<< block << "\")" << endl;
-#endif
-  if (not fvt) {
-    cerr << "vt node found: Texture coords not supported yet. Ignoring texture part..." << endl;
-    fvt = true;
-  }
-  Face f;
-  stringstream ssb;
-  ssb.str(block);
-  int index;
-  ssb >> index;
-  f.v.push_back(3*index-3);
-
-  ss >> block;
-  ssb.clear(); ssb.str(block);
-  ssb >> index;
-  f.v.push_back(3*index-3);
-
-  ss >> block;
-  ssb.clear(); ssb.str(block);
-  ssb >> index;
-  f.v.push_back(3*index-3);
-  f.mat = material;
-  _faces.push_back(f);
-  Face fAnt(f);
-  while(ss >> block) {
-    f.v.clear();
-    ssb.clear(); ssb.str(block);
-    ssb >> index;
-    f.v.push_back(fAnt.v[0]);
-    f.v.push_back(fAnt.v[2]);
-    f.v.push_back(3*index-3);
-    _faces.push_back(f);
-    fAnt = f;
-  }
-}
-
-void Model::parseVTN(stringstream & ss, string & block) {
-#if DEBUGPARSER
-  cout << "Entering parseVTN(..., \""<< block << "\")" << endl;
-#endif
- /* if (not fvtn) {
-    cerr << "vtn node found: Texture coords not supported yet. Ignoring texture part..." << endl;
-    fvtn = true;
-  }*/
-  Face f;
-  stringstream ssb;
-  ssb.str(block);
-  int index, n, t;
-  char sep;
-  ssb >> index >> sep >> t >> sep >> n;
-  f.v.push_back(3*index-3);
-  f.t.push_back(2*t-2);
-  f.n.push_back(3*n-3);
-
-  ss >> block;
-  ssb.clear(); ssb.str(block);
-  ssb >> index >> sep >> t >> sep >> n;
-  f.v.push_back(3*index-3);
-  f.t.push_back(2*t-2);
-  f.n.push_back(3*n-3);
-
-  ss >> block;
-  ssb.clear(); ssb.str(block);
-  ssb >> index >> sep >> t >> sep >> n;
-  f.v.push_back(3*index-3);
-  f.t.push_back(2*t-2);
-  f.n.push_back(3*n-3);
-  f.mat = material;
-  _faces.push_back(f);
-  Face fAnt(f);
-  while(ss >> block) {
-    f.v.clear(); f.n.clear(); f.t.clear();
-    ssb.clear(); ssb.str(block);
-    ssb >> index >> sep >> t >> sep >> n;
-    f.v.push_back(fAnt.v[0]);
-    f.t.push_back(fAnt.t[0]);
-    f.n.push_back(fAnt.n[0]);
-
-    f.v.push_back(fAnt.v[2]);
-    f.t.push_back(fAnt.t[2]);
-    f.n.push_back(fAnt.n[2]);
-
-    f.v.push_back(3*index-3);
-    f.t.push_back(2*t-2);
-    f.n.push_back(3*n-3);
-    _faces.push_back(f);
-    fAnt = f;
-  }
-}
-
-static void loadMTL(std::string filename) {
-  fstream input(filename.data(), ios::in);
-  if (input.rdstate() != ios::goodbit) {
-    cerr << "Cannot load MTL file " << filename << endl;
-    return;
-  }
-  string line;
-  stringstream ss;
-  while (getline(input, line)) {
-#if DEBUGPARSER
-    cerr << "Just read [" << line << "]" << endl;
-#endif
-    ss.clear(); ss.str(line);
-    string wrd;
-    ss >> wrd;
-    if (wrd[0] == '#') ;
-    else if (wrd == "newmtl") {
-#if DEBUGPARSER
-    cerr << "Processing '" << wrd << "'" << endl;
-#endif
-      Material noumat;
-      ss >> noumat.name;
-      Materials.push_back(noumat);
-#if DEBUGPARSER
-      Material &current = Materials.back();
-      cerr << "Now defining material " << current.name << "(size=" << Materials.size() << ")" <<endl;
-#endif
-    }
-    else if (wrd == "Ns") {
-#if DEBUGPARSER
-    cerr << "Processing '" << wrd << "'" << endl;
-#endif
-      ss >> Materials.back().shininess;
-    }
-    else if (wrd == "Ka") {
-#if DEBUGPARSER
-    cerr << "Processing '" << wrd << "'" << endl;
-#endif
-      for (int i = 0; i < 3; ++i)
-    ss >> Materials.back().ambient[i];
-    }
-    else if (wrd == "Kd") {
-#if DEBUGPARSER
-    cerr << "Processing '" << wrd << "'" << endl;
-#endif
-      for (int i = 0; i < 3; ++i)
-    ss >> Materials.back().diffuse[i];
-    }
-    else if (wrd == "Ks") {
-#if DEBUGPARSER
-    cerr << "Processing '" << wrd << "'" << endl;
-#endif
-      for (int i = 0; i < 3; ++i)
-    ss >> Materials.back().specular[i];
-    } else if (wrd == "map_Kd") {
-#if DEBUGPARSER
-    cerr << "Processing '" << wrd << "'" << endl;
-#endif
-    ss >> Materials.back().map_kd;
-    } else if (wrd == "map_bump") {
-#if DEBUGPARSER
-    cerr << "Processing '" << wrd << "'" << endl;
-#endif
-    ss >> Materials.back().map_bump;
-    } else {
-#if DEBUGPARSER
-    cerr << "MTL parser: read line of type " << wrd << " which is not supported. Skipped..." << endl;
-#endif
-    }
-  }
-}
-
-static int findMat(string material) {
-  for (unsigned int i = 0; i < Materials.size(); ++i)
-    if (Materials[i].name == material) return i;
-  return 0;
 }
 
 
